@@ -21,10 +21,12 @@
             align-items: center;
             font-family: 'Emirates Bold', sans-serif;
             transition: background 1s ease;
+            position: relative; /* Para posicionar la imagen */
         }
 
         .container {
             text-align: center;
+            z-index: 1; /* Para que los botones estén sobre la imagen */
         }
 
         h1 {
@@ -53,14 +55,32 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
         }
+
+        .corner-image {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            max-width: 20%; /* Ajusta el tamaño relativo a la pantalla */
+            max-height: 20%;
+            object-fit: contain; /* Mantiene la proporción de la imagen */
+            z-index: 0; /* Detrás del contenido */
+        }
+
+        @media (max-width: 768px) { /* Ajuste para pantallas pequeñas */
+            .corner-image {
+                max-width: 30%;
+                max-height: 30%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>EK Crew Bus</h1>
         <a href="https://adriacp96.github.io/grosvenor/" class="button">Grosvenor</a>
-        <a href="https://adriacp96.github.io/dso/" class="button">DSO</a>
+        <a href="https://adriacp96.github.io/DSO/" class="button">DSO</a>
     </div>
+    <img src="https://i.imghippo.com/files/TC4092ilM.png" alt="Corner Image" class="corner-image">
 
     <script>
         function setGradient() {
