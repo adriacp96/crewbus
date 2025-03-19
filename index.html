@@ -20,8 +20,9 @@
             justify-content: center;
             align-items: center;
             font-family: 'Emirates Bold', sans-serif;
-            transition: background 1s ease;
             position: relative; /* Para posicionar la imagen */
+            background: linear-gradient(to bottom, #d9d9e6, #c2c2d9, #b3b3cc); /* Degradado por defecto */
+            transition: background 1s ease;
         }
 
         .container {
@@ -98,7 +99,8 @@
                 gradient = 'linear-gradient(to bottom, #d9d9e6, #c2c2d9, #b3b3cc)';
             }
 
-            document.body.style.background = gradient;
+            document.body.style.backgroundImage = gradient; /* Usar backgroundImage para degradados */
+            console.log('Gradient applied:', gradient); /* Para depuración */
         }
 
         // Ejecutar al cargar y actualizar cada minuto
