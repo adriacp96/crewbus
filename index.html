@@ -49,7 +49,7 @@
         .button {
             display: inline-block;
             width: 200px;
-            padding: 15px 20px; /* Padding uniforme */
+            padding: 15px 20px;
             background-color: rgba(255, 255, 255, 0.9);
             color: #333;
             text-decoration: none;
@@ -58,16 +58,22 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             text-align: center;
             position: relative;
-            overflow: hidden; /* Para que la imagen no desborde el borde redondeado */
         }
 
         .inline-image {
-            width: 50px; /* Ancho de la imagen */
-            height: 75px; /* Altura ajustada para que sobresalga */
+            width: 50px;
+            height: auto;
             position: absolute;
-            bottom: 0; /* Borde inferior de la imagen alineado con el borde inferior del botón */
-            left: 50%;
-            transform: translateX(-50%);
+            top: -50px;
+            z-index: 1;
+        }
+
+        .grosvenor-image {
+            right: -25px;
+        }
+
+        .dso-image {
+            left: -25px;
         }
 
         .corner-image {
@@ -85,13 +91,13 @@
         <div class="button-row">
             <a href="https://adriacp96.github.io/grosvenor/" class="button">
                 Grosvenor
-                <img src="https://i.imghippo.com/files/bTT1071g.png" alt="Grosvenor Icon" class="inline-image">
+                <img src="https://i.imghippo.com/files/bTT1071g.png" alt="Grosvenor Icon" class="inline-image grosvenor-image">
             </a>
         </div>
         <div class="button-row">
             <a href="https://adriacp96.github.io/dso/" class="button">
                 DSO
-                <img src="https://i.imghippo.com/files/FFdi2937mw.png" alt="DSO Icon" class="inline-image">
+                <img src="https://i.imghippo.com/files/FFdi2937mw.png" alt="DSO Icon" class="inline-image dso-image">
             </a>
         </div>
     </div>
