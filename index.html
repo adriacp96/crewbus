@@ -20,9 +20,9 @@
             justify-content: center;
             align-items: center;
             font-family: 'Emirates Bold', sans-serif;
-            /* Se elimina el gradiente y se deja sin color */
-            background: none;
+            background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
             overflow: hidden;
+            position: relative; /* Necesario para posicionar la imagen absoluta */
         }
 
         .container {
@@ -86,6 +86,15 @@
         .dso-text {
             text-align: right;
         }
+
+        .bottom-image {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            z-index: 1; /* Para que esté detrás del contenido */
+        }
     </style>
 </head>
 <body>
@@ -104,5 +113,6 @@
             </a>
         </div>
     </div>
+    <img src="https://i.imghippo.com/files/bDy8385Olk.png" alt="Bottom Image" class="bottom-image">
 </body>
 </html>
