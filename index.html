@@ -14,34 +14,38 @@
             font-style: normal;
         }
 
+        /* Aseguramos que html y body ocupen todo el espacio */
         html {
-            margin: 0;
-            padding: 0;
             height: 100%;
             width: 100%;
-            background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77); /* Movemos el degradado al html */
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
         }
 
         body {
-            margin: 0;
-            padding: 0;
             height: 100%;
             width: 100%;
+            margin: 0;
+            padding: 0;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             font-family: 'Emirates Bold', sans-serif;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .container {
             text-align: center;
+            width: 100%;
+            max-width: 100%;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 100%;
+            z-index: 2;
         }
 
         h1 {
