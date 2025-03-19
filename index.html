@@ -20,14 +20,16 @@
             justify-content: center;
             align-items: center;
             font-family: 'Emirates Bold', sans-serif;
-            position: relative;
-            background: linear-gradient(to bottom, #d9d9e6, #c2c2d9, #b3b3cc); /* Degradado por defecto */
-            transition: background-image 1s ease;
+            background: linear-gradient(to bottom, #cce0f5, #b3d1f0, #99c2eb); /* Degradado azul tipo cielo */
+            overflow: hidden; /* Evita cualquier desplazamiento */
         }
 
         .container {
             text-align: center;
-            z-index: 1;
+            position: absolute; /* Posición fija */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Centrado exacto */
         }
 
         h1 {
@@ -47,31 +49,15 @@
             text-decoration: none;
             border-radius: 25px;
             font-size: 1.2em;
-            transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        .button:hover {
-            background-color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
         }
 
         .corner-image {
             position: absolute;
             bottom: 0;
             right: 0;
-            max-width: 20%;
-            max-height: 20%;
-            object-fit: contain;
-            z-index: 0;
-        }
-
-        @media (max-width: 768px) {
-            .corner-image {
-                max-width: 30%;
-                max-height: 30%;
-            }
+            width: 40%; /* Imagen más grande */
+            height: auto; /* Mantiene proporciones */
         }
     </style>
 </head>
@@ -82,30 +68,5 @@
         <a href="https://adriacp96.github.io/DSO/" class="button">DSO</a>
     </div>
     <img src="https://i.imghippo.com/files/TC4092ilM.png" alt="Corner Image" class="corner-image">
-
-    <script>
-        function setGradient() {
-            const now = new Date();
-            const hours = now.getHours();
-            let gradient;
-
-            if (hours >= 5 && hours < 12) { // Mañana
-                gradient = 'linear-gradient(to bottom, #d9e2f0, #e6eef5, #f0e6ed)';
-            } else if (hours >= 12 && hours < 17) { // Tarde
-                gradient = 'linear-gradient(to bottom, #f0e6ed, #ede6e9, #d9e2f0)';
-            } else if (hours >= 17 && hours < 20) { // Atardecer
-                gradient = 'linear-gradient(to bottom, #f0d9e6, #e6c9d9, #d9b8cc)';
-            } else { // Noche
-                gradient = 'linear-gradient(to bottom, #d9d9e6, #c9c9d9, #b8b8cc)';
-            }
-
-            document.body.style.backgroundImage = gradient;
-            document.body.style.backgroundSize = 'cover'; /* Asegura que el degradado cubra todo */
-            console.log('Gradient applied:', gradient); /* Para depuración */
-        }
-
-        setGradient();
-        setInterval(setGradient, 60000);
-    </script>
 </body>
 </html>
