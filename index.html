@@ -14,22 +14,25 @@
             font-style: normal;
         }
 
-        html, body {
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77); /* Movemos el degradado al html */
+        }
+
+        body {
             margin: 0;
             padding: 0;
             height: 100%;
             width: 100%;
             overflow: hidden;
-        }
-
-        body {
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Emirates Bold', sans-serif;
-            background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
             position: relative;
-            min-height: 100vh;
         }
 
         .container {
@@ -100,7 +103,7 @@
             bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 100px; /* Reducido de 150px a 100px (1/3 más pequeño) */
+            width: 100px;
             height: auto;
             z-index: 1;
         }
