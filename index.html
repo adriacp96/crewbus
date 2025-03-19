@@ -63,44 +63,26 @@
             margin: 40px 0;
         }
 
-        .button {
+        .image-button {
             display: inline-block;
-            width: 200px;
-            padding: 15px 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #333;
             text-decoration: none;
             border-radius: 25px;
-            font-size: 1.2em;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: visible;
+            transition: transform 0.2s;
         }
 
-        .inline-image {
-            position: absolute;
-            z-index: 2;
-            bottom: 0;
+        .image-button:hover {
+            transform: scale(1.05);
         }
 
-        .grosvenor-image {
-            width: 50px;
+        .grosvenor-button img {
+            width: 200px;
             height: auto;
-            right: 20px;
         }
 
-        .dso-image {
-            width: 160px;
+        .dso-button img {
+            width: 200px;
             height: auto;
-            left: 17px;
-        }
-
-        .grosvenor-text {
-            text-align: left;
-        }
-
-        .dso-text {
-            text-align: right;
         }
 
         .bottom-image {
@@ -123,15 +105,13 @@
     <div class="container">
         <h1>EK Crew Bus</h1>
         <div class="button-row">
-            <a href="https://adriacp96.github.io/grosvenor/" class="button grosvenor-text">
-                Grosvenor
-                <img src="https://i.imghippo.com/files/tqlJ2747cfw.png" alt="Grosvenor Icon" class="inline-image grosvenor-image">
+            <a href="https://adriacp96.github.io/grosvenor/" class="image-button grosvenor-button">
+                <img src="https://i.imghippo.com/files/tqlJ2747cfw.png" alt="Grosvenor Button">
             </a>
         </div>
         <div class="button-row">
-            <a href="https://adriacp96.github.io/dso/" class="button dso-text">
-                DSO
-                <img src="https://i.imghippo.com/files/c7307Fjk.png" alt="DSO Icon" class="inline-image dso-image">
+            <a href="https://adriacp96.github.io/dso/" class="image-button dso-button">
+                <img src="https://i.imghippo.com/files/c7307Fjk.png" alt="DSO Button">
             </a>
         </div>
     </div>
