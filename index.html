@@ -2,7 +2,10 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <!-- Hacer que la web se vea como app en pantalla completa en iPhone -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>EK Crew Bus</title>
     <style>
         @font-face {
@@ -12,17 +15,21 @@
             font-style: normal;
         }
 
-        body {
+        html, body {
             margin: 0;
             padding: 0;
-            height: 100vh;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Emirates Bold', sans-serif;
             background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
-            overflow: hidden;
-            position: relative; /* Necesario para posicionar la imagen absoluta */
+            position: relative;
         }
 
         .container {
@@ -89,11 +96,12 @@
 
         .bottom-image {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
             height: auto;
-            z-index: 1; /* Para que esté detrás del contenido */
+            z-index: 1;
         }
     </style>
 </head>
@@ -113,6 +121,6 @@
             </a>
         </div>
     </div>
-    <img src="https://i.imghippo.com/files/bDy8385Olk.png" alt="Bottom Image" class="bottom-image">
+    <img src="https://i.imghippo.com/files/bDy8385Olk.png" alt="Bottom Logo" class="bottom-image">
 </body>
 </html>
