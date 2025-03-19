@@ -61,7 +61,6 @@
 
         .inline-image {
             position: absolute;
-            bottom: 0;
             z-index: 1;
         }
 
@@ -69,13 +68,14 @@
             width: 50px;
             height: auto;
             right: 20px;
+            bottom: 0;
         }
 
         .dso-image {
             width: 120px;
             height: auto;
             left: -25px;
-            clip-path: polygon(25px 0, 100% 0, 100% 100%, 25px 100%, 0 75%, 0 25%);
+            bottom: -60px; /* Mitad de la imagen por debajo del borde inferior del botón */
         }
 
         .grosvenor-text {
