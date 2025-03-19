@@ -20,14 +20,14 @@
             justify-content: center;
             align-items: center;
             font-family: 'Emirates Bold', sans-serif;
-            position: relative; /* Para posicionar la imagen */
+            position: relative;
             background: linear-gradient(to bottom, #d9d9e6, #c2c2d9, #b3b3cc); /* Degradado por defecto */
-            transition: background 1s ease;
+            transition: background-image 1s ease;
         }
 
         .container {
             text-align: center;
-            z-index: 1; /* Para que los botones estén sobre la imagen */
+            z-index: 1;
         }
 
         h1 {
@@ -61,13 +61,13 @@
             position: absolute;
             bottom: 0;
             right: 0;
-            max-width: 20%; /* Ajusta el tamaño relativo a la pantalla */
+            max-width: 20%;
             max-height: 20%;
-            object-fit: contain; /* Mantiene la proporción de la imagen */
-            z-index: 0; /* Detrás del contenido */
+            object-fit: contain;
+            z-index: 0;
         }
 
-        @media (max-width: 768px) { /* Ajuste para pantallas pequeñas */
+        @media (max-width: 768px) {
             .corner-image {
                 max-width: 30%;
                 max-height: 30%;
@@ -90,20 +90,20 @@
             let gradient;
 
             if (hours >= 5 && hours < 12) { // Mañana
-                gradient = 'linear-gradient(to bottom, #e6e9f0, #eef1f5, #f5e6e9)';
+                gradient = 'linear-gradient(to bottom, #d9e2f0, #e6eef5, #f0e6ed)';
             } else if (hours >= 12 && hours < 17) { // Tarde
-                gradient = 'linear-gradient(to bottom, #f5e6e9, #f0e6e6, #e6e9f0)';
+                gradient = 'linear-gradient(to bottom, #f0e6ed, #ede6e9, #d9e2f0)';
             } else if (hours >= 17 && hours < 20) { // Atardecer
-                gradient = 'linear-gradient(to bottom, #f0d9e6, #e6c2d9, #d9b3cc)';
+                gradient = 'linear-gradient(to bottom, #f0d9e6, #e6c9d9, #d9b8cc)';
             } else { // Noche
-                gradient = 'linear-gradient(to bottom, #d9d9e6, #c2c2d9, #b3b3cc)';
+                gradient = 'linear-gradient(to bottom, #d9d9e6, #c9c9d9, #b8b8cc)';
             }
 
-            document.body.style.backgroundImage = gradient; /* Usar backgroundImage para degradados */
+            document.body.style.backgroundImage = gradient;
+            document.body.style.backgroundSize = 'cover'; /* Asegura que el degradado cubra todo */
             console.log('Gradient applied:', gradient); /* Para depuración */
         }
 
-        // Ejecutar al cargar y actualizar cada minuto
         setGradient();
         setInterval(setGradient, 60000);
     </script>
