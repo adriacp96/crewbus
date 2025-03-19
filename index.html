@@ -19,8 +19,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(to bottom, #ff6b6b, #ff8e53, #ffd166, #87ceeb);
             font-family: 'Emirates Bold', sans-serif;
+            transition: background 1s ease;
         }
 
         .container {
@@ -59,7 +59,31 @@
     <div class="container">
         <h1>EK Crew Bus</h1>
         <a href="https://adriacp96.github.io/grosvenor/" class="button">Grosvenor</a>
-        <a href="https://adriacp96.github.io/DSO/" class="button">DSO</a>
+        <a href="https://adriacp96.github.io/dso/" class="button">DSO</a>
     </div>
+
+    <script>
+        function setGradient() {
+            const now = new Date();
+            const hours = now.getHours();
+            let gradient;
+
+            if (hours >= 5 && hours < 12) { // Mañana
+                gradient = 'linear-gradient(to bottom, #e6e9f0, #eef1f5, #f5e6e9)';
+            } else if (hours >= 12 && hours < 17) { // Tarde
+                gradient = 'linear-gradient(to bottom, #f5e6e9, #f0e6e6, #e6e9f0)';
+            } else if (hours >= 17 && hours < 20) { // Atardecer
+                gradient = 'linear-gradient(to bottom, #f0d9e6, #e6c2d9, #d9b3cc)';
+            } else { // Noche
+                gradient = 'linear-gradient(to bottom, #d9d9e6, #c2c2d9, #b3b3cc)';
+            }
+
+            document.body.style.background = gradient;
+        }
+
+        // Ejecutar al cargar y actualizar cada minuto
+        setGradient();
+        setInterval(setGradient, 60000);
+    </script>
 </body>
 </html>
