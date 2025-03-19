@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <!-- Hacer que la web se vea como app en pantalla completa en iPhone -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>EK Crew Bus</title>
@@ -30,6 +29,7 @@
             font-family: 'Emirates Bold', sans-serif;
             background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
             position: relative;
+            min-height: 100vh; /* Asegura que ocupe al menos toda la altura */
         }
 
         .container {
@@ -38,6 +38,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            width: 100%; /* Asegura que el contenedor ocupe el ancho completo */
         }
 
         h1 {
