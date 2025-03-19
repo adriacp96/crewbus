@@ -20,16 +20,16 @@
             justify-content: center;
             align-items: center;
             font-family: 'Emirates Bold', sans-serif;
-            background: linear-gradient(to bottom, #cce0f5, #b3d1f0, #99c2eb); /* Degradado azul tipo cielo */
-            overflow: hidden; /* Evita cualquier desplazamiento */
+            background: linear-gradient(to bottom, #cce0f5, #b3d1f0, #99c2eb);
+            overflow: hidden;
         }
 
         .container {
             text-align: center;
-            position: absolute; /* Posición fija */
+            position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%); /* Centrado exacto */
+            transform: translate(-50%, -50%);
         }
 
         h1 {
@@ -39,11 +39,17 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
+        .button-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
         .button {
             display: block;
             width: 200px;
             padding: 15px;
-            margin: 20px auto;
             background-color: rgba(255, 255, 255, 0.9);
             color: #333;
             text-decoration: none;
@@ -52,20 +58,32 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
+        .inline-image {
+            width: 50px; /* Ajusta el tamaño según necesites */
+            height: auto;
+            margin: 0 10px; /* Espacio entre imagen y botón */
+        }
+
         .corner-image {
             position: absolute;
             bottom: 0;
             right: 0;
-            width: 40%; /* Imagen más grande */
-            height: auto; /* Mantiene proporciones */
+            width: 40%;
+            height: auto;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>EK Crew Bus</h1>
-        <a href="https://adriacp96.github.io/grosvenor/" class="button">Grosvenor</a>
-        <a href="https://adriacp96.github.io/dso/" class="button">DSO</a>
+        <div class="button-row">
+            <a href="https://adriacp96.github.io/grosvenor/" class="button">Grosvenor</a>
+            <img src="https://i.imghippo.com/files/bTT1071g.png" alt="Grosvenor Icon" class="inline-image">
+        </div>
+        <div class="button-row">
+            <img src="https://i.imghippo.com/files/FFdi2937mw.png" alt="DSO Icon" class="inline-image">
+            <a href="https://adriacp96.github.io/dso/" class="button">DSO</a>
+        </div>
     </div>
     <img src="https://i.imghippo.com/files/JwBK7847tdg.png" alt="Corner Image" class="corner-image">
 </body>
