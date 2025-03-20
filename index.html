@@ -16,31 +16,28 @@
             font-style: normal;
         }
 
-        html {
-            height: 100%;
-            width: 100%;
+        html, body {
+            height: 100vh; /* Usamos vh para toda la altura visible */
+            width: 100vw; /* Usamos vw para todo el ancho visible */
             margin: 0;
             padding: 0;
-            background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
-            overflow: hidden; /* Evita scroll no deseado */
+            overflow: hidden; /* Evita scroll */
+            background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77); /* Fondo aplicado directamente */
+            position: fixed; /* Fija el html y body para cubrir todo */
+            top: 0;
+            left: 0;
         }
 
         body {
-            height: 100vh; /* Cambiado a 100vh para usar toda la altura de la pantalla */
-            width: 100vw; /* Cambiado a 100vw para usar todo el ancho */
-            margin: 0;
-            padding: 0;
-            padding-top: env(safe-area-inset-top); /* Respeta el notch */
-            padding-bottom: env(safe-area-inset-bottom); /* Respeta el área inferior */
-            overflow: hidden;
             font-family: 'Emirates Bold', sans-serif;
-            position: relative;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: inherit; /* Hereda el gradiente del html */
-            box-sizing: border-box; /* Asegura que el padding no afecte el tamaño */
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch; /* Mejora el desplazamiento en iOS si se activa */
+            padding-top: env(safe-area-inset-top); /* Respeta el notch */
+            padding-bottom: env(safe-area-inset-bottom); /* Respeta el área inferior */
         }
 
         .container {
@@ -52,7 +49,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 2;
-            padding: 0 20px; /* Añade algo de padding lateral para contenido */
+            padding: 0 20px;
             box-sizing: border-box;
         }
 
@@ -97,7 +94,7 @@
         }
 
         .bottom-image {
-            position: absolute;
+            position: fixed; /* Cambiado a fixed para alinearse con la pantalla */
             bottom: calc(20px + env(safe-area-inset-bottom));
             left: 50%;
             transform: translateX(-50%);
@@ -122,7 +119,7 @@
         </div>
         <div class="button-row">
             <a href="https://adriacp96.github.io/dso/" class="image-button dso-button">
-                <img src="https://i.imghippo.com/files/c7307Fjk.png" alt="DSO Button">
+                <img src="https://i.imghippo.com/files/DTpE1959sl.png" alt="DSO Button">
             </a>
         </div>
         <div class="button-row">
