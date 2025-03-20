@@ -26,8 +26,8 @@
             position: fixed;
             top: 0;
             left: 0;
-            -webkit-text-size-adjust: 100%; /* Evita ajustes de texto en iOS */
-            -webkit-tap-highlight-color: transparent; /* Elimina resaltado en iOS */
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -39,8 +39,8 @@
             box-sizing: border-box;
             padding-top: env(safe-area-inset-top);
             padding-bottom: env(safe-area-inset-bottom);
-            min-height: -webkit-fill-available; /* Asegura que use toda la altura disponible en iOS */
-            height: 100%; /* Fallback para otros navegadores */
+            min-height: -webkit-fill-available;
+            height: 100%;
         }
 
         .container {
@@ -110,9 +110,47 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.3);
         }
+
+        /* Mensaje para añadir a pantalla de inicio */
+        .add-to-home-message {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            z-index: 1000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .add-to-home-message p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .add-to-home-message button {
+            padding: 10px 20px;
+            background: #415a77;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <div class="add-to-home-message" id="addToHomeMessage">
+        <p>Para una mejor experiencia, añade esta página a tu pantalla de inicio.<br> Toca el botón de compartir y selecciona "Añadir a pantalla de inicio".</p>
+        <button onclick="document.getElementById('addToHomeMessage').style.display='none'">Entendido</button>
+    </div>
+
     <div class="container">
         <h1>EK Crew Bus</h1>
         <div class="button-row">
@@ -122,7 +160,7 @@
         </div>
         <div class="button-row">
             <a href="https://adriacp96.github.io/dso/" class="image-button dso-button">
-                <img src="https://i.imghippo.com/files/peq2049LM.png" alt="DSO Button">
+                <img src="https://i.imghippo.com/files/c7307Fjk.png" alt="DSO Button">
             </a>
         </div>
         <div class="button-row">
@@ -131,6 +169,13 @@
             </a>
         </div>
     </div>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Emirates_logo.svg/1200px-Emirates_logo.svgdubai.png" alt="Emirates Logo" class="bottom-image">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Emirates_logo.svg/1200px-Emirates_logo.svg.png" alt="Emirates Logo" class="bottom-image">
+
+    <script>
+        // Detectar si la página no está en modo pantalla completa
+        if (!window.navigator.standalone && /iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            document.getElementById('addToHomeMessage').style.display = 'flex';
+        }
+    </script>
 </body>
 </html>
