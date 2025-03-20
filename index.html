@@ -22,7 +22,8 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
+            /* Ajustamos el gradiente para que comience con un color que coincida con la barra de estado */
+            background: linear-gradient(to bottom, #ffffff 0%, #0d1b2a 10%, #1b263b 50%, #415a77 100%);
             position: fixed;
             top: 0;
             left: 0;
@@ -37,7 +38,7 @@
             justify-content: center;
             align-items: center;
             box-sizing: border-box;
-            padding-top: env(safe-area-inset-top);
+            padding-top: calc(env(safe-area-inset-top) + 20px); /* Añadimos espacio para la barra de estado */
             padding-bottom: env(safe-area-inset-bottom);
             min-height: -webkit-fill-available;
             height: 100%;
@@ -110,47 +111,9 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.3);
         }
-
-        /* Mensaje para añadir a pantalla de inicio */
-        .add-to-home-message {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            text-align: center;
-            padding: 20px;
-            z-index: 1000;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .add-to-home-message p {
-            font-size: 1.2em;
-            margin-bottom: 20px;
-        }
-
-        .add-to-home-message button {
-            padding: 10px 20px;
-            background: #415a77;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-size: 1em;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
-    <div class="add-to-home-message" id="addToHomeMessage">
-        <p>Para una mejor experiencia, añade esta página a tu pantalla de inicio.<br> Toca el botón de compartir y selecciona "Añadir a pantalla de inicio".</p>
-        <button onclick="document.getElementById('addToHomeMessage').style.display='none'">Entendido</button>
-    </div>
-
     <div class="container">
         <h1>EK Crew Bus</h1>
         <div class="button-row">
@@ -160,7 +123,7 @@
         </div>
         <div class="button-row">
             <a href="https://adriacp96.github.io/dso/" class="image-button dso-button">
-                <img src="https://i.imghippo.com/files/c7307Fjk.png" alt="DSO Button">
+                <img src="https://i.imghippo.com/files/Ik4636fk.png" alt="DSO Button">
             </a>
         </div>
         <div class="button-row">
@@ -170,12 +133,5 @@
         </div>
     </div>
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Emirates_logo.svg/1200px-Emirates_logo.svg.png" alt="Emirates Logo" class="bottom-image">
-
-    <script>
-        // Detectar si la página no está en modo pantalla completa
-        if (!window.navigator.standalone && /iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-            document.getElementById('addToHomeMessage').style.display = 'flex';
-        }
-    </script>
 </body>
 </html>
