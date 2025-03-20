@@ -17,15 +17,17 @@
         }
 
         html, body {
-            height: 100vh; /* Usamos vh para toda la altura visible */
-            width: 100vw; /* Usamos vw para todo el ancho visible */
+            height: 100vh;
+            width: 100vw;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Evita scroll */
-            background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77); /* Fondo aplicado directamente */
-            position: fixed; /* Fija el html y body para cubrir todo */
+            overflow: hidden;
+            background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
+            position: fixed;
             top: 0;
             left: 0;
+            -webkit-text-size-adjust: 100%; /* Evita ajustes de texto en iOS */
+            -webkit-tap-highlight-color: transparent; /* Elimina resaltado en iOS */
         }
 
         body {
@@ -35,9 +37,10 @@
             justify-content: center;
             align-items: center;
             box-sizing: border-box;
-            -webkit-overflow-scrolling: touch; /* Mejora el desplazamiento en iOS si se activa */
-            padding-top: env(safe-area-inset-top); /* Respeta el notch */
-            padding-bottom: env(safe-area-inset-bottom); /* Respeta el área inferior */
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            min-height: -webkit-fill-available; /* Asegura que use toda la altura disponible en iOS */
+            height: 100%; /* Fallback para otros navegadores */
         }
 
         .container {
@@ -94,7 +97,7 @@
         }
 
         .bottom-image {
-            position: fixed; /* Cambiado a fixed para alinearse con la pantalla */
+            position: fixed;
             bottom: calc(20px + env(safe-area-inset-bottom));
             left: 50%;
             transform: translateX(-50%);
@@ -119,7 +122,7 @@
         </div>
         <div class="button-row">
             <a href="https://adriacp96.github.io/dso/" class="image-button dso-button">
-                <img src="https://i.imghippo.com/files/DTpE1959sl.png" alt="DSO Button">
+                <img src="https://i.imghippo.com/files/peq2049LM.png" alt="DSO Button">
             </a>
         </div>
         <div class="button-row">
@@ -128,6 +131,6 @@
             </a>
         </div>
     </div>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Emirates_logo.svg/1200px-Emirates_logo.svg.png" alt="Emirates Logo" class="bottom-image">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Emirates_logo.svg/1200px-Emirates_logo.svgdubai.png" alt="Emirates Logo" class="bottom-image">
 </body>
 </html>
