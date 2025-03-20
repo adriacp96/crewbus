@@ -22,13 +22,16 @@
             margin: 0;
             padding: 0;
             background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
+            overflow: hidden; /* Evita scroll no deseado */
         }
 
         body {
-            height: 100%;
-            width: 100%;
+            height: 100vh; /* Cambiado a 100vh para usar toda la altura de la pantalla */
+            width: 100vw; /* Cambiado a 100vw para usar todo el ancho */
             margin: 0;
             padding: 0;
+            padding-top: env(safe-area-inset-top); /* Respeta el notch */
+            padding-bottom: env(safe-area-inset-bottom); /* Respeta el área inferior */
             overflow: hidden;
             font-family: 'Emirates Bold', sans-serif;
             position: relative;
@@ -36,6 +39,8 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            background: inherit; /* Hereda el gradiente del html */
+            box-sizing: border-box; /* Asegura que el padding no afecte el tamaño */
         }
 
         .container {
@@ -47,6 +52,8 @@
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 2;
+            padding: 0 20px; /* Añade algo de padding lateral para contenido */
+            box-sizing: border-box;
         }
 
         h1 {
