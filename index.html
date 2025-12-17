@@ -6,6 +6,14 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>EK Crew Bus</title>
+    
+    <!-- Speed Optimization: Preconnect to external domains -->
+    <link rel="preconnect" href="https://i.imghippo.com" crossorigin>
+    <link rel="preconnect" href="https://c.ekstatic.net" crossorigin>
+    
+    <!-- Speed Optimization: Preload Critical Font -->
+    <link rel="preload" href="https://c.ekstatic.net/shared/fonts/emirates/emirates-bold-v3.woff2" as="font" type="font/woff2" crossorigin>
+
     <link rel="icon" href="https://i.imghippo.com/files/QJ6163Z.png" type="image/png">
 
     <meta name="thumbnail" content="https://i.imghippo.com/files/I6835C.png">
@@ -23,6 +31,7 @@
             src: url('https://c.ekstatic.net/shared/fonts/emirates/emirates-bold-v3.woff2') format('woff2');
             font-weight: bold;
             font-style: normal;
+            font-display: swap; /* Optimization: Shows fallback text until font loads */
         }
 
         html {
@@ -45,6 +54,8 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            /* iOS Optimization: Prevents tap highlight flicker */
+            -webkit-tap-highlight-color: transparent;
         }
 
         .container {
@@ -65,7 +76,7 @@
             background-color: rgba(255, 255, 255, 0.1);
             padding: 2px 6px;
             border-radius: 3px;
-            margin: 0 auto 10px auto; /* Centrado y espacio debajo */
+            margin: 0 auto 10px auto;
             width: fit-content;
         }
 
@@ -81,6 +92,8 @@
             align-items: center;
             justify-content: center;
             margin: 20px 0;
+            /* Reserve space to prevent layout shift if images load slowly */
+            min-height: 60px; 
         }
 
         .image-button {
@@ -88,15 +101,22 @@
             text-decoration: none;
             border-radius: 25px;
             transition: transform 0.2s;
+            /* Optimization: Hardware acceleration for smooth animation */
+            will-change: transform;
         }
 
         .image-button:hover {
             transform: scale(1.05);
         }
 
+        .image-button:active {
+            transform: scale(0.95);
+        }
+
         .image-button img {
             width: 200px;
             height: auto;
+            display: block; /* Removes bottom spacing in some browsers */
         }
 
         .bottom-image {
@@ -119,27 +139,59 @@
     <div class="container">
         <span class="beta-label">BETA</span>
         <h1>EK Crew Bus</h1>
+        
+        <!-- Button 1: High Priority (Visible Immediately) -->
         <div class="button-row">
             <a href="https://grosvenor.crewbus.info" class="image-button grosvenor-button">
-                <img src="https://i.imghippo.com/files/tqlJ2747cfw.png" alt="Grosvenor Button">
+                <img src="https://i.imghippo.com/files/tqlJ2747cfw.png" 
+                     alt="Grosvenor Button"
+                     width="200"
+                     fetchpriority="high"
+                     decoding="sync">
             </a>
         </div>
+        
+        <!-- Button 2: Normal Priority -->
         <div class="button-row">
             <a href="https://dso.crewbus.info" class="image-button dso-button">
-                <img src="https://i.imghippo.com/files/Ik4636fk.png" alt="DSO Button">
+                <img src="https://i.imghippo.com/files/Ik4636fk.png" 
+                     alt="DSO Button"
+                     width="200"
+                     loading="eager"
+                     decoding="async">
             </a>
         </div>
+        
+        <!-- Button 3: Lazy Load (Lower down) -->
         <div class="button-row">
             <a href="https://parkzabeel.crewbus.info" class="image-button new-button">
-                <img src="https://i.imghippo.com/files/BQlQ1574qA.png" alt="New Button">
+                <img src="https://i.imghippo.com/files/BQlQ1574qA.png" 
+                     alt="New Button"
+                     width="200"
+                     loading="lazy"
+                     decoding="async">
             </a>
         </div>
+        
+        <!-- Button 4: Lazy Load -->
         <div class="button-row">
             <a href="https://7pearls.crewbus.info" class="image-button sevenpearls-button">
-                <img src="https://i.imghippo.com/files/kQt9136gb.png" alt="7 Pearls Button">
+                <img src="https://i.imghippo.com/files/kQt9136gb.png" 
+                     alt="7 Pearls Button"
+                     width="200"
+                     loading="lazy"
+                     decoding="async">
             </a>
         </div>
     </div>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/archive/d/d0/20250508163912%21Emirates_logo.svg" alt="Emirates Logo" class="bottom-image">
+    
+    <!-- Footer Logo: Lazy Load -->
+    <img src="https://upload.wikimedia.org/wikipedia/commons/archive/d/d0/20250508163912%21Emirates_logo.svg" 
+         alt="Emirates Logo" 
+         class="bottom-image"
+         width="60"
+         height="60"
+         loading="lazy"
+         decoding="async">
 </body>
 </html>
