@@ -38,21 +38,23 @@
 
         html {
             height: 100%;
-            height: -webkit-fill-available; /* iOS Safari Fullscreen fix */
+            min-height: 100%; /* Ensures it covers full height */
             width: 100%;
             margin: 0;
             padding: 0;
             background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
             background-attachment: fixed; /* Prevents background scroll on bounce */
+            background-size: cover;
+            background-repeat: no-repeat;
         }
 
         body {
             height: 100%;
-            height: -webkit-fill-available; /* iOS Safari Fullscreen fix */
+            min-height: 100vh; /* Ensures body fills the viewport */
             width: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden;
+            overflow: hidden; /* Keeps it as a fixed app-like view */
             font-family: 'Emirates Bold', sans-serif;
             position: relative;
             display: flex;
@@ -124,12 +126,13 @@
             display: block; /* Removes bottom spacing in some browsers */
         }
 
+        /* Updated: Position fixed to ensure it stays static on screen */
         .bottom-image {
-            position: absolute;
+            position: fixed; 
             bottom: calc(20px + env(safe-area-inset-bottom));
             left: 50%;
             transform: translateX(-50%);
-            z-index: 3;
+            z-index: 100; /* Increased z-index to stay on top */
             width: 60px;
             height: 60px;
             object-fit: cover;
@@ -137,6 +140,7 @@
             opacity: 0.9;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            pointer-events: none; /* Optional: lets clicks pass through if needed, remove if it should be clickable */
         }
     </style>
 </head>
@@ -190,7 +194,7 @@
         </div>
     </div>
     
-    <!-- Footer Logo: Lazy Load -->
+    <!-- Footer Logo: Static Fixed Position -->
     <img src="https://upload.wikimedia.org/wikipedia/commons/archive/d/d0/20250508163912%21Emirates_logo.svg" 
          alt="Emirates Logo" 
          class="bottom-image"
