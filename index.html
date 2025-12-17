@@ -36,33 +36,44 @@
             font-display: swap; /* Optimization: Shows fallback text until font loads */
         }
 
-        html {
+        /* Reset and Base Styles */
+        html, body {
             height: 100%;
-            min-height: 100%; /* Ensures it covers full height */
-            width: 100%;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
-            background-attachment: fixed; /* Prevents background scroll on bounce */
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-
-        body {
-            height: 100%;
-            min-height: 100vh; /* Ensures body fills the viewport */
             width: 100%;
             margin: 0;
             padding: 0;
             overflow: hidden; /* Keeps it as a fixed app-like view */
             font-family: 'Emirates Bold', sans-serif;
+            /* iOS Optimization: Prevents tap highlight flicker */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* NEW: Dedicated Background Layer 
+           This ensures coverage behind the Dynamic Island and Status Bar 
+           by ignoring safe-area margins that might affect the body.
+        */
+        .background-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            /* Use a slightly taller height to force coverage on bouncy scrolls if they happen */
+            height: 100dvh; 
+            background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
+            background-size: cover;
+            background-repeat: no-repeat;
+            z-index: -1; /* Puts it behind everything */
+        }
+
+        body {
             position: relative;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            /* iOS Optimization: Prevents tap highlight flicker */
-            -webkit-tap-highlight-color: transparent;
         }
 
         .container {
@@ -126,7 +137,7 @@
             display: block; /* Removes bottom spacing in some browsers */
         }
 
-        /* Updated: Position fixed to ensure it stays static on screen */
+        /* Position fixed to ensure it stays static on screen */
         .bottom-image {
             position: fixed; 
             bottom: calc(20px + env(safe-area-inset-bottom));
@@ -140,11 +151,14 @@
             opacity: 0.9;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.3);
-            pointer-events: none; /* Optional: lets clicks pass through if needed, remove if it should be clickable */
+            pointer-events: none; /* Optional: lets clicks pass through if needed */
         }
     </style>
 </head>
 <body>
+    <!-- The Background Layer -->
+    <div class="background-layer"></div>
+
     <div class="container">
         <span class="beta-label">BETA</span>
         <h1>EK Crew Bus</h1>
