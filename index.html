@@ -12,6 +12,11 @@
     <!-- Speed Optimization: Preconnect to external domains -->
     <link rel="preconnect" href="https://i.imghippo.com" crossorigin>
     <link rel="preconnect" href="https://c.ekstatic.net" crossorigin>
+    <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
+    
+    <!-- Speed Optimization: Preload assets we want painted first -->
+    <link rel="preload" href="https://i.imghippo.com/files/tqlJ2747cfw.png" as="image" importance="high">
+    <link rel="preload" href="https://upload.wikimedia.org/wikipedia/commons/archive/d/d0/20250508163912%21Emirates_logo.svg" as="image" importance="low">
     
     <!-- Speed Optimization: Preload Critical Font -->
     <link rel="preload" href="https://c.ekstatic.net/shared/fonts/emirates/emirates-bold-v3.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,15 +42,26 @@
         }
 
         /* Reset and Base Styles */
-        html, body {
+        html {
+            min-height: 100%;
+            background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
+        }
+
+        body {
             height: 100%;
             width: 100%;
             margin: 0;
-            padding: 0;
             overflow: hidden; /* Keeps it as a fixed app-like view */
             font-family: 'Emirates Bold', sans-serif;
             /* iOS Optimization: Prevents tap highlight flicker */
             -webkit-tap-highlight-color: transparent;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
         }
 
         /* NEW: Dedicated Background Layer 
@@ -54,27 +70,15 @@
         */
         .background-layer {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100vw;
-            height: 100vh;
-            /* Use a slightly taller height to force coverage on bouncy scrolls if they happen */
-            height: 100dvh; 
+            inset: 0;
+            min-height: calc(100dvh + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px));
+            min-height: 100svh;
             background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
             background-size: cover;
             background-repeat: no-repeat;
             z-index: -1; /* Puts it behind everything */
         }
 
-        body {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
 
         .container {
             text-align: center;
