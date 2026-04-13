@@ -14,8 +14,8 @@
 </head>
 <body class="bg-neutral-50 dark:bg-black text-neutral-900 dark:text-neutral-100 font-sans transition-colors duration-200 select-none">
 
-    <div id="splash-screen" class="hidden fixed inset-0 z-[100] bg-white dark:bg-black flex flex-col items-center justify-start sm:justify-center p-6 sm:p-8 overflow-y-auto custom-scrollbar animate-in fade-in duration-700">
-        <div class="max-w-md w-full flex flex-col items-center mt-4 sm:mt-0 pb-8">
+    <div id="splash-screen" class="hidden fixed inset-0 z-[100] bg-white dark:bg-black flex flex-col items-center justify-center p-6 sm:p-8 overflow-y-auto custom-scrollbar animate-in fade-in duration-700">
+        <div class="max-w-md w-full flex flex-col items-center py-8">
             <div class="w-full max-w-[320px] overflow-hidden relative mb-8 shrink-0">
                 <div class="carousel-track" id="carousel-track">
                     <!-- Slides dynamically injected here via JS -->
@@ -427,10 +427,24 @@
                     `;
                     track.appendChild(slide);
                 });
+
+                // Clone the first slide for seamless infinite loop
+                const firstSlideClone = track.children[0].cloneNode(true);
+                track.appendChild(firstSlideClone);
+
                 let currentSlide = 0;
                 setInterval(() => {
-                    currentSlide = (currentSlide + 1) % crewEmotions.length;
+                    currentSlide++;
+                    track.style.transition = 'transform 0.6s cubic-bezier(0.25,1,0.5,1)';
                     track.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+                    if (currentSlide === crewEmotions.length) {
+                        setTimeout(() => {
+                            track.style.transition = 'none';
+                            currentSlide = 0;
+                            track.style.transform = 'translateX(0)';
+                        }, 600); // 600ms matches the CSS transition duration
+                    }
                 }, 3000);
             }
 
