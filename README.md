@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="crewrun.png" alt="CrewBus Logo" width="100">
+<img src="assets/crewrun.png" alt="CrewBus Logo" width="100">
 
 # CrewBus
 
