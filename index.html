@@ -5,9 +5,14 @@
     <title>CrewBus</title>
     <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="CrewBus">
     <meta name="mobile-web-app-capable" content="yes"><meta name="application-name" content="CrewBus"><meta name="theme-color" content="#000000">
-    <link rel="preconnect" href="https://raw.githubusercontent.com">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/adriacp96/crewbus/ae8901519bd89a159f47c80d879801e8c8105259/assets/crewrun.png">
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/adriacp96/crewbus/ae8901519bd89a159f47c80d879801e8c8105259/assets/crewruntp.png">
+    <link rel="apple-touch-icon" href="assets/crewrun.png">
+    <link rel="icon" type="image/png" href="assets/crewruntp.png">
+    <link rel="preload" as="image" href="assets/crewtime.png">
+    <link rel="preload" as="image" href="assets/crewsleepy.png">
+    <link rel="preload" as="image" href="assets/crewmad.png">
+    <link rel="preload" as="image" href="assets/crewlost.png">
+    <link rel="preload" as="image" href="assets/crewhappy.png">
+    <link rel="preload" as="image" href="assets/crewrun.png">
     <link rel="preconnect" href="https://cdn.tailwindcss.com"><link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
     <script src="https://cdn.tailwindcss.com"></script><script>tailwind.config={darkMode:'media'}</script>
     <style>:root{--vh:1vh}body{height:100vh;height:100dvh;width:100vw;overflow:hidden;background-color:#f8fafc}@media (prefers-color-scheme:dark){body{background-color:#000}}.hide-scrollbar::-webkit-scrollbar{display:none}.hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}.custom-scrollbar::-webkit-scrollbar{width:6px}.custom-scrollbar::-webkit-scrollbar-track{background:0 0}.custom-scrollbar::-webkit-scrollbar-thumb{background-color:rgba(82,82,91,.3);border-radius:20px}@media (prefers-color-scheme:dark){.custom-scrollbar::-webkit-scrollbar-thumb{background-color:rgba(82,82,91,.6)}} .carousel-track{display:flex;transition:transform 0.6s cubic-bezier(0.25,1,0.5,1)} .carousel-slide{min-width:100%;display:flex;flex-direction:column;align-items:center;padding:0 0.5rem} .image-wrapper{position:relative;width:180px;height:180px;display:flex;justify-content:center;align-items:center;margin-bottom:1.5rem;animation:float 4s infinite ease-in-out} .carousel-image{position:relative;height:160px;width:auto;max-width:100%;object-fit:contain} @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}} .progress-bar{width:100%;height:4px;background:rgba(150,150,150,0.2);margin-top:1rem;border-radius:2px;overflow:hidden} .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#3b82f6,#60a5fa);animation:fillProgress 3s linear infinite} @keyframes fillProgress{0%{width:0%}100%{width:100%}}</style>
@@ -403,12 +408,12 @@
             document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){updateVH();updateTime();}});
             
             const crewEmotions = [
-                { src: 'https://raw.githubusercontent.com/adriacp96/crewbus/ae8901519bd89a159f47c80d879801e8c8105259/assets/crewtime.png', text: 'Worried you might miss the next bus?' },
-                { src: 'https://raw.githubusercontent.com/adriacp96/crewbus/ae8901519bd89a159f47c80d879801e8c8105259/assets/crewsleepy.png', text: 'Exhausted and disoriented after that grueling ULR flight?' },
-                { src: 'https://raw.githubusercontent.com/adriacp96/crewbus/ae8901519bd89a159f47c80d879801e8c8105259/assets/crewmad.png', text: 'Just watched your ride pull away right in front of you?' },
-                { src: 'https://raw.githubusercontent.com/adriacp96/crewbus/ae8901519bd89a159f47c80d879801e8c8105259/assets/crewlost.png', text: 'Not sure which schedule fits your next briefing?' },
-                { src: 'https://raw.githubusercontent.com/adriacp96/crewbus/ae8901519bd89a159f47c80d879801e8c8105259/assets/crewhappy.png', text: 'Why rush? Walk with ease and always know your next ride.' },
-                { src: 'https://raw.githubusercontent.com/adriacp96/crewbus/ae8901519bd89a159f47c80d879801e8c8105259/assets/crewrun.png', text: 'Install CrewBus', isIcon: true }
+                { src: 'assets/crewtime.png', text: 'Worried you might miss the next bus?' },
+                { src: 'assets/crewsleepy.png', text: 'Exhausted and disoriented after that grueling ULR flight?' },
+                { src: 'assets/crewmad.png', text: 'Just watched your ride pull away right in front of you?' },
+                { src: 'assets/crewlost.png', text: 'Not sure which schedule fits your next briefing?' },
+                { src: 'assets/crewhappy.png', text: 'Why rush? Walk with ease and always know your next ride.' },
+                { src: 'assets/crewrun.png', text: 'Install CrewBus', isIcon: true }
             ];
             const track = document.getElementById('carousel-track');
             if (track) {
@@ -416,8 +421,8 @@
                     const slide = document.createElement('div');
                     slide.className = 'carousel-slide';
                     const imageContent = emotion.isIcon 
-                        ? `<div class="w-[160px] h-[160px] rounded-3xl shadow-[0_0_20px_rgba(59,130,246,0.4)] border-2 border-blue-400 dark:border-blue-500 overflow-hidden shrink-0 animate-pop"><img class="w-full h-full object-cover" src="${emotion.src}" alt="Install CrewBus"></div>`
-                        : `<img class="carousel-image" src="${emotion.src}" alt="CrewBus Scenario">`;
+                        ? `<div class="w-[160px] h-[160px] rounded-3xl shadow-[0_0_20px_rgba(59,130,246,0.4)] border-2 border-blue-400 dark:border-blue-500 overflow-hidden shrink-0 animate-pop"><img class="w-full h-full object-cover" src="${emotion.src}" alt="Install CrewBus" fetchpriority="high" decoding="async"></div>`
+                        : `<img class="carousel-image" src="${emotion.src}" alt="CrewBus Scenario" fetchpriority="high" decoding="async">`;
                     const textClass = emotion.isIcon
                         ? `text-lg sm:text-xl text-blue-600 dark:text-blue-400 font-black`
                         : `text-sm sm:text-base text-neutral-600 dark:text-neutral-300 font-semibold`;
