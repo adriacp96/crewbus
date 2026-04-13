@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+    <title>CrewBus</title>
+    <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="CrewBus">
+    <meta name="mobile-web-app-capable" content="yes"><meta name="application-name" content="CrewBus"><meta name="theme-color" content="#000000">
+    <link rel="apple-touch-icon" href="https://github.com/adriacp96/ekbus/blob/c59b12fece46a32cb5670730fb4d21933669c061/crewrun.png?raw=true">
+    <link rel="icon" type="image/png" href="https://github.com/adriacp96/ekbus/blob/c59b12fece46a32cb5670730fb4d21933669c061/crewrun.png?raw=true">
+    <link rel="preconnect" href="https://cdn.tailwindcss.com"><link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+    <script src="https://cdn.tailwindcss.com"></script><script>tailwind.config={darkMode:'media'}</script>
+    <style>:root{--vh:1vh}body{height:100vh;height:100dvh;width:100vw;overflow:hidden;background-color:#f8fafc}@media (prefers-color-scheme:dark){body{background-color:#000}}.hide-scrollbar::-webkit-scrollbar{display:none}.hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}.custom-scrollbar::-webkit-scrollbar{width:6px}.custom-scrollbar::-webkit-scrollbar-track{background:0 0}.custom-scrollbar::-webkit-scrollbar-thumb{background-color:rgba(82,82,91,.3);border-radius:20px}@media (prefers-color-scheme:dark){.custom-scrollbar::-webkit-scrollbar-thumb{background-color:rgba(82,82,91,.6)}}</style>
+</head>
+<body class="bg-neutral-50 dark:bg-black text-neutral-900 dark:text-neutral-100 font-sans transition-colors duration-200 select-none">
+
+    <div id="splash-screen" class="hidden fixed inset-0 z-[100] bg-white dark:bg-black flex flex-col items-center justify-center p-8 animate-in fade-in duration-700">
+        <div class="max-w-md w-full flex flex-col items-center">
+            <div class="w-24 h-24 mb-6 rounded-3xl shadow-2xl border-2 border-neutral-200 dark:border-white/20 overflow-hidden"><img src="https://github.com/adriacp96/ekbus/blob/c59b12fece46a32cb5670730fb4d21933669c061/crewrun.png?raw=true" alt="CrewBus" class="w-full h-full object-cover" fetchpriority="high"></div>
+            <h2 class="text-3xl font-black mb-2 text-neutral-900 dark:text-white text-center tracking-tight">Install CrewBus</h2><p class="text-neutral-500 dark:text-neutral-400 mb-10 text-lg leading-relaxed font-medium text-center">Add to Home Screen for the full experience.</p>
+            <div class="space-y-6 w-full">
+                <div class="flex items-center gap-4 bg-neutral-100 dark:bg-white/5 p-4 rounded-2xl border border-neutral-200 dark:border-white/10"><div class="w-10 h-10 bg-white dark:bg-neutral-800 rounded-lg flex items-center justify-center text-blue-500 shadow-sm shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></div><div><p class="font-bold text-neutral-900 dark:text-white tracking-tight text-left">1. Tap Share</p><p class="text-sm text-neutral-500 dark:text-neutral-400 text-left">Located at the bottom of Safari.</p></div></div>
+                <div class="flex items-center gap-4 bg-neutral-100 dark:bg-white/5 p-4 rounded-2xl border border-neutral-200 dark:border-white/10 shadow-sm"><div class="w-10 h-10 bg-white dark:bg-neutral-800 rounded-lg flex items-center justify-center text-neutral-900 dark:text-white shadow-sm shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div><div><p class="font-bold text-neutral-900 dark:text-white tracking-tight text-left">2. Add to Home Screen</p><p class="text-sm text-neutral-500 dark:text-neutral-400 text-left">Find it in the Safari menu.</p></div></div>
+            </div><button id="dismiss-splash" class="mt-12 w-full px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold text-lg">Got it</button>
+        </div>
+    </div>
+
+    <div id="egate-modal" class="hidden fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex flex-col items-center justify-end sm:justify-center p-4 transition-opacity">
+        <div class="bg-white dark:bg-neutral-900 w-full max-w-sm rounded-[2rem] p-6 shadow-2xl transform transition-transform translate-y-0 relative border border-neutral-200 dark:border-neutral-800">
+            <button id="btn-close-egate" class="absolute top-5 right-5 p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/50 rounded-2xl flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-4">
+                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>
+            </div>
+            <h3 class="text-2xl font-black mb-1 text-neutral-900 dark:text-white tracking-tight">eGate Planner</h3>
+            <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6 font-medium">When does your eGate open?</p>
+            <input type="time" id="egate-time-input" class="w-full bg-neutral-50 dark:bg-black text-4xl font-bold text-center py-4 rounded-2xl mb-6 border-2 border-neutral-200 dark:border-neutral-800 text-indigo-600 dark:text-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none transition-colors">
+            <button id="btn-find-egate" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white text-lg font-bold rounded-2xl">Find Buses</button>
+        </div>
+    </div>
+
+    <div id="fullscreen-overlay" class="hidden fixed inset-0 z-50 bg-white dark:bg-black flex flex-col items-center justify-center text-neutral-900 dark:text-white transition-opacity h-full w-full">
+        <button id="btn-close-fs" class="absolute top-16 left-1/2 transform -translate-x-1/2 p-4 bg-neutral-100 dark:bg-white/10 rounded-full hover:bg-neutral-200 dark:hover:bg-white/20 transition-all cursor-pointer border border-neutral-200 dark:border-white/10 text-center"><svg class="w-8 h-8 text-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" x2="21" y1="10" y2="3"/><line x1="3" x2="10" y1="21" y2="14"/></svg></button>
+        <div class="text-center px-4 w-full max-w-2xl"><p id="fs-title" class="text-indigo-600 dark:text-indigo-400 font-semibold tracking-widest uppercase text-sm sm:text-xl mb-4 sm:mb-8 text-center">Next Departure</p><div id="fs-departs" class="text-[6rem] sm:text-[12rem] font-extrabold tracking-tighter leading-none mb-10 sm:mb-16 text-neutral-900 dark:text-white text-center">--:--</div><div id="fs-countdown-box" class="flex flex-col items-center justify-center bg-neutral-100 dark:bg-neutral-900 p-8 sm:p-12 rounded-3xl border border-neutral-200 dark:border-white/10 w-full mx-auto transition-all duration-500 shadow-xl dark:shadow-2xl"><p class="text-sm sm:text-lg text-neutral-500 dark:text-neutral-400 uppercase tracking-widest font-bold mb-4 text-center">Departing In</p><div id="fs-countdown" class="text-7xl sm:text-9xl font-bold font-mono tracking-tight text-neutral-900 dark:text-white mb-2 tabular-nums text-center">--:--</div></div><div class="mt-10 sm:mt-16 flex items-center justify-center gap-3 sm:gap-4 text-xl sm:text-3xl text-neutral-600 dark:text-neutral-300 font-medium text-center"><span id="fs-arrival-label">Expected Arrival</span><span id="fs-arrives" class="font-bold text-neutral-900 dark:text-white text-center">--:--</span><svg class="w-6 h-6 sm:w-8 sm:h-8 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div></div>
+    </div>
+
+    <div class="h-full w-full flex flex-col gap-2 sm:gap-4 px-2 sm:px-4 lg:px-6 pt-[max(env(safe-area-inset-top),0.5rem)] pb-2 sm:pb-4 lg:pb-6 text-center">
+        <header class="shrink-0 flex flex-row items-center justify-between bg-white dark:bg-black p-2.5 sm:p-5 lg:px-6 lg:py-5 rounded-xl sm:rounded-2xl lg:rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-none">
+            <div class="flex items-center gap-2.5 sm:gap-4 lg:gap-5 text-left">
+                <div class="w-9 h-9 sm:w-14 sm:h-14 lg:w-14 lg:h-14 bg-red-600 rounded-lg sm:rounded-xl flex items-center justify-center text-white shadow-md shadow-red-600/30 shrink-0">
+                    <svg class="w-5 h-5 sm:w-8 sm:h-8 lg:w-8 lg:h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6 2 7"/><path d="M10 6h4"/><path d="m22 7-2-1"/><rect width="16" height="16" x="4" y="3" rx="2"/><path d="M4 11h16"/><path d="M8 15h.01"/><path d="M16 15h.01"/><path d="M6 19v2"/><path d="M18 19v2"/></svg>
+                </div>
+                <div>
+                    <h1 id="header-route-name" class="text-base sm:text-2xl lg:text-3xl font-bold lg:font-black text-neutral-900 dark:text-white tracking-tight leading-none">Route 5</h1>
+                    <p id="header-accommodation-list" class="text-[9px] sm:text-sm text-neutral-500 font-medium flex items-center gap-1 mt-1 sm:mt-1.5 uppercase tracking-tight">Loading...</p>
+                </div>
+            </div>
+            <div class="bg-neutral-100 dark:bg-neutral-900/50 px-2.5 py-1.5 sm:px-5 sm:py-3 lg:px-5 lg:py-3 rounded-lg sm:rounded-xl lg:rounded-xl border border-neutral-200 dark:border-neutral-800 shrink-0 text-right">
+                <p class="hidden sm:block text-xs lg:text-[10px] text-neutral-400 dark:text-neutral-500 font-medium lg:font-bold uppercase tracking-wider mb-1">Current Time</p>
+                <div class="flex items-center gap-1 sm:gap-2 lg:gap-2 text-sm sm:text-xl lg:text-xl font-bold text-neutral-900 dark:text-neutral-100 justify-end">
+                    <svg class="w-3.5 h-3.5 sm:w-5 sm:h-5 lg:w-5 lg:h-5 text-neutral-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span id="current-time-display">--:--</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex flex-col lg:flex-row gap-2 sm:gap-4 flex-1 min-h-0 w-full">
+            <div class="flex flex-col gap-2 sm:gap-4 w-full lg:w-[320px] xl:w-[380px] shrink-0 lg:min-h-0">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-col gap-2 sm:gap-4 bg-white dark:bg-black p-2 sm:p-5 lg:p-5 rounded-xl sm:rounded-2xl lg:rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-none transition-colors">
+                    <div class="flex-1 text-left">
+                        <label class="block text-[9px] sm:text-xs font-bold text-neutral-400 uppercase tracking-wider mb-1 sm:mb-2">Route</label>
+                        <div class="relative">
+                            <select id="route-dropdown" class="w-full bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white text-[11px] sm:text-base rounded-md lg:rounded-lg focus:ring-blue-500 block py-1.5 px-2 sm:p-2.5 lg:py-2 lg:px-3 font-bold appearance-none cursor-pointer"><option value="1">Route 1</option><option value="2">Route 2</option><option value="2A">Route 2A</option><option value="3A">Route 3A</option><option value="3B">Route 3B</option><option value="3C">Route 3C</option><option value="4A">Route 4A</option><option value="4B">Route 4B</option><option value="5" selected>Route 5</option><option value="6">Route 6</option><option value="7">Route 7</option><option value="7A">Route 7A</option></select>
+                            <svg class="w-3.5 h-3.5 sm:w-5 sm:h-5 lg:w-5 lg:h-5 absolute right-2 lg:right-3 top-1/2 transform -translate-y-1/2 text-neutral-500 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                    </div>
+                    <div class="flex-1 text-left">
+                        <label class="block text-[9px] sm:text-xs font-bold text-neutral-400 uppercase tracking-wider mb-1 sm:mb-2">Accommodation</label>
+                        <div class="relative">
+                            <select id="stop-selector" class="w-full bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white text-[11px] sm:text-base rounded-md lg:rounded-lg focus:ring-blue-500 block py-1.5 px-2 sm:p-2.5 lg:py-2 lg:px-3 font-bold appearance-none cursor-pointer"></select>
+                            <svg class="w-3.5 h-3.5 sm:w-5 sm:h-5 lg:w-5 lg:h-5 absolute right-2 lg:right-3 top-1/2 transform -translate-y-1/2 text-neutral-500 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1 lg:col-span-1 text-left">
+                        <label class="block text-[9px] sm:text-xs font-bold text-neutral-400 uppercase tracking-wider mb-1 sm:mb-2 text-left tracking-wide">Direction</label>
+                        <div class="flex bg-neutral-100 dark:bg-neutral-900 rounded-md lg:rounded-lg p-0.5 sm:p-1 lg:p-1.5 border border-neutral-200 dark:border-neutral-800">
+                            <button id="btn-from-eghq" class="flex-1 py-1 sm:py-1.5 lg:py-2 text-[10px] sm:text-sm font-bold rounded lg:rounded-md bg-white dark:bg-neutral-800 shadow dark:shadow-none text-neutral-900 dark:text-white transition-all whitespace-nowrap text-center">From EGHQ</button>
+                            <button id="btn-to-eghq" class="flex-1 py-1 sm:py-1.5 lg:py-2 text-[10px] sm:text-sm font-medium rounded lg:rounded-md text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-all whitespace-nowrap text-center">To EGHQ</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="next-bus-banner" class="shrink-0 hidden bg-gradient-to-br from-indigo-700 to-blue-900 rounded-xl sm:rounded-2xl lg:rounded-2xl p-3 sm:p-8 lg:p-8 text-white shadow-lg lg:shadow-xl lg:shadow-indigo-900/10 dark:shadow-none border border-white/5 lg:border-white/10 flex-row lg:flex-col items-center lg:items-start justify-between gap-2 sm:gap-4 lg:gap-4 overflow-hidden relative lg:flex-1 lg:min-h-0">
+                    <button id="btn-expand-fs" class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 lg:left-auto lg:top-4 lg:right-4 lg:transform-none z-20 p-2 sm:p-3 lg:p-2.5 bg-white/20 rounded-full hover:bg-white/30 transition-all cursor-pointer text-white shadow-lg backdrop-blur-md border border-white/30">
+                        <svg class="w-4 h-4 sm:w-6 sm:h-6 lg:w-5 lg:h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/></svg>
+                    </button>
+                    <div class="absolute top-0 right-0 opacity-10 pointer-events-none transform translate-x-1/4 -translate-y-1/4 lg:transform-none lg:-bottom-10 lg:-right-10 lg:top-auto">
+                        <svg class="w-32 h-32 sm:w-60 sm:h-60 lg:w-64 lg:h-64" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6 2 7"/><path d="M10 6h4"/><path d="m22 7-2-1"/><rect width="16" height="16" x="4" y="3" rx="2"/><path d="M4 11h16"/><path d="M8 15h.01"/><path d="M16 15h.01"/><path d="M6 19v2"/><path d="M18 19v2"/></svg>
+                    </div>
+                    <div class="relative z-10 text-left">
+                        <p id="banner-title" class="text-blue-200 lg:text-indigo-200 font-medium lg:font-bold tracking-wide lg:tracking-widest uppercase text-[9px] sm:text-sm lg:text-xs mb-0.5 sm:mb-2 text-left">Next Departure</p>
+                        <div class="flex items-baseline gap-1.5 sm:gap-3 text-left justify-start">
+                            <span id="banner-departs" class="text-2xl sm:text-6xl lg:text-6xl font-extrabold lg:font-black leading-none tracking-tighter">--:--</span>
+                            <span id="banner-minutes" class="text-xs sm:text-2xl lg:text-2xl text-indigo-100 font-medium lg:font-semibold leading-none text-left">--</span>
+                        </div>
+                    </div>
+                    <div class="relative z-10 flex items-center bg-black/30 px-2.5 py-1.5 sm:px-6 sm:py-4 lg:px-4 lg:py-3 rounded-lg sm:rounded-xl lg:rounded-xl backdrop-blur-sm lg:backdrop-blur-md border border-white/10 shrink-0 text-right lg:w-full lg:justify-between lg:mt-auto">
+                        <span id="banner-arrival-label-desk" class="hidden lg:block text-[10px] text-indigo-200 font-bold uppercase tracking-widest text-left lg:mr-auto">Expected Arr</span>
+                        <div class="flex flex-col items-end w-full sm:w-auto">
+                            <span id="banner-arrival-label" class="text-[9px] sm:text-sm text-indigo-200 font-medium mb-0.5 sm:mb-1 uppercase tracking-tight text-right lg:hidden">Expected Arr</span>
+                            <span class="text-base sm:text-2xl lg:text-2xl font-bold lg:font-black flex items-center gap-1 sm:gap-2 leading-none">
+                                <span id="banner-arrives">--:--</span>
+                                <svg class="w-3.5 h-3.5 sm:w-6 sm:h-6 lg:w-5 lg:h-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 flex flex-col gap-2 sm:gap-4 min-h-0">
+                <div class="shrink-0 bg-white dark:bg-black rounded-xl sm:rounded-2xl lg:rounded-2xl border border-neutral-200 dark:border-neutral-800 flex flex-col shadow-sm dark:shadow-none transition-colors relative">
+                    <div class="flex items-center justify-end pt-2 sm:pt-4 lg:pt-3 px-3 sm:px-6 mb-0">
+                        <span class="flex items-center gap-1 lg:gap-1.5 px-1.5 lg:px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-950 text-green-600 dark:text-green-400 lg:text-green-700 border border-green-200 dark:border-green-900/50 text-[8px] sm:text-xs font-bold uppercase tracking-wider shrink-0 text-right">
+                            <span class="relative flex h-1 w-1 sm:h-2 sm:w-2 lg:h-1.5 lg:w-1.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span><span class="relative inline-flex rounded-full h-1 w-1 sm:h-2 sm:w-2 lg:h-1.5 lg:w-1.5 bg-green-500"></span></span>Live
+                        </span>
+                    </div>
+                    <div class="w-full overflow-hidden px-1 sm:px-4 lg:px-6 pt-1 sm:pt-2">
+                        <div id="route-map-container" class="flex items-center w-full justify-between pb-8 sm:pb-12 lg:pb-14 pt-2 sm:pt-4 px-1 sm:px-2 lg:px-4 min-w-0"></div>
+                    </div>
+                </div>
+                
+                <div class="flex-1 flex flex-col min-h-0 bg-white dark:bg-black rounded-t-xl rounded-b-[3.5rem] sm:rounded-t-2xl sm:rounded-b-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden transition-colors shadow-sm dark:shadow-none">
+                    <div class="shrink-0 px-3 py-2 sm:px-6 sm:py-5 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 flex justify-between items-center text-left">
+                        <h2 class="text-xs sm:text-lg lg:text-lg font-bold lg:font-black text-neutral-900 dark:text-neutral-100 uppercase tracking-tight text-left">Your Bus Schedule</h2>
+                        <div class="flex items-center gap-1 sm:gap-2 lg:gap-3">
+                            <button id="btn-egate-planner" class="flex items-center gap-1 sm:gap-1.5 lg:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 lg:px-4 lg:py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-[10px] sm:text-xs lg:text-sm rounded-lg lg:rounded-xl border border-indigo-200 dark:border-indigo-800/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors shadow-sm">
+                                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>
+                                <span class="hidden sm:inline">eGate Planner</span><span class="sm:hidden">eGate</span>
+                            </button>
+                            <button id="btn-center-schedule" class="p-1 sm:p-2 lg:p-1.5 bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 rounded-md sm:rounded-lg lg:rounded-xl border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors shadow-sm text-center">
+                                <svg class="w-3.5 h-3.5 sm:w-5 sm:h-5 text-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="egate-active-banner" class="hidden shrink-0 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/30 dark:to-blue-900/20 border-b border-indigo-200 dark:border-indigo-800/50 py-2 sm:py-3 px-3 sm:px-6 lg:px-6 justify-between items-center text-left transition-all">
+                        <div class="flex items-center gap-2 sm:gap-3">
+                            <span class="bg-indigo-600 text-white text-[9px] sm:text-[10px] lg:text-xs font-bold px-1.5 py-0.5 sm:px-2 sm:py-1 lg:px-3 lg:py-1 rounded lg:rounded-md shadow-sm flex items-center gap-1 lg:gap-1.5 uppercase tracking-wider">
+                                <svg class="w-3 h-3 lg:w-3.5 lg:h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>eGate Mode
+                            </span>
+                            <span class="text-[10px] sm:text-sm font-semibold lg:font-bold text-indigo-900 dark:text-indigo-200">Window: <span id="egate-window-text"></span></span>
+                        </div>
+                        <button id="btn-clear-egate" class="text-[10px] sm:text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 hover:underline px-2.5 py-1 lg:px-3 lg:py-1.5 bg-white/60 dark:bg-black/40 rounded-md lg:rounded-lg border border-indigo-200 dark:border-indigo-800/50 shadow-sm transition-colors">Clear</button>
+                    </div>
+                    
+                    <div class="md:hidden shrink-0 grid grid-cols-2 bg-neutral-50/50 dark:bg-neutral-900/50 py-2 border-b border-neutral-200 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest px-3 z-10 sticky top-0">
+                        <div id="mobile-label-start" class="text-left flex items-center gap-1"></div>
+                        <div id="mobile-label-end" class="text-right flex items-center gap-1 justify-end"></div>
+                    </div>
+
+                    <div id="desktop-table-container" class="hidden md:block flex-1 overflow-x-auto overflow-y-auto custom-scrollbar scroll-smooth relative text-left">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-neutral-50/90 dark:bg-neutral-900/90 backdrop-blur-md text-neutral-500 dark:text-neutral-400 uppercase tracking-widest text-xs sticky top-0 z-10 shadow-sm border-b border-neutral-200 dark:border-neutral-800 text-left">
+                                <tr id="desktop-thead-tr" class="text-left"></tr>
+                            </thead>
+                            <tbody id="desktop-tbody" class="divide-y divide-neutral-100 dark:divide-neutral-800/60 text-left"></tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="mobile-cards-container" class="md:hidden flex-1 overflow-y-auto custom-scrollbar scroll-smooth relative pb-[calc(env(safe-area-inset-bottom)+1rem)] text-left"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const ROUTES = {
+            "1": { name: "Route 1", stops: ['EGHQ (Dep)', 'Dr. Khalifa', 'T.Ecom 1', 'T.Ecom 2', 'EGHQ (Arr)'], dataStr: "00:10,00:35,00:43,00:48,01:23|00:40,01:05,01:13,01:18,01:53|01:10,01:35,01:43,01:48,02:23|01:40,02:05,02:13,02:18,02:53|02:20,02:45,02:53,02:58,03:33|03:00,03:25,03:33,03:38,04:13|03:40,04:05,04:13,04:18,04:53|04:10,04:35,04:43,04:48,05:23|04:40,05:05,05:13,05:18,05:53|05:10,05:35,05:43,05:48,06:23|05:40,06:05,06:13,06:18,06:53|06:10,06:40,06:52,06:57,07:32|06:40,07:10,07:22,07:27,08:02|07:10,07:45,07:57,07:57,08:40|07:40,08:15,08:27,08:32,09:10|08:10,08:45,08:57,09:02,09:40|08:50,09:25,09:37,09:42,10:20|09:30,10:05,10:17,10:22,11:00|10:10,10:40,10:48,10:53,11:35|10:50,11:20,11:28,11:33,12:10|11:20,11:50,11:58,12:03,12:40|11:50,12:20,12:28,12:33,13:10|12:20,12:50,12:58,13:03,13:40|12:50,13:20,12:28,13:33,14:10|13:20,13:52,14:00,14:05,14:55|14:00,14:35,14:45,14:50,15:45|14:40,15:15,15:23,15:28,16:30|15:20,15:55,16:03,16:08,17:10|16:00,16:35,16:43,16:48,17:55|16:40,17:15,17:25,17:30,18:35|17:10,17:50,18:05,18:10,19:25|17:40,18:20,18:35,18:40,19:55|18:10,18:50,19:05,19:10,20:25|18:40,19:20,19:35,19:40,20:45|19:10,19:50,20:05,20:10,21:10|19:50,20:30,20:45,20:50,21:45|20:30,21:10,21:25,21:30,22:20|21:10,21:50,22:02,22:07,22:47|21:40,22:20,22:32,22:37,23:12|22:10,22:45,22:55,23:00,23:35|22:40,23:15,23:23,23:28,00:03|23:10,23:45,23:53,23:58,00:33|23:40,00:15,00:23,00:28,01:03" },
+            "2": { name: "Route 2", stops: ['EGHQ (Dep)', 'MIT', 'EGHQ (Arr)'], dataStr: "00:15,00:40,01:00|00:45,01:10,01:30|01:15,01:40,02:00|01:45,02:10,02:30|02:25,02:50,03:10|03:05,03:30,03:50|03:45,04:10,04:30|04:15,04:35,04:55|04:45,05:10,05:30|05:15,05:40,06:00|05:45,06:10,06:30|06:15,06:40,07:00|06:45,07:10,07:30|07:15,07:40,08:00|07:45,08:10,08:30|08:15,08:40,09:00|08:55,09:20,09:40|09:35,10:00,10:20|10:15,10:40,11:00|10:55,11:20,11:40|11:25,11:50,12:10|11:55,12:22,12:42|12:25,12:52,13:12|12:55,13:22,13:42|13:25,13:52,14:12|14:05,14:32,14:52|14:45,15:12,15:32|15:25,15:54,16:14|16:05,16:34,16:54|16:45,17:20,17:42|17:15,17:50,18:12|17:45,18:20,18:45|18:15,18:50,19:15|18:45,19:20,19:45|19:15,19:50,20:15|19:55,20:30,20:55|20:35,21:10,21:30|21:15,21:50,22:10|21:45,22:15,22:35|22:15,22:45,23:05|22:45,23:15,23:35|23:15,23:45,00:05|23:45,00:15,00:35" },
+            "2A": { name: "Route 2A", stops: ['EGHQ (Dep)', 'Pink', 'GROS', 'EGHQ (Arr)'], dataStr: "00:15,00:38,00:43,01:03|00:45,01:08,01:13,01:33|01:15,01:38,01:43,02:03|01:45,02:08,02:13,02:33|02:25,02:48,02:53,03:13|03:05,03:28,03:33,03:53|03:45,04:08,04:13,04:33|04:15,04:38,04:43,05:03|04:45,05:08,05:13,05:33|05:15,05:38,05:43,06:03|05:45,06:08,06:13,06:33|06:15,06:38,06:43,07:03|06:45,07:08,07:13,07:33|07:15,07:38,07:43,08:03|07:45,08:08,08:13,08:33|08:15,08:38,08:43,09:03|08:55,09:18,09:23,09:43|09:35,09:58,10:03,10:23|10:15,10:38,10:43,11:03|10:55,11:18,11:23,11:43|11:25,11:48,11:53,12:13|11:55,12:18,12:23,12:43|12:25,12:48,12:53,13:13|12:55,13:18,13:23,13:43|13:25,13:48,13:53,14:13|14:05,14:28,14:33,14:53|14:45,15:08,15:13,15:33|15:25,15:48,15:53,16:13|16:05,16:28,16:33,16:53|16:45,17:10,17:17,17:39|17:15,17:40,17:47,18:09|17:45,18:10,18:17,18:42|18:15,18:40,18:47,19:12|18:45,19:10,19:17,19:42|19:15,19:40,19:47,20:12|19:55,20:20,20:27,20:49|20:35,21:00,21:07,21:29|21:15,21:40,21:45,22:05|21:45,22:08,22:13,22:33|22:15,22:38,22:43,23:03|22:45,23:08,23:13,23:33|23:15,23:38,23:43,00:03|23:45,00:08,00:13,00:33" },
+            "3A": { name: "Route 3A", stops: ['EGHQ (Dep)', 'Faltat', 'Sabrin', 'Manazil', 'EGHQ (Arr)'], dataStr: "00:10,00:30,00:39,00:45,01:10|00:35,00:55,01:04,01:10,01:35|01:05,01:25,01:34,01:40,02:05|01:35,01:55,02:04,02:10,02:35|02:15,02:35,02:44,02:50,03:15|02:55,03:15,03:24,03:30,03:55|03:35,03:55,04:04,04:10,04:35|04:15,04:35,04:44,04:50,05:15|04:45,05:05,05:14,05:20,05:45|05:15,05:35,05:44,05:50,06:15|05:45,06:05,06:14,06:20,06:45|06:15,06:35,06:44,06:50,07:15|06:45,07:05,07:14,07:20,07:45|07:15,07:35,07:44,07:50,08:15|07:45,08:05,08:14,08:20,08:45|08:15,08:35,08:44,08:50,09:15|08:55,09:15,09:24,09:30,09:55|09:35,09:55,10:04,10:10,10:35|10:15,10:35,10:44,10:50,11:15|10:55,11:15,11:24,11:30,11:55|11:25,11:45,11:54,12:00,12:25|11:55,12:20,12:32,12:40,13:10|12:25,12:50,13:02,13:10,13:40|12:55,13:20,13:32,13:40,14:10|13:25,13:50,14:02,14:10,14:40|13:55,14:20,14:32,14:40,15:10|14:35,15:00,15:12,15:20,15:50|15:15,15:40,15:52,16:00,16:30|15:55,16:20,16:32,16:40,17:10|16:35,17:00,17:12,17:20,17:50|17:15,17:40,17:52,18:00,18:30|17:45,18:10,18:22,18:30,19:00|18:15,18:40,18:52,19:00,19:30|18:45,19:10,19:22,19:30,20:00|19:15,19:40,19:52,20:00,20:30|19:45,20:10,20:22,20:30,21:00|20:25,20:50,21:02,21:10,21:40|21:05,21:30,21:42,21:50,22:20|21:45,22:10,22:22,22:30,23:00|22:25,22:50,23:02,23:10,23:40|22:55,23:20,23:32,23:40,00:10|23:25,23:50,00:02,00:10,00:40|23:45,00:10,00:22,00:30,01:00" },
+            "3B": { name: "Route 3B", stops: ['EGHQ (Dep)', 'PV6', '7 TWR', 'EGHQ (Arr)'], dataStr: "00:05,00:30,00:33,00:58|00:35,01:00,01:03,01:28|01:05,01:30,01:33,01:58|01:35,02:00,02:03,02:28|02:15,02:40,02:43,03:08|02:55,03:20,03:23,03:48|03:35,04:00,04:03,04:28|04:15,04:40,04:43,05:08|04:45,05:10,05:13,05:38|05:15,05:40,05:43,06:08|05:45,06:10,06:13,06:38|06:15,06:40,06:43,07:08|06:45,07:10,07:13,07:38|07:15,07:40,07:43,08:08|07:45,08:10,08:13,08:38|08:15,08:40,08:43,09:08|08:55,09:20,09:23,09:48|09:35,10:00,10:03,10:28|10:15,10:40,10:43,11:08|10:55,11:20,11:23,11:48|11:25,11:50,11:53,12:18|11:55,12:20,12:23,12:48|12:25,12:50,12:53,13:18|12:55,13:20,13:23,13:48|13:25,13:50,13:53,14:18|13:55,14:20,14:23,14:48|14:35,15:00,15:03,15:28|15:15,15:40,15:43,16:08|15:55,16:20,16:23,16:48|16:35,17:00,17:03,17:28|17:05,17:30,17:33,17:58|17:35,18:00,18:03,18:28|18:05,18:30,18:33,18:58|18:35,19:00,19:03,19:28|19:05,19:30,19:33,19:58|19:35,20:00,20:03,20:28|20:15,20:40,20:43,21:08|20:55,21:20,21:23,21:48|21:35,22:00,22:03,22:28|22:05,22:30,22:33,22:58|22:35,23:00,23:03,23:28|23:05,23:30,23:33,23:58|23:35,00:00,00:03,00:28" },
+            "3C": { name: "Route 3C", stops: ['EGHQ (Dep)', 'ETC-C', 'EAC-B', '3T-3', '3T-2', '3T-1', 'EGHQ (Arr)'], dataStr: "00:00,00:05,00:10,00:18,00:20,00:22,00:32|00:30,00:35,00:40,00:48,00:50,00:52,01:02|01:00,01:05,01:10,01:18,01:20,01:22,01:32|01:30,01:35,01:40,01:48,01:50,01:52,02:02|02:10,02:15,02:20,02:28,02:30,02:32,02:42|02:50,02:55,03:00,03:08,03:10,03:12,03:22|03:30,03:35,03:40,03:48,03:50,03:52,04:02|04:10,04:15,04:20,04:28,04:30,04:32,04:42|04:40,04:45,04:50,04:58,05:00,05:02,05:12|05:10,05:15,05:20,05:28,05:30,05:32,05:42|05:40,05:45,05:50,05:58,06:00,06:02,06:12|06:10,06:15,06:20,06:28,06:30,06:32,06:42|06:40,06:45,06:50,06:58,07:00,07:02,07:12|07:10,07:15,07:20,07:28,07:30,07:32,07:42|07:40,07:45,07:50,07:58,08:00,08:02,08:12|08:10,08:15,08:20,08:28,08:30,08:32,08:42|08:50,08:55,09:00,09:08,09:10,09:12,09:22|09:30,09:35,09:40,09:48,09:50,09:52,10:02|10:10,10:15,10:20,10:28,10:30,10:32,10:42|10:50,10:55,11:00,11:08,11:10,11:12,11:22|11:30,11:35,11:40,11:48,11:50,11:52,12:02|11:50,11:55,12:00,12:08,12:10,12:12,12:22|12:10,12:15,12:20,12:28,12:30,12:32,12:42|12:40,12:45,12:50,12:58,13:00,13:02,13:12|13:10,13:15,13:20,13:28,13:30,13:32,13:42|13:40,13:45,13:50,13:58,14:00,14:02,14:12|14:20,14:25,14:30,14:38,14:40,14:42,14:52|15:00,15:06,15:10,15:18,15:20,15:22,15:32|15:40,15:46,15:50,15:58,16:00,16:02,16:12|16:30,16:36,16:40,16:48,16:50,16:52,17:02|17:10,17:16,17:20,17:28,17:30,17:32,17:42|17:40,17:46,17:50,17:58,18:00,18:02,18:12|18:10,18:16,18:20,18:28,18:30,18:32,18:42|18:40,18:46,18:50,18:58,19:00,19:02,19:12|19:20,19:26,19:30,19:38,19:40,19:42,19:52|20:00,20:05,20:10,20:18,20:20,20:22,20:32|20:40,20:45,20:50,20:58,21:00,21:02,21:12|21:20,21:26,21:30,21:38,21:40,21:42,21:52|22:00,22:05,22:10,22:18,22:20,22:22,22:32|22:40,22:45,22:50,22:58,23:00,23:02,23:12|23:10,23:15,23:20,23:28,23:30,23:32,23:42|23:40,23:46,23:50,23:58,00:00,00:02,00:12" },
+            "4A": { name: "Route 4A", stops: ['EGHQ (Dep)', 'Talal', 'Al Qamzi', 'EGHQ (Arr)'], dataStr: "00:10,00:25,00:27,00:47|00:40,00:55,00:57,01:17|01:10,01:25,01:27,01:47|01:40,00:55,01:57,02:17|02:20,02:35,02:37,02:57|03:00,03:15,03:17,03:37|03:40,03:55,03:57,04:17|04:20,04:35,04:37,04:57|04:50,05:05,05:07,05:27|05:20,05:35,05:37,05:57|05:50,06:05,06:07,06:27|06:20,06:40,06:42,07:12|06:50,07:10,07:12,07:42|07:20,07:40,07:42,08:12|07:50,08:10,08:12,08:42|08:20,08:40,08:42,09:12|08:50,09:10,09:12,09:42|09:30,09:47,09:49,10:17|10:10,10:27,10:29,10:57|10:50,11:07,11:09,11:37|11:20,11:37,11:39,12:07|11:50,12:07,12:09,12:37|12:20,12:37,12:39,13:07|12:50,13:07,13:09,13:37|13:20,13:37,13:39,14:07|13:50,14:07,14:09,14:37|14:30,14:47,14:49,15:17|15:10,15:27,15:29,15:57|15:50,16:07,16:09,16:37|16:30,16:55,16:57,17:27|17:00,17:30,17:32,18:02|17:30,18:00,18:02,18:32|18:00,18:30,18:32,19:02|18:30,19:03,19:05,19:35|19:00,19:33,19:35,20:05|19:30,20:03,20:05,20:35|20:00,20:33,20:35,21:05|20:30,20:45,20:47,21:15|21:10,21:25,21:27,21:55|21:50,22:05,22:07,22:32|22:20,22:35,22:37,23:02|22:50,23:05,23:07,23:32|23:20,23:35,23:37,00:02|23:50,00:05,00:07,00:32" },
+            "4B": { name: "Route 4B", stops: ['EGHQ (Dep)', 'Manazel Deira', 'Emirates 6', 'Manazel Deira', 'EGHQ (Arr)'], dataStr: "00:05,00:17,00:26,00:37,00:57|00:35,00:47,00:56,01:07,01:27|01:05,01:17,01:26,01:37,01:57|01:35,01:47,01:56,02:07,02:27|02:15,02:27,02:36,02:47,03:05|02:55,03:07,03:16,03:27,03:45|03:35,03:47,03:56,04:07,04:25|04:15,04:27,04:36,04:47,05:05|04:45,05:06,05:06,05:17,05:35|05:15,05:27,05:36,05:47,06:07|05:45,05:57,06:06,06:17,06:40|06:15,06:27,06:36,06:47,07:10|06:45,06:57,07:06,07:21,07:50|07:15,07:27,07:36,07:51,08:20|07:45,07:57,08:06,08:21,08:50|08:15,08:27,08:36,08:51,09:20|08:45,09:00,09:11,09:25,09:50|09:25,09:40,09:51,10:05,10:30|10:05,10:20,10:31,10:45,11:10|10:45,11:00,11:11,11:25,11:50|11:15,11:30,11:41,11:55,12:20|11:45,12:00,12:11,12:25,12:50|12:15,12:30,12:41,12:55,13:20|12:45,13:00,13:11,13:25,13:48|13:15,13:30,13:41,13:55,14:18|13:45,14:00,14:11,14:25,14:48|14:25,14:40,14:51,15:05,15:28|15:05,15:20,15:31,15:45,16:08|15:45,16:00,16:11,16:25,16:53|16:25,16:45,16:59,17:15,17:43|16:55,17:15,17:29,17:45,18:13|17:25,17:45,17:59,18:15,18:43|17:55,18:15,18:29,18:45,19:13|18:25,18:50,19:04,19:20,19:48|18:55,19:20,19:34,19:50,20:18|19:25,19:50,20:04,20:20,20:48|19:55,20:10,20:24,20:38,21:05|20:35,20:50,21:04,21:18,21:45|21:15,21:27,21:36,21:47,22:09|21:45,21:57,22:06,22:17,22:33|22:15,22:27,22:36,22:47,23:09|22:45,22:57,23:06,23:17,23:39|23:15,23:27,23:36,23:47,00:09|23:45,23:57,00:06,00:17,00:39" },
+            "5": { name: "Route 5", stops: ['EGHQ (Dep)', 'Sarab 1', 'Safa Twr', 'Sarab 5', 'Sarab 3', 'Sarab 2', 'Sarab 4', 'EGHQ (Arr)'], dataStr: "00:10,00:35,00:36,00:37,00:38,00:39,00:40,01:18|00:40,01:05,01:06,01:07,01:08,01:09,01:10,01:48|01:10,01:35,01:36,01:37,01:38,01:39,01:40,02:18|01:40,02:05,02:06,02:07,02:08,02:09,02:10,02:48|02:20,02:45,02:46,02:47,02:48,02:49,02:50,03:28|03:00,03:25,03:26,03:27,03:28,03:29,03:30,04:08|03:40,04:05,04:06,04:07,04:08,04:09,04:10,04:48|04:20,04:45,04:46,04:47,04:48,04:49,04:50,05:28|04:50,05:15,05:16,05:17,05:18,05:19,05:20,06:00|05:20,05:45,05:46,05:47,05:48,05:49,05:50,06:30|05:50,06:15,06:16,06:17,06:18,06:19,06:20,07:00|06:20,06:48,06:49,06:50,06:51,06:52,06:53,07:33|06:50,07:18,07:19,07:20,07:21,07:22,07:23,08:03|07:20,07:48,07:49,07:50,07:51,07:52,07:53,08:33|07:50,08:18,08:19,08:20,08:21,08:22,08:23,09:03|08:20,08:48,08:49,08:50,08:51,08:52,08:53,09:33|08:50,09:18,09:19,09:20,09:21,09:22,09:23,10:05|09:30,09:58,09:59,10:00,10:01,10:02,10:05,10:43|10:10,10:38,10:39,10:40,10:41,10:42,10:43,11:23|10:50,11:18,11:19,11:20,11:21,11:22,11:23,12:03|11:20,11:48,11:49,11:50,11:51,11:52,11:53,12:33|11:50,12:18,12:19,12:20,12:21,12:22,12:23,13:03|12:20,12:48,12:49,12:50,12:51,12:52,12:55,13:33|12:50,13:18,13:19,13:20,13:21,13:22,13:23,14:03|13:20,13:48,13:49,13:50,13:51,13:52,13:53,14:33|13:50,14:18,14:19,14:20,14:21,14:22,14:23,15:03|14:30,14:58,14:59,15:00,15:01,15:02,15:03,15:43|15:10,15:38,15:39,15:40,15:41,15:42,15:43,16:23|15:50,16:18,16:19,16:20,16:21,16:22,16:23,17:08|16:30,16:58,16:59,17:00,17:01,17:02,17:03,17:48|17:00,17:28,17:29,17:30,17:31,17:32,17:33,18:18|17:30,17:58,17:59,18:00,18:01,18:02,18:03,18:48|18:00,18:28,18:29,18:30,18:31,18:32,18:33,19:18|18:30,18:58,18:59,19:00,19:01,19:02,19:03,19:48|19:00,19:28,19:29,19:30,19:31,19:32,19:33,20:13|19:30,19:58,19:59,20:00,20:01,20:02,20:03,20:43|20:00,20:28,20:29,20:30,20:31,20:32,20:33,21:13|20:40,21:08,21:09,21:10,21:11,21:12,21:13,21:53|21:20,21:48,21:49,21:50,21:51,21:52,21:53,22:33|21:50,22:18,22:19,22:20,22:21,22:22,22:23,23:03|22:20,22:45,22:46,22:47,22:48,22:49,22:50,23:28|22:50,23:15,23:16,23:17,23:18,23:19,23:20,23:58|23:20,23:45,23:46,23:47,23:48,23:49,23:50,00:28|23:50,00:15,00:16,00:17,00:18,00:19,00:20,00:58" },
+            "6": { name: "Route 6", stops: ['EGHQ (Dep)', 'DSO 4', 'DSO Z', 'EGHQ (Arr)'], dataStr: "00:00,00:25,00:29,01:05|00:30,00:55,00:59,01:35|01:00,01:25,01:29,02:05|01:30,01:55,01:59,02:35|02:10,02:35,02:39,03:15|02:50,03:15,03:19,03:55|03:30,03:55,03:59,04:35|04:00,04:25,04:29,05:05|04:30,04:55,04:59,05:35|05:00,05:25,05:29,06:05|05:30,05:55,05:59,06:39|06:00,06:25,06:29,07:09|06:30,06:55,06:59,07:39|07:00,07:25,07:29,08:09|07:30,07:55,07:59,08:39|08:00,08:25,08:29,09:09|08:30,08:55,08:59,09:39|09:10,09:35,09:39,10:19|09:50,10:15,10:19,10:59|10:30,10:55,10:59,11:39|11:00,11:25,11:29,12:09|11:30,11:55,11:59,12:39|12:00,12:25,12:29,13:09|12:30,12:55,12:59,13:39|13:00,13:25,13:29,14:09|13:30,13:55,13:59,14:39|14:00,14:25,14:29,15:09|14:40,15:05,15:09,15:49|15:20,15:45,15:49,16:29|16:00,16:25,16:29,17:12|16:40,17:05,17:09,17:52|17:10,17:35,17:39,18:22|17:40,18:05,18:09,18:52|18:10,18:35,18:39,19:22|18:40,19:05,19:09,19:52|19:10,19:35,19:39,20:22|19:40,20:05,20:09,20:52|20:20,20:45,20:49,21:29|21:00,21:25,21:29,22:09|21:40,22:05,22:09,22:49|22:10,22:35,22:39,23:19|22:40,23:05,23:09,23:49|23:10,23:35,23:39,00:19|23:40,00:05,00:09,00:45" },
+            "7": { name: "Route 7", stops: ['EGHQ (Dep)', 'PZV1', 'PZV2', 'EGHQ (Arr)'], dataStr: "00:00,00:14,00:15,00:37|00:30,00:44,00:45,01:14|01:00,01:14,01:15,01:36|01:30,01:44,01:45,02:06|02:10,02:24,02:25,02:46|02:50,03:04,03:05,03:26|03:30,03:44,03:45,04:06|04:10,04:24,04:25,04:46|04:40,04:54,04:55,05:16|05:10,05:24,05:25,05:46|05:40,05:54,05:55,06:16|06:10,06:24,06:25,06:46|06:40,06:54,06:55,07:16|07:10,07:24,07:25,07:46|07:40,07:54,07:55,08:16|08:10,08:24,08:25,08:46|08:40,08:54,08:55,09:16|09:20,09:34,09:35,09:56|10:00,10:16,10:17,10:38|10:40,10:56,10:57,11:18|11:10,11:26,11:27,11:48|11:40,11:56,11:57,12:18|12:10,12:26,12:27,12:48|12:40,12:56,12:57,13:18|13:10,13:26,13:27,13:48|13:40,13:56,13:57,14:18|14:20,14:36,14:37,14:58|15:00,15:16,15:17,15:38|15:40,15:56,15:57,16:25|16:20,16:36,16:37,17:05|17:00,17:16,17:17,17:45|17:30,17:46,17:47,18:17|18:00,18:18,18:19,18:49|18:30,18:48,18:49,19:19|19:00,19:20,19:21,19:51|19:30,19:50,19:51,20:21|20:10,20:28,20:29,20:59|20:50,21:08,21:09,21:39|21:30,21:48,21:49,22:19|22:00,22:18,22:19,22:47|22:30,22:46,22:47,23:08|23:00,23:16,23:17,23:38|23:30,23:45,23:46,00:07" },
+            "7A": { name: "Route 7A", stops: ['EGHQ (Dep)', 'SNB', 'JADAF', 'EGHQ (Arr)'], dataStr: "00:00,00:12,00:25,00:40|00:30,00:42,00:55,01:10|01:00,01:12,01:25,01:40|01:30,01:42,01:55,02:10|02:00,02:12,02:25,02:40|02:40,02:52,03:05,03:20|03:20,03:32,03:45,04:00|04:00,04:12,04:25,04:40|04:30,04:42,04:55,05:10|05:00,05:12,05:25,05:40|05:30,05:42,05:55,06:10|06:00,06:12,06:25,06:40|06:30,06:45,07:00,07:20|07:00,07:15,07:30,07:50|07:30,07:45,08:00,08:20|08:00,08:15,08:30,08:50|08:30,08:45,09:00,09:20|09:10,09:22,09:37,09:55|09:50,10:02,10:17,10:35|10:30,10:42,10:57,11:15|11:00,11:12,11:27,11:45|11:30,11:42,11:57,12:15|12:00,12:12,12:27,12:45|12:30,12:42,12:57,13:15|13:00,13:12,13:27,13:45|13:30,13:42,13:57,14:15|14:10,14:22,14:37,14:55|14:50,15:02,15:17,15:35|15:30,15:45,16:00,16:20|16:10,16:25,16:40,17:00|16:50,17:05,17:20,17:40|17:20,17:35,17:50,18:10|17:50,18:05,18:20,18:40|18:20,18:35,18:50,19:10|18:50,19:05,19:20,19:40|19:20,19:35,19:50,20:10|20:00,20:15,20:30,20:50|20:40,20:55,21:10,21:30|21:20,21:32,21:45,22:00|22:00,22:12,22:25,22:40|22:30,22:42,22:55,23:10|23:00,23:12,23:25,23:40|23:30,23:42,23:55,00:10" }
+        };
+        let activeRouteId="5",stopsData=[],schedule=[],stopNamesMap={},stopIndices={},currentDirection='from_eghq',currentStop='stop1',nextTripData={id:null,minutes:0,departs:'',arrives:''},nextTripTargetDate=null,activeBuses=[],forceScroll=!0,lastAutoScrolledId=null;
+        let eGateTimeMinutes=null;
+        
+        function updateVH(){document.documentElement.style.setProperty('--vh',`${window.innerHeight*.01}px`);}
+        function switchRoute(id,initStop=null){
+            activeRouteId=id;localStorage.setItem('sarab_saved_route',activeRouteId);
+            const rData=ROUTES[activeRouteId];stopsData=rData.stops;stopNamesMap={};stopIndices={};
+            const sel=document.getElementById('stop-selector');sel.innerHTML='';
+            for(let i=1;i<stopsData.length-1;i++){
+                let k=`stop${i}`,n=stopsData[i];stopNamesMap[k]=n;stopIndices[k]=i;
+                sel.appendChild(new Option(n,k));
+            }
+            currentStop=(initStop&&stopNamesMap[initStop])?initStop:'stop1';
+            localStorage.setItem('sarab_saved_stop',currentStop);sel.value=currentStop;
+            schedule=rData.dataStr.split('|').map(s=>s.split(',')).map((row,index)=>{
+                let o={id:index,departs:row[0],arrives:row[row.length-1],times:row};
+                for(let i=1;i<row.length-1;i++)o[`stop${i}`]=row[i];return o;
+            });
+            document.getElementById('header-accommodation-list').innerText=stopsData.slice(1,-1).join(' • ');
+            document.getElementById('header-route-name').innerText=`Route ${activeRouteId}`;
+            const sL=currentDirection==='from_eghq'?'EGHQ':stopNamesMap[currentStop].toUpperCase();
+            const eL=currentDirection==='from_eghq'?stopNamesMap[currentStop].toUpperCase():'EGHQ';
+            const pinIcon = `<svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
+            document.getElementById('mobile-label-start').innerHTML=`${pinIcon} ${sL}`;
+            document.getElementById('mobile-label-end').innerHTML=`${eL} ${pinIcon}`;
+            forceScroll=!0;renderRouteMap(!0);updateTime();
+        }
+        function setDirection(d,skipUpdate=!1){
+            currentDirection=d;localStorage.setItem('sarab_saved_direction',d);
+            const bf=document.getElementById('btn-from-eghq'),bt=document.getElementById('btn-to-eghq');
+            if(d==='from_eghq'){
+                bf.className="flex-1 py-1 sm:py-1.5 lg:py-2 text-[10px] sm:text-sm font-bold rounded lg:rounded-md bg-white dark:bg-neutral-800 shadow dark:shadow-none text-neutral-900 dark:text-white transition-all whitespace-nowrap text-center";
+                bt.className="flex-1 py-1 sm:py-1.5 lg:py-2 text-[10px] sm:text-sm font-medium rounded lg:rounded-md text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-all whitespace-nowrap text-center";
+            } else {
+                bt.className="flex-1 py-1 sm:py-1.5 lg:py-2 text-[10px] sm:text-sm font-bold rounded lg:rounded-md bg-white dark:bg-neutral-800 shadow dark:shadow-none text-neutral-900 dark:text-white transition-all whitespace-nowrap text-center";
+                bf.className="flex-1 py-1 sm:py-1.5 lg:py-2 text-[10px] sm:text-sm font-medium rounded lg:rounded-md text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-all whitespace-nowrap text-center";
+            }
+            if(!skipUpdate)switchRoute(activeRouteId,currentStop);
+        }
+        function setStop(s){currentStop=s;localStorage.setItem('sarab_saved_stop',s);forceScroll=!0;switchRoute(activeRouteId,s);}
+        function timeToMinutes(t){if(!t||!t.trim())return -1;const[h,m]=t.split(':').map(Number);return h*60+m;}
+        function calculateNextBus(){
+            const now=new Date(),currMin=now.getHours()*60+now.getMinutes();
+            let evts=schedule.map(t=>{
+                let dStr=currentDirection==='from_eghq'?t.departs:t[currentStop];
+                let aStr=currentDirection==='from_eghq'?t[currentStop]:t.arrives;
+                return {id:t.id,time:timeToMinutes(dStr),dStr,aStr};
+            }).sort((a,b)=>a.time-b.time);
+            let f=evts.find(e=>e.time>currMin);
+            if(f)nextTripData={id:f.id,minutes:f.time-currMin,departs:f.dStr,arrives:f.aStr};
+            else nextTripData={id:evts[0].id,minutes:(evts[0].time+1440)-currMin,departs:evts[0].dStr,arrives:evts[0].aStr};
+            let tg=f||evts[0];let d=new Date();d.setHours(Math.floor(tg.time/60),tg.time%60,0,0);
+            if(!f)d.setDate(d.getDate()+1);
+            nextTripTargetDate=d;
+        }
+        function calculateActiveBuses(){
+            const now=new Date(),currMin=now.getHours()*60+now.getMinutes()+(now.getSeconds()/60);activeBuses=[];
+            schedule.forEach(trip=>{
+                let ts=trip.times.map(t=>timeToMinutes(t));
+                for(let i=1;i<ts.length;i++)if(ts[i]<ts[i-1])ts[i]+=1440;
+                let s=ts[0],e=ts[ts.length-1],c=(currMin+1440>=s&&currMin+1440<=e)?currMin+1440:currMin;
+                if(c>=s&&c<=e){
+                    let sIdx=0,p=0;
+                    for(let i=0;i<ts.length-1;i++)if(c>=ts[i]&&c<=ts[i+1]){sIdx=i;let dur=ts[i+1]-ts[i];p=dur===0?1:(c-ts[i])/dur;break;}
+                    activeBuses.push({tripId:trip.id,segmentIndex:sIdx,progress:p});
+                }
+            });
+        }
+        function scrollToFocusBus(){
+            setTimeout(()=>{
+                const dc=document.getElementById('desktop-table-container'),mc=document.getElementById('mobile-cards-container');
+                let dt,mt;
+                if(eGateTimeMinutes!==null){
+                    dt=dc.querySelector('tr[data-egate="true"]');mt=mc.querySelector('div[data-egate="true"]');
+                }else{
+                    dt=document.getElementById('next-bus-row-desktop');mt=document.getElementById('next-bus-row-mobile');
+                }
+                if(dt&&dc)dc.scrollTop=dt.offsetTop-(dc.clientHeight/2)+(dt.clientHeight/2);
+                if(mt&&mc)mc.scrollTop=mt.offsetTop-(mc.clientHeight/2)+(mt.clientHeight/2);
+            },50);
+        }
+        function updateTime(){calculateNextBus();calculateActiveBuses();updateBusPositions();renderAll();if(forceScroll||nextTripData.id!==lastAutoScrolledId){scrollToFocusBus();lastAutoScrolledId=nextTripData.id;forceScroll=!1;}}
+        function updateLiveCountdown(){
+            const now=new Date();document.getElementById('current-time-display').innerText=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:!1});
+            if(!nextTripTargetDate)return;
+            let dMs=nextTripTargetDate-now;if(dMs<=0){updateTime();return;}
+            let tSec=Math.floor(dMs/1000),h=Math.floor(tSec/3600),m=Math.floor((tSec%3600)/60),s=tSec%60,tMinL=tSec/60;
+            let f=(h>0?`${h}h `:'')+`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            document.getElementById('banner-minutes').innerText=`in ${f}`;
+            if(document.getElementById('fs-countdown'))document.getElementById('fs-countdown').innerText=f;
+            const b=document.getElementById('fs-countdown-box');
+            if(b)b.className=`flex flex-col items-center justify-center p-8 sm:p-12 rounded-3xl w-full mx-auto transition-all duration-500 shadow-xl ${tMinL<=5?'bg-red-600 dark:bg-red-700 border border-white/20 shadow-2xl':tMinL<=10?'bg-amber-600 dark:bg-amber-700 border border-white/20':'bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-white/10 dark:shadow-2xl'}`;
+        }
+        function toggleFullscreen(){const f=document.getElementById('fullscreen-overlay');if(f.classList.contains('hidden')){f.classList.remove('hidden');f.classList.add('flex');}else{f.classList.add('hidden');f.classList.remove('flex');}}
+        function renderBanner(){
+            const b=document.getElementById('next-bus-banner');
+            if(nextTripData.id!==null){
+                b.classList.remove('hidden');b.classList.add('flex');
+                const cn=stopNamesMap[currentStop],tTxt=currentDirection==='from_eghq'?'Departure from EGHQ':`Departure from ${cn}`,aTxt=currentDirection==='from_eghq'?`Arr at ${cn}`:'Arr at EGHQ';
+                document.getElementById('banner-title').innerText=tTxt;
+                document.getElementById('banner-arrival-label').innerText=aTxt;
+                document.getElementById('banner-arrival-label-desk').innerText=aTxt;
+                document.getElementById('banner-departs').innerText=nextTripData.departs;
+                document.getElementById('banner-arrives').innerText=nextTripData.arrives;
+                document.getElementById('fs-title').innerText=tTxt;
+                document.getElementById('fs-arrival-label').innerText=aTxt;
+                document.getElementById('fs-departs').innerText=nextTripData.departs;
+                document.getElementById('fs-arrives').innerText=nextTripData.arrives;
+                updateLiveCountdown();
+            }else{b.classList.add('hidden');b.classList.remove('flex');}
+        }
+        function highlightSelectedStop(){
+            const si=stopIndices[currentStop],sCt=stopsData.length,mTxt=sCt>6?'text-[6px]':sCt>4?'text-[7px]':'text-[8px]';
+            stopsData.forEach((s,i)=>{
+                const d=document.getElementById(`stop-dot-${i}`),t=document.getElementById(`stop-text-${i}`);
+                if(!d||!t)return;
+                const isE=i===0||i===stopsData.length-1;
+                if(i===si){
+                    d.className="w-2 h-2 sm:w-4 sm:h-4 lg:w-4 lg:h-4 rounded-full border z-10 scale-[1.3] sm:scale-[1.5] bg-blue-500 border-blue-200 dark:border-blue-900 shadow-[0_0_8px_rgba(59,130,246,0.8)]";
+                    t.className=`absolute top-3 sm:top-6 lg:top-6 w-12 sm:w-24 lg:w-24 text-center ${mTxt} sm:text-xs font-extrabold text-blue-600 dark:text-blue-500 scale-110 whitespace-nowrap`;
+                } else if(isE){
+                    d.className="w-2 h-2 sm:w-4 sm:h-4 lg:w-4 lg:h-4 rounded-full border z-10 bg-red-600 border-red-900 dark:border-black";
+                    t.className=`absolute top-3 sm:top-6 lg:top-6 w-12 sm:w-24 lg:w-24 text-center ${mTxt} sm:text-xs font-semibold text-red-600 whitespace-nowrap`;
+                } else{
+                    d.className="w-2 h-2 sm:w-4 sm:h-4 lg:w-4 lg:h-4 rounded-full border z-10 bg-neutral-300 dark:bg-neutral-700 border-neutral-400 dark:border-neutral-800";
+                    t.className=`absolute top-3 sm:top-6 lg:top-6 w-12 sm:w-24 lg:w-24 text-center ${mTxt} sm:text-xs font-semibold text-neutral-400 dark:text-neutral-500 whitespace-nowrap`;
+                }
+            });
+        }
+        function renderRouteMap(f){
+            const c=document.getElementById('route-map-container');
+            if(f)c.innerHTML='';if(c.children.length>0)return;
+            c.innerHTML=stopsData.map((s,i)=>{
+                let h=`<div class="flex flex-col items-center relative flex-1"><div id="stop-dot-${i}"></div><span id="stop-text-${i}">${s}</span></div>`;
+                if(i<stopsData.length-1)h+=`<div class="flex-1 h-[1px] sm:h-1 bg-neutral-200 dark:bg-neutral-800 mx-0 rounded-full relative"><div id="segment-buses-${i}" class="absolute inset-0"></div></div>`;
+                return h;
+            }).join('');
+            highlightSelectedStop();
+        }
+        function updateBusPositions(){
+            for(let i=0;i<stopsData.length-1;i++){
+                let bs=activeBuses.filter(b=>b.segmentIndex===i),c=document.getElementById(`segment-buses-${i}`);
+                if(c){
+                    let ex=Array.from(c.children),ids=bs.map(b=>b.tripId.toString());
+                    ex.forEach(el=>{if(!ids.includes(el.dataset.tripId))el.remove();});
+                    bs.forEach(b=>{
+                        let el=document.getElementById(`bus-icon-${b.tripId}`);
+                        if(!el){
+                            el=document.createElement('div');el.id=`bus-icon-${b.tripId}`;el.dataset.tripId=b.tripId;el.className="absolute top-1/2 -translate-y-1/2 z-20 transition-all duration-1000 ease-linear";
+                            el.innerHTML=`<div class="relative flex items-center justify-center"><span class="animate-ping absolute inline-flex h-3 w-3 sm:h-6 sm:w-6 rounded-full bg-blue-400 opacity-60"></span><div class="bg-blue-600 text-white rounded-full p-0.5 sm:p-1 shadow-md border border-white dark:border-black relative z-10 flex items-center justify-center text-center"><svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-2 h-2 sm:w-3.5 sm:h-3.5"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg></div></div>`;
+                            c.appendChild(el);
+                        }
+                        el.style.left=`calc(${b.progress*100}% - 4px)`;
+                    });
+                }
+            }
+        }
+        function renderDesktopTable(){
+            const th=document.getElementById('desktop-thead-tr'),cn=stopNamesMap[currentStop];
+            const pinIcon = `<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
+            const dL=`<div class="flex items-center gap-2 text-left">${pinIcon} EGHQ (Dep)</div>`,aL=`<div class="flex items-center gap-2 text-left">${pinIcon} EGHQ (Arr)</div>`,sL=`<div class="flex items-center gap-2 text-left">${pinIcon} ${cn}</div>`;
+            th.innerHTML=currentDirection==='from_eghq'?`<th class="px-6 py-4 font-bold text-red-600 w-1/2 bg-transparent text-left">${dL}</th><th class="px-6 py-4 font-bold text-blue-600 w-1/2 bg-transparent text-left">${sL}</th>`:`<th class="px-6 py-4 font-bold text-blue-600 w-1/2 bg-transparent text-left">${sL}</th><th class="px-6 py-4 font-bold text-red-600 w-1/2 bg-transparent text-left">${aL}</th>`;
+            let s=[...schedule].sort((a,b)=>timeToMinutes(currentDirection==='from_eghq'?a.departs:a[currentStop])-timeToMinutes(currentDirection==='from_eghq'?b.departs:b[currentStop]));
+            document.getElementById('desktop-tbody').innerHTML=s.map(t=>{
+                const n=t.id===nextTripData.id;let c1=currentDirection==='from_eghq'?t.departs:t[currentStop],c2=currentDirection==='from_eghq'?t[currentStop]:t.arrives;
+                let isEg=!1,egB='',egAttr='';
+                if(eGateTimeMinutes!==null){
+                    let aMins=timeToMinutes(currentDirection==='from_eghq'?t[currentStop]:t.arrives),d=aMins-eGateTimeMinutes;
+                    if(d<-720)d+=1440;if(d>720)d-=1440;
+                    if(d>=-45&&d<=45){
+                        isEg=!0;egAttr='data-egate="true"';
+                        let l=d<0?`${Math.abs(d)}m early`:d===0?'Exact time':`${d}m after`;
+                        let c=(d>=-15&&d<=15)?'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-400 border-green-200 dark:border-green-800':'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800';
+                        egB=`<span class="inline-flex text-[10px] sm:text-xs font-bold ${c} px-2 py-0.5 rounded ml-3 border whitespace-nowrap shadow-sm">${l}</span>`;
+                    }
+                }
+                let rCls=n?'bg-blue-50 dark:bg-blue-900/20':isEg?'bg-indigo-50/40 dark:bg-indigo-900/10':'';
+                return `<tr ${n?'id="next-bus-row-desktop"':''} ${egAttr} class="transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-900/80 ${rCls}"><td class="px-6 py-4 font-bold text-lg ${n?'text-blue-600 dark:text-blue-400':'text-neutral-900 dark:text-neutral-100'} text-left">${c1}</td><td class="px-6 py-4 font-bold text-lg ${n?'text-blue-600 dark:text-blue-400':'text-neutral-900 dark:text-neutral-100'} text-left"><div class="flex items-center">${c2}${egB}</div></td></tr>`;
+            }).join('');
+        }
+        function renderMobileCards(){
+            const mc=document.getElementById('mobile-cards-container');
+            let s=[...schedule].sort((a,b)=>timeToMinutes(currentDirection==='from_eghq'?a.departs:a[currentStop])-timeToMinutes(currentDirection==='from_eghq'?b.departs:b[currentStop]));
+            mc.innerHTML=s.map(t=>{
+                const n=t.id===nextTripData.id;let c1=currentDirection==='from_eghq'?t.departs:t[currentStop],c2=currentDirection==='from_eghq'?t[currentStop]:t.arrives;
+                let isEg=!1,egB='',egAttr='';
+                if(eGateTimeMinutes!==null){
+                    let aMins=timeToMinutes(currentDirection==='from_eghq'?t[currentStop]:t.arrives),d=aMins-eGateTimeMinutes;
+                    if(d<-720)d+=1440;if(d>720)d-=1440;
+                    if(d>=-45&&d<=45){
+                        isEg=!0;egAttr='data-egate="true"';
+                        let l=d<0?`${Math.abs(d)}m early`:d===0?'Exact time':`${d}m after`;
+                        let c=(d>=-15&&d<=15)?'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-400 border-green-200 dark:border-green-800':'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800';
+                        egB=`<div class="mt-1 text-right"><span class="inline-block text-[9px] font-bold ${c} px-1.5 py-0.5 rounded shadow-sm border">${l}</span></div>`;
+                    }
+                }
+                let rCls=n?'bg-blue-50 dark:bg-blue-900/20':isEg?'bg-indigo-50/40 dark:bg-indigo-900/10':'';
+                const arrowIcon = `<svg class="w-3 h-3 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-600 ${n||isEg?'bg-transparent':'bg-white dark:bg-black'}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
+                return `<div ${n?'id="next-bus-row-mobile"':''} ${egAttr} class="flex flex-col shrink-0 ${rCls} py-3 px-4 border-b border-neutral-100 dark:border-neutral-800/60 transition-colors"><div class="flex items-center justify-between"><div class="flex items-center gap-2 w-full"><div class="flex-1 text-left"><p class="text-xl font-bold ${n?'text-blue-600 dark:text-blue-400':'text-neutral-900 dark:text-neutral-100'} leading-none">${c1}</p></div><div class="flex flex-col items-center justify-center shrink-0 px-4"><div class="w-8 h-[1px] bg-neutral-200 dark:bg-neutral-800 relative">${arrowIcon}</div></div><div class="flex-1 text-right"><p class="text-xl font-bold ${n?'text-blue-600 dark:text-blue-400':'text-neutral-900 dark:text-neutral-100'} leading-none">${c2}</p>${egB}</div></div></div></div>`;
+            }).join('');
+        }
+        function renderAll(){renderBanner();renderDesktopTable();renderMobileCards();highlightSelectedStop();}
+        document.addEventListener('DOMContentLoaded',()=>{
+            updateVH();window.addEventListener('resize',()=>{updateVH();renderRouteMap(!0);});
+            if(window.visualViewport)window.visualViewport.addEventListener('resize',()=>{updateVH();});
+            const hs=localStorage.getItem('crewbus_onboarding_seen'),sp=document.getElementById('splash-screen');
+            if(!hs){sp.classList.remove('hidden');document.getElementById('dismiss-splash').onclick=()=>{sp.classList.add('hidden');localStorage.setItem('crewbus_onboarding_seen','true');};}
+            document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){updateVH();updateTime();}});
+            
+            document.getElementById('btn-egate-planner').addEventListener('click', () => { document.getElementById('egate-modal').classList.remove('hidden'); });
+            document.getElementById('btn-close-egate').addEventListener('click', () => { document.getElementById('egate-modal').classList.add('hidden'); });
+            document.getElementById('btn-find-egate').addEventListener('click', () => {
+                const val = document.getElementById('egate-time-input').value; if(!val) return;
+                eGateTimeMinutes = timeToMinutes(val);
+                setDirection('to_eghq'); 
+                document.getElementById('egate-modal').classList.add('hidden');
+                document.getElementById('egate-active-banner').classList.remove('hidden'); document.getElementById('egate-active-banner').classList.add('flex');
+                let h = Math.floor(eGateTimeMinutes/60), m = eGateTimeMinutes%60;
+                let endH = Math.floor((eGateTimeMinutes+60)/60)%24, endM = (eGateTimeMinutes+60)%60;
+                document.getElementById('egate-window-text').innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')} - ${endH.toString().padStart(2,'0')}:${endM.toString().padStart(2,'0')}`;
+                forceScroll = true; updateTime();
+            });
+            document.getElementById('btn-clear-egate').addEventListener('click', () => {
+                eGateTimeMinutes = null; document.getElementById('egate-active-banner').classList.add('hidden'); document.getElementById('egate-active-banner').classList.remove('flex');
+                document.getElementById('egate-time-input').value = ''; forceScroll = true; updateTime();
+            });
+
+            document.getElementById('btn-from-eghq').addEventListener('click',()=>setDirection('from_eghq'));
+            document.getElementById('btn-to-eghq').addEventListener('click',()=>setDirection('to_eghq'));
+            document.getElementById('route-dropdown').addEventListener('change',(e)=>switchRoute(e.target.value));
+            document.getElementById('stop-selector').addEventListener('change',(e)=>setStop(e.target.value));
+            document.getElementById('btn-expand-fs').addEventListener('click',toggleFullscreen);
+            document.getElementById('btn-close-fs').addEventListener('click',toggleFullscreen);
+            document.getElementById('btn-center-schedule').addEventListener('click',scrollToFocusBus);
+            const sr=localStorage.getItem('sarab_saved_route')||'5',ss=localStorage.getItem('sarab_saved_stop')||'stop1',sd=localStorage.getItem('sarab_saved_direction')||'from_eghq';
+            setDirection(sd,!0);document.getElementById('route-dropdown').value=sr;switchRoute(sr,ss);
+            setInterval(()=>{updateLiveCountdown();calculateActiveBuses();updateBusPositions();},1000);
+        });
+    </script>
+</body>
+</html>
