@@ -1,24 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
     <title>CrewBus</title>
-    <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="CrewBus">
-    <meta name="mobile-web-app-capable" content="yes"><meta name="application-name" content="CrewBus"><meta name="theme-color" content="#000000">
+    
+    <!-- PWA & Native App Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CrewBus">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="CrewBus">
+    
+    <!-- Dynamic Theme Color for seamless status bar blending -->
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+    
     <link rel="apple-touch-icon" href="assets/crewrun.png">
     <link rel="icon" type="image/png" href="assets/crewruntp.png">
-    <link rel="manifest" href="manifest.json">
     <link rel="preload" as="image" href="assets/crewtime.png">
     <link rel="preload" as="image" href="assets/crewsleepy.png">
     <link rel="preload" as="image" href="assets/crewmad.png">
     <link rel="preload" as="image" href="assets/crewlost.png">
     <link rel="preload" as="image" href="assets/crewhappy.png">
     <link rel="preload" as="image" href="assets/crewrun.png">
-    <link rel="preconnect" href="https://cdn.tailwindcss.com"><link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
-    <script src="https://cdn.tailwindcss.com"></script><script>tailwind.config={darkMode:'media'}</script>
-    <style>html,body{position:fixed;inset:0;width:100%;height:100%;margin:0;padding:0;overflow:hidden;background-color:#f8fafc}@media (prefers-color-scheme:dark){body{background-color:#000}}.hide-scrollbar::-webkit-scrollbar{display:none}.hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}.custom-scrollbar::-webkit-scrollbar{width:6px}.custom-scrollbar::-webkit-scrollbar-track{background:0 0}.custom-scrollbar::-webkit-scrollbar-thumb{background-color:rgba(82,82,91,.3);border-radius:20px}@media (prefers-color-scheme:dark){.custom-scrollbar::-webkit-scrollbar-thumb{background-color:rgba(82,82,91,.6)}} .carousel-track{display:flex;transition:transform 0.6s cubic-bezier(0.25,1,0.5,1)} .carousel-slide{min-width:100%;display:flex;flex-direction:column;align-items:center;padding:0 0.5rem} .image-wrapper{position:relative;width:180px;height:180px;display:flex;justify-content:center;align-items:center;margin-bottom:1.5rem;animation:float 4s infinite ease-in-out} .carousel-image{position:relative;height:160px;width:auto;max-width:100%;object-fit:contain} @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}} .progress-bar{width:100%;height:4px;background:rgba(150,150,150,0.2);margin-top:1rem;border-radius:2px;overflow:hidden} .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#3b82f6,#60a5fa);animation:fillProgress 3s linear infinite} @keyframes fillProgress{0%{width:0%}100%{width:100%}}</style>
+    
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config={darkMode:'media'}</script>
+    
+    <style>
+        :root { --vh: 1vh; }
+        
+        /* Lock the body to prevent iOS bounce and force edge-to-edge rendering */
+        html, body {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+        }
+        @media (prefers-color-scheme: dark) {
+            html, body { background-color: #000000; }
+        }
+
+        .hide-scrollbar::-webkit-scrollbar{display:none}
+        .hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+        .custom-scrollbar::-webkit-scrollbar{width:6px}
+        .custom-scrollbar::-webkit-scrollbar-track{background:0 0}
+        .custom-scrollbar::-webkit-scrollbar-thumb{background-color:rgba(82,82,91,.3);border-radius:20px}
+        
+        @media (prefers-color-scheme:dark){
+            .custom-scrollbar::-webkit-scrollbar-thumb{background-color:rgba(82,82,91,.6)}
+        } 
+        
+        .carousel-track{display:flex;transition:transform 0.6s cubic-bezier(0.25,1,0.5,1)} 
+        .carousel-slide{min-width:100%;display:flex;flex-direction:column;align-items:center;padding:0 0.5rem} 
+        .image-wrapper{position:relative;width:180px;height:180px;display:flex;justify-content:center;align-items:center;margin-bottom:1.5rem;animation:float 4s infinite ease-in-out} 
+        .carousel-image{position:relative;height:160px;width:auto;max-width:100%;object-fit:contain} 
+        
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}} 
+        
+        .progress-bar{width:100%;height:4px;background:rgba(150,150,150,0.2);margin-top:1rem;border-radius:2px;overflow:hidden} 
+        .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#3b82f6,#60a5fa);animation:fillProgress 3s linear infinite} 
+        
+        @keyframes fillProgress{0%{width:0%}100%{width:100%}}
+    </style>
+    <link rel="manifest" href="manifest.json">
+
+<script>
+  // Registrar el Service Worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('CrewBus Offline Ready!'))
+        .catch(err => console.log('Error en SW', err));
+    });
+  }
+</script>
 </head>
-<body class="bg-neutral-50 dark:bg-black text-neutral-900 dark:text-neutral-100 font-sans transition-colors duration-200 select-none">
+<body class="text-neutral-900 dark:text-neutral-100 font-sans transition-colors duration-200 select-none">
 
     <div id="splash-screen" class="hidden fixed inset-0 z-[100] bg-white dark:bg-black flex flex-col items-center justify-center p-6 sm:p-8 overflow-y-auto custom-scrollbar animate-in fade-in duration-700">
         <div class="max-w-md w-full flex flex-col items-center py-8">
@@ -55,7 +125,8 @@
         <div class="text-center px-4 w-full max-w-2xl"><p id="fs-title" class="text-indigo-600 dark:text-indigo-400 font-semibold tracking-widest uppercase text-sm sm:text-xl mb-4 sm:mb-8 text-center">Next Departure</p><div id="fs-departs" class="text-[6rem] sm:text-[12rem] font-extrabold tracking-tighter leading-none mb-10 sm:mb-16 text-neutral-900 dark:text-white text-center">--:--</div><div id="fs-countdown-box" class="flex flex-col items-center justify-center bg-neutral-100 dark:bg-neutral-900 p-8 sm:p-12 rounded-3xl border border-neutral-200 dark:border-white/10 w-full mx-auto transition-all duration-500 shadow-xl dark:shadow-2xl"><p class="text-sm sm:text-lg text-neutral-500 dark:text-neutral-400 uppercase tracking-widest font-bold mb-4 text-center">Departing In</p><div id="fs-countdown" class="text-7xl sm:text-9xl font-bold font-mono tracking-tight text-neutral-900 dark:text-white mb-2 tabular-nums text-center">--:--</div></div><div class="mt-10 sm:mt-16 flex items-center justify-center gap-3 sm:gap-4 text-xl sm:text-3xl text-neutral-600 dark:text-neutral-300 font-medium text-center"><span id="fs-arrival-label">Expected Arrival</span><span id="fs-arrives" class="font-bold text-neutral-900 dark:text-white text-center">--:--</span><svg class="w-6 h-6 sm:w-8 sm:h-8 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div></div>
     </div>
 
-    <div class="absolute inset-0 flex flex-col gap-2 sm:gap-4 px-2 sm:px-4 lg:px-6 pt-[max(env(safe-area-inset-top),0.5rem)] pb-0 sm:pb-4 lg:pb-6 text-center">
+    <!-- The Absolute Inset-0 container locks the main view entirely -->
+    <div id="app-container" class="absolute inset-0 flex flex-col gap-2 sm:gap-4 px-2 sm:px-4 lg:px-6 pt-[max(env(safe-area-inset-top),0.5rem)] pb-2 sm:pb-4 lg:pb-6 text-center w-full h-full">
         <header class="shrink-0 flex flex-row items-center justify-between bg-white dark:bg-black p-2.5 sm:p-5 lg:px-6 lg:py-5 rounded-xl sm:rounded-2xl lg:rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-none">
             <div class="flex items-center gap-2.5 sm:gap-4 lg:gap-5 text-left">
                 <div class="w-9 h-9 sm:w-14 sm:h-14 lg:w-14 lg:h-14 bg-red-600 rounded-lg sm:rounded-xl flex items-center justify-center text-white shadow-md shadow-red-600/30 shrink-0">
@@ -131,7 +202,7 @@
             <div class="flex-1 flex flex-col gap-2 sm:gap-4 min-h-0">
                 <div class="shrink-0 bg-white dark:bg-black rounded-xl sm:rounded-2xl lg:rounded-2xl border border-neutral-200 dark:border-neutral-800 flex flex-col shadow-sm dark:shadow-none transition-colors relative">
                     <div class="flex items-center justify-end pt-2 sm:pt-4 lg:pt-3 px-3 sm:px-6 mb-0">
-                        <span id="connectivity-status" class="flex items-center gap-1 lg:gap-1.5 px-1.5 lg:px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-950 text-green-600 dark:text-green-400 lg:text-green-700 border border-green-200 dark:border-green-900/50 text-[8px] sm:text-xs font-bold uppercase tracking-wider shrink-0 text-right">
+                        <span class="flex items-center gap-1 lg:gap-1.5 px-1.5 lg:px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-950 text-green-600 dark:text-green-400 lg:text-green-700 border border-green-200 dark:border-green-900/50 text-[8px] sm:text-xs font-bold uppercase tracking-wider shrink-0 text-right">
                             <span class="relative flex h-1 w-1 sm:h-2 sm:w-2 lg:h-1.5 lg:w-1.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span><span class="relative inline-flex rounded-full h-1 w-1 sm:h-2 sm:w-2 lg:h-1.5 lg:w-1.5 bg-green-500"></span></span>Live
                         </span>
                     </div>
@@ -140,8 +211,8 @@
                     </div>
                 </div>
                 
-                <div class="flex-1 flex flex-col min-h-0 bg-white dark:bg-black rounded-t-xl rounded-b-none sm:rounded-2xl border border-x-0 sm:border-x border-b-0 sm:border-b border-neutral-200 dark:border-neutral-800 overflow-hidden transition-colors shadow-sm dark:shadow-none -mx-2 -mb-6 pb-6 sm:m-0 sm:pb-0">
-                    <div class="shrink-0 px-4 py-3 sm:px-6 sm:py-5 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 flex justify-between items-center text-left">
+                <div class="flex-1 flex flex-col min-h-0 bg-white dark:bg-black rounded-t-xl rounded-b-[3.5rem] sm:rounded-t-2xl sm:rounded-b-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden transition-colors shadow-sm dark:shadow-none">
+                    <div class="shrink-0 px-3 py-2 sm:px-6 sm:py-5 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 flex justify-between items-center text-left">
                         <h2 class="text-xs sm:text-lg lg:text-lg font-bold lg:font-black text-neutral-900 dark:text-neutral-100 uppercase tracking-tight text-left">Your Bus Schedule</h2>
                         <div class="flex items-center gap-1 sm:gap-2 lg:gap-3">
                             <button id="btn-egate-planner" class="flex items-center gap-1 sm:gap-1.5 lg:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 lg:px-4 lg:py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-[10px] sm:text-xs lg:text-sm rounded-lg lg:rounded-xl border border-indigo-200 dark:border-indigo-800/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors shadow-sm">
@@ -154,7 +225,7 @@
                         </div>
                     </div>
 
-                    <div id="egate-active-banner" class="hidden shrink-0 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/30 dark:to-blue-900/20 border-b border-indigo-200 dark:border-indigo-800/50 py-2 sm:py-3 px-4 sm:px-6 lg:px-6 justify-between items-center text-left transition-all">
+                    <div id="egate-active-banner" class="hidden shrink-0 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/30 dark:to-blue-900/20 border-b border-indigo-200 dark:border-indigo-800/50 py-2 sm:py-3 px-3 sm:px-6 lg:px-6 justify-between items-center text-left transition-all">
                         <div class="flex items-center gap-2 sm:gap-3">
                             <span class="bg-indigo-600 text-white text-[9px] sm:text-[10px] lg:text-xs font-bold px-1.5 py-0.5 sm:px-2 sm:py-1 lg:px-3 lg:py-1 rounded lg:rounded-md shadow-sm flex items-center gap-1 lg:gap-1.5 uppercase tracking-wider">
                                 <svg class="w-3 h-3 lg:w-3.5 lg:h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>eGate Mode
@@ -164,7 +235,7 @@
                         <button id="btn-clear-egate" class="text-[10px] sm:text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 hover:underline px-2.5 py-1 lg:px-3 lg:py-1.5 bg-white/60 dark:bg-black/40 rounded-md lg:rounded-lg border border-indigo-200 dark:border-indigo-800/50 shadow-sm transition-colors">Clear</button>
                     </div>
                     
-                    <div class="md:hidden shrink-0 grid grid-cols-2 bg-neutral-50/50 dark:bg-neutral-900/50 py-2 border-b border-neutral-200 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest px-4 z-10 sticky top-0">
+                    <div class="md:hidden shrink-0 grid grid-cols-2 bg-neutral-50/50 dark:bg-neutral-900/50 py-2 border-b border-neutral-200 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest px-3 z-10 sticky top-0">
                         <div id="mobile-label-start" class="text-left flex items-center gap-1"></div>
                         <div id="mobile-label-end" class="text-right flex items-center gap-1 justify-end"></div>
                     </div>
@@ -178,7 +249,7 @@
                         </table>
                     </div>
                     
-                    <div id="mobile-cards-container" class="md:hidden flex-1 overflow-y-auto custom-scrollbar scroll-smooth relative text-left" style="padding-bottom: calc(env(safe-area-inset-bottom) + 1.5rem);"></div>
+                    <div id="mobile-cards-container" class="md:hidden flex-1 overflow-y-auto custom-scrollbar scroll-smooth relative pb-[calc(env(safe-area-inset-bottom)+1rem)] text-left"></div>
                 </div>
             </div>
         </div>
@@ -202,6 +273,7 @@
         let activeRouteId="5",stopsData=[],schedule=[],stopNamesMap={},stopIndices={},currentDirection='from_eghq',currentStop='stop1',nextTripData={id:null,minutes:0,departs:'',arrives:''},nextTripTargetDate=null,activeBuses=[],forceScroll=!0,lastAutoScrolledId=null;
         let eGateTimeMinutes=null;
         
+        function updateVH(){document.documentElement.style.setProperty('--vh',`${window.innerHeight*.01}px`);}
         function switchRoute(id,initStop=null){
             activeRouteId=id;localStorage.setItem('sarab_saved_route',activeRouteId);
             const rData=ROUTES[activeRouteId];stopsData=rData.stops;stopNamesMap={};stopIndices={};
@@ -400,39 +472,13 @@
             }).join('');
         }
         function renderAll(){renderBanner();renderDesktopTable();renderMobileCards();highlightSelectedStop();}
-
-        // Connectivity Handler
-        function updateConnectivityUI() {
-            const indicator = document.getElementById('connectivity-status');
-            if (navigator.onLine) {
-                indicator.innerHTML = '<span class="relative flex h-1 w-1 sm:h-2 sm:w-2 lg:h-1.5 lg:w-1.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span><span class="relative inline-flex rounded-full h-1 w-1 sm:h-2 sm:w-2 lg:h-1.5 lg:w-1.5 bg-green-500"></span></span>Live';
-                indicator.className = "flex items-center gap-1 lg:gap-1.5 px-1.5 lg:px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-950 text-green-600 dark:text-green-400 lg:text-green-700 border border-green-200 dark:border-green-900/50 text-[8px] sm:text-xs font-bold uppercase tracking-wider shrink-0 text-right";
-            } else {
-                indicator.innerHTML = '<svg class="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-3.536m1.414 3.536l-2.829-2.829m-7.071-3.535a9 9 0 013.536-7.071m0 0L3 3m11.364 11.364L12 12m-2.121-2.121L7.05 7.05"></path></svg>Offline';
-                indicator.className = "flex items-center gap-1 lg:gap-1.5 px-1.5 lg:px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800 text-[8px] sm:text-xs font-bold uppercase tracking-wider shrink-0 text-right";
-            }
-        }
-
-        // Register Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(() => console.log('ServiceWorker registered'))
-                    .catch(err => console.log('ServiceWorker registration failed: ', err));
-            });
-        }
-
         document.addEventListener('DOMContentLoaded',()=>{
-            window.addEventListener('resize',()=>{renderRouteMap(!0);});
+            updateVH();window.addEventListener('resize',()=>{updateVH();renderRouteMap(!0);});
+            if(window.visualViewport)window.visualViewport.addEventListener('resize',()=>{updateVH();});
             const hs=localStorage.getItem('crewbus_onboarding_seen'),sp=document.getElementById('splash-screen');
             if(!hs){sp.classList.remove('hidden');document.getElementById('dismiss-splash').onclick=()=>{sp.classList.add('hidden');localStorage.setItem('crewbus_onboarding_seen','true');};}
-            document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){updateTime();}});
+            document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){updateVH();updateTime();}});
             
-            // Connectivity listeners
-            window.addEventListener('online', updateConnectivityUI);
-            window.addEventListener('offline', updateConnectivityUI);
-            updateConnectivityUI();
-
             const crewEmotions = [
                 { src: 'assets/crewtime.png', text: 'Worried you might miss the next bus?' },
                 { src: 'assets/crewsleepy.png', text: 'Exhausted and disoriented after that grueling ULR flight?' },
@@ -459,6 +505,7 @@
                     track.appendChild(slide);
                 });
 
+                // Clone the first slide for seamless infinite loop
                 const firstSlideClone = track.children[0].cloneNode(true);
                 track.appendChild(firstSlideClone);
 
@@ -473,7 +520,7 @@
                             track.style.transition = 'none';
                             currentSlide = 0;
                             track.style.transform = 'translateX(0)';
-                        }, 600);
+                        }, 600); // 600ms matches the CSS transition duration
                     }
                 }, 3000);
             }
