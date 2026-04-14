@@ -7,6 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes"><meta name="application-name" content="CrewBus"><meta name="theme-color" content="#000000">
     <link rel="apple-touch-icon" href="assets/crewrun.png">
     <link rel="icon" type="image/png" href="assets/crewruntp.png">
+    <link rel="manifest" href="manifest.json">
     <link rel="preload" as="image" href="assets/crewtime.png">
     <link rel="preload" as="image" href="assets/crewsleepy.png">
     <link rel="preload" as="image" href="assets/crewmad.png">
@@ -16,18 +17,6 @@
     <link rel="preconnect" href="https://cdn.tailwindcss.com"><link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
     <script src="https://cdn.tailwindcss.com"></script><script>tailwind.config={darkMode:'media'}</script>
     <style>:root{--vh:1vh}body{height:100vh;height:100dvh;width:100vw;overflow:hidden;background-color:#f8fafc}@media (prefers-color-scheme:dark){body{background-color:#000}}.hide-scrollbar::-webkit-scrollbar{display:none}.hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}.custom-scrollbar::-webkit-scrollbar{width:6px}.custom-scrollbar::-webkit-scrollbar-track{background:0 0}.custom-scrollbar::-webkit-scrollbar-thumb{background-color:rgba(82,82,91,.3);border-radius:20px}@media (prefers-color-scheme:dark){.custom-scrollbar::-webkit-scrollbar-thumb{background-color:rgba(82,82,91,.6)}} .carousel-track{display:flex;transition:transform 0.6s cubic-bezier(0.25,1,0.5,1)} .carousel-slide{min-width:100%;display:flex;flex-direction:column;align-items:center;padding:0 0.5rem} .image-wrapper{position:relative;width:180px;height:180px;display:flex;justify-content:center;align-items:center;margin-bottom:1.5rem;animation:float 4s infinite ease-in-out} .carousel-image{position:relative;height:160px;width:auto;max-width:100%;object-fit:contain} @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}} .progress-bar{width:100%;height:4px;background:rgba(150,150,150,0.2);margin-top:1rem;border-radius:2px;overflow:hidden} .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#3b82f6,#60a5fa);animation:fillProgress 3s linear infinite} @keyframes fillProgress{0%{width:0%}100%{width:100%}}</style>
-    <link rel="manifest" href="manifest.json">
-
-<script>
-  // Registrar el Service Worker
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('CrewBus Offline Ready!'))
-        .catch(err => console.log('Error en SW', err));
-    });
-  }
-</script>
 </head>
 <body class="bg-neutral-50 dark:bg-black text-neutral-900 dark:text-neutral-100 font-sans transition-colors duration-200 select-none">
 
@@ -142,7 +131,7 @@
             <div class="flex-1 flex flex-col gap-2 sm:gap-4 min-h-0">
                 <div class="shrink-0 bg-white dark:bg-black rounded-xl sm:rounded-2xl lg:rounded-2xl border border-neutral-200 dark:border-neutral-800 flex flex-col shadow-sm dark:shadow-none transition-colors relative">
                     <div class="flex items-center justify-end pt-2 sm:pt-4 lg:pt-3 px-3 sm:px-6 mb-0">
-                        <span class="flex items-center gap-1 lg:gap-1.5 px-1.5 lg:px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-950 text-green-600 dark:text-green-400 lg:text-green-700 border border-green-200 dark:border-green-900/50 text-[8px] sm:text-xs font-bold uppercase tracking-wider shrink-0 text-right">
+                        <span id="connectivity-status" class="flex items-center gap-1 lg:gap-1.5 px-1.5 lg:px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-950 text-green-600 dark:text-green-400 lg:text-green-700 border border-green-200 dark:border-green-900/50 text-[8px] sm:text-xs font-bold uppercase tracking-wider shrink-0 text-right">
                             <span class="relative flex h-1 w-1 sm:h-2 sm:w-2 lg:h-1.5 lg:w-1.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span><span class="relative inline-flex rounded-full h-1 w-1 sm:h-2 sm:w-2 lg:h-1.5 lg:w-1.5 bg-green-500"></span></span>Live
                         </span>
                     </div>
@@ -412,6 +401,28 @@
             }).join('');
         }
         function renderAll(){renderBanner();renderDesktopTable();renderMobileCards();highlightSelectedStop();}
+
+        // Connectivity Handler
+        function updateConnectivityUI() {
+            const indicator = document.getElementById('connectivity-status');
+            if (navigator.onLine) {
+                indicator.innerHTML = '<span class="relative flex h-1 w-1 sm:h-2 sm:w-2 lg:h-1.5 lg:w-1.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span><span class="relative inline-flex rounded-full h-1 w-1 sm:h-2 sm:w-2 lg:h-1.5 lg:w-1.5 bg-green-500"></span></span>Live';
+                indicator.className = "flex items-center gap-1 lg:gap-1.5 px-1.5 lg:px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-950 text-green-600 dark:text-green-400 lg:text-green-700 border border-green-200 dark:border-green-900/50 text-[8px] sm:text-xs font-bold uppercase tracking-wider shrink-0 text-right";
+            } else {
+                indicator.innerHTML = '<svg class="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-3.536m1.414 3.536l-2.829-2.829m-7.071-3.535a9 9 0 013.536-7.071m0 0L3 3m11.364 11.364L12 12m-2.121-2.121L7.05 7.05"></path></svg>Offline';
+                indicator.className = "flex items-center gap-1 lg:gap-1.5 px-1.5 lg:px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800 text-[8px] sm:text-xs font-bold uppercase tracking-wider shrink-0 text-right";
+            }
+        }
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(() => console.log('ServiceWorker registered'))
+                    .catch(err => console.log('ServiceWorker registration failed: ', err));
+            });
+        }
+
         document.addEventListener('DOMContentLoaded',()=>{
             updateVH();window.addEventListener('resize',()=>{updateVH();renderRouteMap(!0);});
             if(window.visualViewport)window.visualViewport.addEventListener('resize',()=>{updateVH();});
@@ -419,6 +430,11 @@
             if(!hs){sp.classList.remove('hidden');document.getElementById('dismiss-splash').onclick=()=>{sp.classList.add('hidden');localStorage.setItem('crewbus_onboarding_seen','true');};}
             document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){updateVH();updateTime();}});
             
+            // Connectivity listeners
+            window.addEventListener('online', updateConnectivityUI);
+            window.addEventListener('offline', updateConnectivityUI);
+            updateConnectivityUI();
+
             const crewEmotions = [
                 { src: 'assets/crewtime.png', text: 'Worried you might miss the next bus?' },
                 { src: 'assets/crewsleepy.png', text: 'Exhausted and disoriented after that grueling ULR flight?' },
@@ -445,7 +461,6 @@
                     track.appendChild(slide);
                 });
 
-                // Clone the first slide for seamless infinite loop
                 const firstSlideClone = track.children[0].cloneNode(true);
                 track.appendChild(firstSlideClone);
 
@@ -460,7 +475,7 @@
                             track.style.transition = 'none';
                             currentSlide = 0;
                             track.style.transform = 'translateX(0)';
-                        }, 600); // 600ms matches the CSS transition duration
+                        }, 600);
                     }
                 }, 3000);
             }
