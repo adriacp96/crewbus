@@ -1,7 +1,8 @@
-const CACHE_NAME = 'crewbus-v1';
-const ASSETS = [
+const CACHE_NAME = 'crewbus-v3';
+const ASSETS_TO_CACHE = [
   './',
   './index.html',
+  './manifest.json',
   'https://cdn.tailwindcss.com',
   './assets/crewtime.png',
   './assets/crewsleepy.png',
@@ -11,31 +12,56 @@ const ASSETS = [
   './assets/crewrun.png'
 ];
 
-// Instalación: Guardar archivos en caché
+// Install Event: Caching static assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
+      console.log('CrewBus: Caching assets');
+      return cache.addAll(ASSETS_TO_CACHE);
     })
   );
+  self.skipWaiting();
 });
 
-// Activación: Limpiar cachés antiguos
+// Activate Event: Cleaning up old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
       );
     })
   );
+  self.clients.claim();
 });
 
-// Estrategia: Cache First, fallback to Network
+// Fetch Event: Stale-While-Revalidate Strategy
+// Serves from cache immediately while fetching updated version in background
 self.addEventListener('fetch', (event) => {
+  // Only cache GET requests
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
+    caches.match(event.request).then((cachedResponse) => {
+      const fetchPromise = fetch(event.request).then((networkResponse) => {
+        // Only cache successful responses
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return networkResponse;
+      }).catch(() => {
+          // If network fails and no cache, return nothing or a fallback
+          return cachedResponse;
+      });
+
+      return cachedResponse || fetchPromise;
     })
   );
 });
