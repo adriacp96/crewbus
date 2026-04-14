@@ -55,7 +55,7 @@
         <div class="text-center px-4 w-full max-w-2xl"><p id="fs-title" class="text-indigo-600 dark:text-indigo-400 font-semibold tracking-widest uppercase text-sm sm:text-xl mb-4 sm:mb-8 text-center">Next Departure</p><div id="fs-departs" class="text-[6rem] sm:text-[12rem] font-extrabold tracking-tighter leading-none mb-10 sm:mb-16 text-neutral-900 dark:text-white text-center">--:--</div><div id="fs-countdown-box" class="flex flex-col items-center justify-center bg-neutral-100 dark:bg-neutral-900 p-8 sm:p-12 rounded-3xl border border-neutral-200 dark:border-white/10 w-full mx-auto transition-all duration-500 shadow-xl dark:shadow-2xl"><p class="text-sm sm:text-lg text-neutral-500 dark:text-neutral-400 uppercase tracking-widest font-bold mb-4 text-center">Departing In</p><div id="fs-countdown" class="text-7xl sm:text-9xl font-bold font-mono tracking-tight text-neutral-900 dark:text-white mb-2 tabular-nums text-center">--:--</div></div><div class="mt-10 sm:mt-16 flex items-center justify-center gap-3 sm:gap-4 text-xl sm:text-3xl text-neutral-600 dark:text-neutral-300 font-medium text-center"><span id="fs-arrival-label">Expected Arrival</span><span id="fs-arrives" class="font-bold text-neutral-900 dark:text-white text-center">--:--</span><svg class="w-6 h-6 sm:w-8 sm:h-8 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div></div>
     </div>
 
-    <div class="h-full w-full flex flex-col gap-2 sm:gap-4 px-2 sm:px-4 lg:px-6 pt-[max(env(safe-area-inset-top),0.5rem)] pb-2 sm:pb-4 lg:pb-6 text-center">
+    <div class="h-full w-full flex flex-col gap-2 sm:gap-4 px-2 sm:px-4 lg:px-6 pt-[max(env(safe-area-inset-top),0.5rem)] pb-0 sm:pb-4 lg:pb-6 text-center">
         <header class="shrink-0 flex flex-row items-center justify-between bg-white dark:bg-black p-2.5 sm:p-5 lg:px-6 lg:py-5 rounded-xl sm:rounded-2xl lg:rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-none">
             <div class="flex items-center gap-2.5 sm:gap-4 lg:gap-5 text-left">
                 <div class="w-9 h-9 sm:w-14 sm:h-14 lg:w-14 lg:h-14 bg-red-600 rounded-lg sm:rounded-xl flex items-center justify-center text-white shadow-md shadow-red-600/30 shrink-0">
@@ -140,7 +140,7 @@
                     </div>
                 </div>
                 
-                <div class="flex-1 flex flex-col min-h-0 bg-white dark:bg-black rounded-t-xl rounded-b-[3.5rem] sm:rounded-t-2xl sm:rounded-b-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden transition-colors shadow-sm dark:shadow-none">
+                <div class="flex-1 flex flex-col min-h-0 bg-white dark:bg-black rounded-t-xl rounded-b-none sm:rounded-2xl border border-b-0 sm:border-b border-neutral-200 dark:border-neutral-800 overflow-hidden transition-colors shadow-sm dark:shadow-none">
                     <div class="shrink-0 px-3 py-2 sm:px-6 sm:py-5 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 flex justify-between items-center text-left">
                         <h2 class="text-xs sm:text-lg lg:text-lg font-bold lg:font-black text-neutral-900 dark:text-neutral-100 uppercase tracking-tight text-left">Your Bus Schedule</h2>
                         <div class="flex items-center gap-1 sm:gap-2 lg:gap-3">
