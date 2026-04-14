@@ -1,6 +1,7 @@
 {
-  "name": "CrewBus Pro",
+  "name": "CrewBus - Schedules",
   "short_name": "CrewBus",
+  "description": "Bus schedules for crew accommodations.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#000000",
@@ -11,7 +12,7 @@
       "src": "assets/crewrun.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     },
     {
       "src": "assets/crewrun.png",
