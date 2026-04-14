@@ -55,7 +55,7 @@
         <div class="text-center px-4 w-full max-w-2xl"><p id="fs-title" class="text-indigo-600 dark:text-indigo-400 font-semibold tracking-widest uppercase text-sm sm:text-xl mb-4 sm:mb-8 text-center">Next Departure</p><div id="fs-departs" class="text-[6rem] sm:text-[12rem] font-extrabold tracking-tighter leading-none mb-10 sm:mb-16 text-neutral-900 dark:text-white text-center">--:--</div><div id="fs-countdown-box" class="flex flex-col items-center justify-center bg-neutral-100 dark:bg-neutral-900 p-8 sm:p-12 rounded-3xl border border-neutral-200 dark:border-white/10 w-full mx-auto transition-all duration-500 shadow-xl dark:shadow-2xl"><p class="text-sm sm:text-lg text-neutral-500 dark:text-neutral-400 uppercase tracking-widest font-bold mb-4 text-center">Departing In</p><div id="fs-countdown" class="text-7xl sm:text-9xl font-bold font-mono tracking-tight text-neutral-900 dark:text-white mb-2 tabular-nums text-center">--:--</div></div><div class="mt-10 sm:mt-16 flex items-center justify-center gap-3 sm:gap-4 text-xl sm:text-3xl text-neutral-600 dark:text-neutral-300 font-medium text-center"><span id="fs-arrival-label">Expected Arrival</span><span id="fs-arrives" class="font-bold text-neutral-900 dark:text-white text-center">--:--</span><svg class="w-6 h-6 sm:w-8 sm:h-8 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div></div>
     </div>
 
-    <div class="h-full w-full flex flex-col gap-2 sm:gap-4 px-2 sm:px-4 lg:px-6 pt-[max(env(safe-area-inset-top),0.5rem)] pb-0 sm:pb-4 lg:pb-6 text-center">
+    <div class="absolute inset-0 flex flex-col gap-2 sm:gap-4 px-2 sm:px-4 lg:px-6 pt-[max(env(safe-area-inset-top),0.5rem)] pb-0 sm:pb-4 lg:pb-6 text-center">
         <header class="shrink-0 flex flex-row items-center justify-between bg-white dark:bg-black p-2.5 sm:p-5 lg:px-6 lg:py-5 rounded-xl sm:rounded-2xl lg:rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-none">
             <div class="flex items-center gap-2.5 sm:gap-4 lg:gap-5 text-left">
                 <div class="w-9 h-9 sm:w-14 sm:h-14 lg:w-14 lg:h-14 bg-red-600 rounded-lg sm:rounded-xl flex items-center justify-center text-white shadow-md shadow-red-600/30 shrink-0">
@@ -140,8 +140,8 @@
                     </div>
                 </div>
                 
-                <div class="flex-1 flex flex-col min-h-0 bg-white dark:bg-black rounded-t-xl rounded-b-none sm:rounded-2xl border border-b-0 sm:border-b border-neutral-200 dark:border-neutral-800 overflow-hidden transition-colors shadow-sm dark:shadow-none">
-                    <div class="shrink-0 px-3 py-2 sm:px-6 sm:py-5 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 flex justify-between items-center text-left">
+                <div class="flex-1 flex flex-col min-h-0 bg-white dark:bg-black rounded-t-xl rounded-b-none sm:rounded-2xl border border-x-0 sm:border-x border-b-0 sm:border-b border-neutral-200 dark:border-neutral-800 overflow-hidden transition-colors shadow-sm dark:shadow-none -mx-2 sm:mx-0">
+                    <div class="shrink-0 px-4 py-3 sm:px-6 sm:py-5 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 flex justify-between items-center text-left">
                         <h2 class="text-xs sm:text-lg lg:text-lg font-bold lg:font-black text-neutral-900 dark:text-neutral-100 uppercase tracking-tight text-left">Your Bus Schedule</h2>
                         <div class="flex items-center gap-1 sm:gap-2 lg:gap-3">
                             <button id="btn-egate-planner" class="flex items-center gap-1 sm:gap-1.5 lg:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 lg:px-4 lg:py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-[10px] sm:text-xs lg:text-sm rounded-lg lg:rounded-xl border border-indigo-200 dark:border-indigo-800/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors shadow-sm">
@@ -154,7 +154,7 @@
                         </div>
                     </div>
 
-                    <div id="egate-active-banner" class="hidden shrink-0 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/30 dark:to-blue-900/20 border-b border-indigo-200 dark:border-indigo-800/50 py-2 sm:py-3 px-3 sm:px-6 lg:px-6 justify-between items-center text-left transition-all">
+                    <div id="egate-active-banner" class="hidden shrink-0 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/30 dark:to-blue-900/20 border-b border-indigo-200 dark:border-indigo-800/50 py-2 sm:py-3 px-4 sm:px-6 lg:px-6 justify-between items-center text-left transition-all">
                         <div class="flex items-center gap-2 sm:gap-3">
                             <span class="bg-indigo-600 text-white text-[9px] sm:text-[10px] lg:text-xs font-bold px-1.5 py-0.5 sm:px-2 sm:py-1 lg:px-3 lg:py-1 rounded lg:rounded-md shadow-sm flex items-center gap-1 lg:gap-1.5 uppercase tracking-wider">
                                 <svg class="w-3 h-3 lg:w-3.5 lg:h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>eGate Mode
@@ -164,7 +164,7 @@
                         <button id="btn-clear-egate" class="text-[10px] sm:text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 hover:underline px-2.5 py-1 lg:px-3 lg:py-1.5 bg-white/60 dark:bg-black/40 rounded-md lg:rounded-lg border border-indigo-200 dark:border-indigo-800/50 shadow-sm transition-colors">Clear</button>
                     </div>
                     
-                    <div class="md:hidden shrink-0 grid grid-cols-2 bg-neutral-50/50 dark:bg-neutral-900/50 py-2 border-b border-neutral-200 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest px-3 z-10 sticky top-0">
+                    <div class="md:hidden shrink-0 grid grid-cols-2 bg-neutral-50/50 dark:bg-neutral-900/50 py-2 border-b border-neutral-200 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest px-4 z-10 sticky top-0">
                         <div id="mobile-label-start" class="text-left flex items-center gap-1"></div>
                         <div id="mobile-label-end" class="text-right flex items-center gap-1 justify-end"></div>
                     </div>
@@ -178,7 +178,7 @@
                         </table>
                     </div>
                     
-                    <div id="mobile-cards-container" class="md:hidden flex-1 overflow-y-auto custom-scrollbar scroll-smooth relative pb-[calc(env(safe-area-inset-bottom)+1rem)] text-left"></div>
+                    <div id="mobile-cards-container" class="md:hidden flex-1 overflow-y-auto custom-scrollbar scroll-smooth relative pb-[max(env(safe-area-inset-bottom),1rem)] text-left"></div>
                 </div>
             </div>
         </div>
