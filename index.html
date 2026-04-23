@@ -260,6 +260,7 @@
         let routeMode = localStorage.getItem('crewbus_route_mode') || 'auto';
         let screensaverAnimationInterval = null;
         let currentScreensaverScene = null;
+        let screensaverTrigger = null;
         const SCREENSAVER_SCENES = [
             { img: 'assets/crewsun.png', text: 'ENJOY YOUR TIME', disco: false },
             { img: 'assets/crewdrink.png', text: 'PARTY TIME!', disco: true }
@@ -592,7 +593,8 @@
             }
         }
 
-       function showScreensaver() {
+       function showScreensaver(trigger = 'manual-click') {
+            screensaverTrigger = trigger;
             const ss = document.getElementById('screensaver');
             ss.classList.remove('hidden');
             ss.classList.add('flex');
@@ -628,10 +630,12 @@
 
         function hideScreensaver() {
             if (screensaverAnimationInterval) clearInterval(screensaverAnimationInterval);
-            document.getElementById('screensaver').classList.add('hidden');
-            document.getElementById('screensaver').classList.remove('flex');
+            const ss = document.getElementById('screensaver');
+            ss.classList.add('hidden');
+            ss.classList.remove('flex');
             currentScreensaverScene = null;
-            if(routeMode === 'auto') setRouteMode('manual');
+            if (screensaverTrigger === 'auto-location') setRouteMode('manual');
+            screensaverTrigger = null;
         }
 
         function autoDetectDirection() {
@@ -644,7 +648,7 @@
 
                     // Outside Dubai (>60km from EGHQ) -> Show Screensaver
                     if (distEGHQ > 60) {
-                        showScreensaver();
+                        showScreensaver('auto-location');
                         return;
                     }
 
@@ -826,7 +830,7 @@
             document.getElementById('clock-container').addEventListener('click', () => {
                 clockClicks++;
                 clearTimeout(clockTimer);
-                if (clockClicks >= 3) { clockClicks = 0; showScreensaver(); }
+                if (clockClicks >= 3) { clockClicks = 0; showScreensaver('manual-click'); }
                 else { clockTimer = setTimeout(() => { clockClicks = 0; }, 600); }
             });
 
