@@ -429,8 +429,8 @@
         function renderAll(){renderBanner();renderDesktopTable();renderMobileCards();highlightSelectedStop();}
 
         // Location Detection
-        const EGHQ_LAT = 25.2532; // NOTE: Update with exact EGHQ Latitude
-        const EGHQ_LNG = 55.3657; // NOTE: Update with exact EGHQ Longitude
+        const EGHQ_LAT = 25.35168470; // NOTE: Update with exact EGHQ Latitude
+        const EGHQ_LNG = 55.40923583; // NOTE: Update with exact EGHQ Longitude
         const EGHQ_RADIUS_KM = 0.5; // 500 meters radius
         const ACCOMMODATION_RADIUS_KM = 1.0; // 1km radius for accommodations
 
@@ -440,8 +440,8 @@
             'T.Ecom 1': { lat: 0, lng: 0 },
             'T.Ecom 2': { lat: 0, lng: 0 },
             'MIT': { lat: 0, lng: 0 },
-            'Pink': { lat: 0, lng: 0 },
-            'GROS': { lat: 0, lng: 0 },
+            'Pink': { lat: 25.20977050, lng: 55.27310290 },
+            'GROS': { lat: 25.22124662, lng: 55.39898959 },
             'Faltat': { lat: 0, lng: 0 },
             'Sabrin': { lat: 0, lng: 0 },
             'Manazil': { lat: 0, lng: 0 },
@@ -456,12 +456,12 @@
             'Al Qamzi': { lat: 0, lng: 0 },
             'Manazel Deira': { lat: 0, lng: 0 },
             'Emirates 6': { lat: 0, lng: 0 },
-            'Sarab 1': { lat: 0, lng: 0 },
+            'Sarab 1': { lat: 25.06258074, lng: 55.30040730 },
             'Safa Twr': { lat: 0, lng: 0 },
             'Sarab 5': { lat: 0, lng: 0 },
             'Sarab 3': { lat: 0, lng: 0 },
             'Sarab 2': { lat: 0, lng: 0 },
-            'Sarab 4': { lat: 0, lng: 0 },
+            'Sarab 4': { lat: 25.06200605, lng: 55.31530604 },
             'DSO 4': { lat: 0, lng: 0 },
             'DSO 2': { lat: 0, lng: 0 },
             'PZV1': { lat: 0, lng: 0 },
@@ -540,7 +540,11 @@
                     }
                 }, (err) => {
                     console.warn("Location access denied or unavailable.", err);
-                }, { timeout: 10000 });
+                }, { 
+                    timeout: 10000,
+                    maximumAge: 300000, // Accept a cached location up to 5 minutes old
+                    enableHighAccuracy: false // Use lower-power cell/Wi-Fi triangulation
+                });
             }
         }
 
