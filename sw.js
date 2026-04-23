@@ -1,5 +1,4 @@
-const CACHE_NAME = 'crewbus-v18';
-const ASSETS_TO_CACHE = [
+const CACHE_NAME = 'crewbus-v1
   './',
   './index.html',
   './manifest.json',
