@@ -635,13 +635,22 @@
         }
 
         function autoDetectDirection() {
-            if (routeMode !== 'auto') return;
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition((position) => {
                     const userLat = position.coords.latitude;
                     const userLng = position.coords.longitude;
                     
                     const distEGHQ = calculateDistance(userLat, userLng, EGHQ_LAT, EGHQ_LNG);
+
+                    // Outside Dubai (>60km from EGHQ) -> Show Screensaver
+                    if (distEGHQ > 60) {
+                        showScreensaver();
+                        return;
+                    }
+
+                    // Inside Dubai -> Only switch automatically if 'Auto' is selected
+                    if (routeMode !== 'auto') return;
+
                     if (distEGHQ <= EGHQ_RADIUS_KM) {
                         setDirection('from_eghq');
                         showLocationToast('EGHQ');
@@ -691,11 +700,9 @@
                             switchRoute(foundRoute, foundStopKey);
                             showLocationToast(targetName);
                         } else {
-                            showScreensaver();
                             setDirection('to_eghq');
                         }
                     } else {
-                        showScreensaver();
                         setDirection('to_eghq');
                     }
                 }, (err) => {
