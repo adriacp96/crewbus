@@ -496,7 +496,12 @@
             'PZV1': { lat: 0, lng: 0 },
             'PZV2': { lat: 0, lng: 0 },
             'SNB': { lat: 0, lng: 0 },
-            'JADAF': { lat: 25.22300079982685, lng: 55.333919130675675 }
+            'JADAF': { lat: 25.22300079982685, lng: 55.333919130675675 },
+            'OST Tower 11': { lat: 25.090879573531748, lng: 55.319346238677355 }
+        };
+
+        const STOP_ALIASES = {
+            'OST Tower 11': 'Sarab 4'
         };
 
         function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -545,11 +550,12 @@
                     }
 
                     if (nearestName && minStopDist <= ACCOMMODATION_RADIUS_KM) {
+                        let targetName = STOP_ALIASES[nearestName] || nearestName;
                         let foundRoute = null;
                         let foundStopKey = null;
                         
                         for (const [rId, rData] of Object.entries(ROUTES)) {
-                            const sIdx = rData.stops.indexOf(nearestName);
+                            const sIdx = rData.stops.indexOf(targetName);
                             if (sIdx > 0 && sIdx < rData.stops.length - 1) {
                                 foundRoute = rId;
                                 foundStopKey = `stop${sIdx}`;
@@ -561,7 +567,7 @@
                             document.getElementById('route-dropdown').value = foundRoute;
                             setDirection('to_eghq', true);
                             switchRoute(foundRoute, foundStopKey);
-                            showLocationToast(nearestName);
+                            showLocationToast(targetName);
                         } else {
                             setDirection('to_eghq');
                         }
