@@ -1,4 +1,4 @@
-const CACHE_NAME = 'crewbus-v4';
+const CACHE_NAME = 'crewbus-v5';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -13,7 +13,6 @@ const ASSETS_TO_CACHE = [
   './assets/crewruntp.png'
 ];
 
-// Install Event: Caching static assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -24,7 +23,6 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Activate Event: Cleaning up old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -40,16 +38,12 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch Event: Stale-While-Revalidate Strategy
-// Serves from cache immediately while fetching updated version in background
 self.addEventListener('fetch', (event) => {
-  // Only cache GET requests
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       const fetchPromise = fetch(event.request).then((networkResponse) => {
-        // Only cache successful responses
         if (networkResponse && networkResponse.status === 200) {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
@@ -58,7 +52,6 @@ self.addEventListener('fetch', (event) => {
         }
         return networkResponse;
       }).catch(() => {
-          // If network fails and no cache, return nothing or a fallback
           return cachedResponse;
       });
 
