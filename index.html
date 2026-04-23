@@ -94,7 +94,7 @@
             </div>
             <div class="bg-neutral-100 dark:bg-neutral-900/50 px-2.5 py-1.5 sm:px-5 sm:py-3 lg:px-5 lg:py-3 rounded-lg sm:rounded-xl lg:rounded-xl border border-neutral-200 dark:border-neutral-800 shrink-0 text-right">
                 <p class="hidden sm:block text-xs lg:text-[10px] text-neutral-400 dark:text-neutral-500 font-medium lg:font-bold uppercase tracking-wider mb-1">Current Time</p>
-                <div class="flex items-center gap-1 sm:gap-2 lg:gap-2 text-sm sm:text-xl lg:text-xl font-bold text-neutral-900 dark:text-neutral-100 justify-end">
+                <div id="clock-container" class="flex items-center gap-1 sm:gap-2 lg:gap-2 text-sm sm:text-xl lg:text-xl font-bold text-neutral-900 dark:text-neutral-100 justify-end cursor-pointer">
                     <svg class="w-3.5 h-3.5 sm:w-5 sm:h-5 lg:w-5 lg:h-5 text-neutral-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     <span id="current-time-display">--:--</span>
                 </div>
@@ -772,6 +772,15 @@
             document.getElementById('btn-expand-fs').addEventListener('click',toggleFullscreen);
             document.getElementById('btn-close-fs').addEventListener('click',toggleFullscreen);
             document.getElementById('btn-center-schedule').addEventListener('click',scrollToFocusBus);
+            
+            let clockClicks = 0, clockTimer = null;
+            document.getElementById('clock-container').addEventListener('click', () => {
+                clockClicks++;
+                clearTimeout(clockTimer);
+                if (clockClicks >= 3) { clockClicks = 0; showScreensaver(); }
+                else { clockTimer = setTimeout(() => { clockClicks = 0; }, 600); }
+            });
+
             const sr=localStorage.getItem('sarab_saved_route')||'5',ss=localStorage.getItem('sarab_saved_stop')||'stop1',sd=localStorage.getItem('sarab_saved_direction')||'from_eghq';
             setDirection(sd,!0);document.getElementById('route-dropdown').value=sr;switchRoute(sr,ss);
             setRouteMode(routeMode);
