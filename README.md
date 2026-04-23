@@ -26,11 +26,14 @@ CrewBus is a lightweight, installable web app for viewing bus schedules between 
 
 | Feature | Description |
 |---|---|
-| 🚌 **Next Departure** | See the next bus and a live countdown in seconds |
+| 📍 **Auto-Location** | Automatically detects if you are at EGHQ or your accommodation to set your route |
+| 🏠 **Custom Home** | Save your exact GPS coordinates to your preferred stop for precise auto-detection |
+| 📶 **Offline Ready** | Fully cached via Service Workers to work instantly without an internet connection |
+|  **Next Departure** | See the next bus and a live countdown in seconds |
 | 🗺️ **Live Route Map** | Animated bus positions along the route in real time |
 | 🔄 **Both Directions** | Toggle between *From EGHQ* and *To EGHQ* |
-| 📍 **Stop Selector** | Pick your accommodation stop to get personalised times |
 | ⌚ **eGate Planner** | Calculate which bus you need to take to be always on time |
+| ✈️ **Layover Mode** | Interactive comic screensavers automatically activate when you're outside Dubai |
 | 🌙 **Dark Mode** | Automatically follows your device's theme |
 | 📲 **Install as App** | Add to Home Screen on iOS or Android for a native feel |
 | 💾 **Remembers You** | Your last route, stop, and direction are saved locally |
@@ -63,10 +66,12 @@ CrewBus covers 12 routes running 24 hours a day:
 ## How to Use
 
 1. **Open** the app at [adriacp96.github.io/crewbus](https://adriacp96.github.io/crewbus/)
-2. **Pick your route** from the dropdown
-3. **Select your stop** (your accommodation)
-4. **Choose direction** — *From EGHQ* or *To EGHQ*
-5. The next departure and a live countdown appear instantly
+2. **Use Auto Mode** to let GPS instantly set your route and direction, OR
+3. **Pick manually** by choosing your route, stop, and direction from the dropdowns.
+4. **Save your Home** by tapping the house icon next to your accommodation.
+5. The next departure and a live countdown will appear instantly!
+
+*(Secret: Triple-tap the clock for a fun surprise!)*
 
 ### Install on your phone (recommended)
 
@@ -83,6 +88,8 @@ Once installed, CrewBus opens fullscreen like a native app.
 - [Tailwind CSS](https://tailwindcss.com/) for styling
 - [Lucide Icons](https://lucide.dev/) for icons
 - All schedule data is embedded in the page
+- **Geolocation API** for smart proximity detection
+- **Service Workers** for 100% offline PWA capabilities
 - `localStorage` for persisting user preferences
 
 ---
