@@ -32,7 +32,7 @@
     <link rel="preload" as="image" href="assets/crewrun.png">
     <link rel="preconnect" href="https://cdn.tailwindcss.com"><link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
     <script src="https://cdn.tailwindcss.com"></script><script>tailwind.config={darkMode:'media'}</script>
-    <style>:root{--vh:1vh}body{height:100vh;height:100dvh;width:100vw;overflow:hidden;background-color:#f8fafc}@media (prefers-color-scheme:dark){body{background-color:#000}}.hide-scrollbar::-webkit-scrollbar{display:none}.hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}.custom-scrollbar::-webkit-scrollbar{width:6px}.custom-scrollbar::-webkit-scrollbar-track{background:0 0}.custom-scrollbar::-webkit-scrollbar-thumb{background-color:rgba(82,82,91,.3);border-radius:20px}@media (prefers-color-scheme:dark){.custom-scrollbar::-webkit-scrollbar-thumb{background-color:rgba(82,82,91,.6)}} .carousel-track{display:flex;transition:transform 0.6s cubic-bezier(0.25,1,0.5,1)} .carousel-slide{min-width:100%;display:flex;flex-direction:column;align-items:center;padding:0 0.5rem} .image-wrapper{position:relative;width:180px;height:180px;display:flex;justify-content:center;align-items:center;margin-bottom:1.5rem;animation:float 4s infinite ease-in-out} .carousel-image{position:relative;height:160px;width:auto;max-width:100%;object-fit:contain} @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}} .progress-bar{width:100%;height:4px;background:rgba(150,150,150,0.2);margin-top:1rem;border-radius:2px;overflow:hidden} .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#3b82f6,#60a5fa);animation:fillProgress 3s linear infinite} @keyframes fillProgress{0%{width:0%}100%{width:100%}}</style>
+    <style>:root{--vh:1vh}html,body{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;overflow:hidden}body{background-color:#f8fafc}@media (prefers-color-scheme:dark){body{background-color:#000}}.hide-scrollbar::-webkit-scrollbar{display:none}.hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}.custom-scrollbar::-webkit-scrollbar{width:6px}.custom-scrollbar::-webkit-scrollbar-track{background:0 0}.custom-scrollbar::-webkit-scrollbar-thumb{background-color:rgba(82,82,91,.3);border-radius:20px}@media (prefers-color-scheme:dark){.custom-scrollbar::-webkit-scrollbar-thumb{background-color:rgba(82,82,91,.6)}} .carousel-track{display:flex;transition:transform 0.6s cubic-bezier(0.25,1,0.5,1)} .carousel-slide{min-width:100%;display:flex;flex-direction:column;align-items:center;padding:0 0.5rem} .image-wrapper{position:relative;width:180px;height:180px;display:flex;justify-content:center;align-items:center;margin-bottom:1.5rem;animation:float 4s infinite ease-in-out} .carousel-image{position:relative;height:160px;width:auto;max-width:100%;object-fit:contain} @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}} .progress-bar{width:100%;height:4px;background:rgba(150,150,150,0.2);margin-top:1rem;border-radius:2px;overflow:hidden} .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#3b82f6,#60a5fa);animation:fillProgress 3s linear infinite} @keyframes fillProgress{0%{width:0%}100%{width:100%}} @keyframes comicPop{0%{transform:scale(0.3) translateY(20px) rotate(-15deg);opacity:0}60%{transform:scale(1.2) translateY(-10px) rotate(10deg);opacity:1}100%{transform:scale(1) translateY(0) rotate(0deg);opacity:1}}.comic-letter{display:inline-block;opacity:0;animation:comicPop .5s cubic-bezier(.175,.885,.32,1.275) forwards}</style>
 </head>
 <body class="bg-neutral-50 dark:bg-black text-neutral-900 dark:text-neutral-100 font-sans transition-colors duration-200 select-none">
 
@@ -73,6 +73,12 @@
     <div id="fullscreen-overlay" class="hidden fixed inset-0 z-50 bg-white dark:bg-black flex flex-col items-center justify-center text-neutral-900 dark:text-white transition-opacity h-full w-full">
         <button id="btn-close-fs" class="absolute top-16 left-1/2 transform -translate-x-1/2 p-4 bg-neutral-100 dark:bg-white/10 rounded-full hover:bg-neutral-200 dark:hover:bg-white/20 transition-all cursor-pointer border border-neutral-200 dark:border-white/10 text-center"><svg class="w-8 h-8 text-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" x2="21" y1="10" y2="3"/><line x1="3" x2="10" y1="21" y2="14"/></svg></button>
         <div class="text-center px-4 w-full max-w-2xl"><p id="fs-title" class="text-indigo-600 dark:text-indigo-400 font-semibold tracking-widest uppercase text-sm sm:text-xl mb-4 sm:mb-8 text-center">Next Departure</p><div id="fs-departs" class="text-[6rem] sm:text-[12rem] font-extrabold tracking-tighter leading-none mb-10 sm:mb-16 text-neutral-900 dark:text-white text-center">--:--</div><div id="fs-countdown-box" class="flex flex-col items-center justify-center bg-neutral-100 dark:bg-neutral-900 p-8 sm:p-12 rounded-3xl border border-neutral-200 dark:border-white/10 w-full mx-auto transition-all duration-500 shadow-xl dark:shadow-2xl"><p class="text-sm sm:text-lg text-neutral-500 dark:text-neutral-400 uppercase tracking-widest font-bold mb-4 text-center">Departing In</p><div id="fs-countdown" class="text-7xl sm:text-9xl font-bold font-mono tracking-tight text-neutral-900 dark:text-white mb-2 tabular-nums text-center">--:--</div></div><div class="mt-10 sm:mt-16 flex items-center justify-center gap-3 sm:gap-4 text-xl sm:text-3xl text-neutral-600 dark:text-neutral-300 font-medium text-center"><span id="fs-arrival-label">Expected Arrival</span><span id="fs-arrives" class="font-bold text-neutral-900 dark:text-white text-center">--:--</span><svg class="w-6 h-6 sm:w-8 sm:h-8 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div></div>
+    </div>
+
+    <div id="screensaver" class="hidden fixed inset-0 z-[70] bg-gradient-to-b from-sky-400 to-sky-100 dark:from-sky-900 dark:to-indigo-950 flex-col items-center justify-center p-6 text-center transition-opacity duration-500 w-full h-full">
+        <img src="assets/crewsun.png" alt="Enjoy Your Time" class="w-64 h-64 sm:w-80 sm:h-80 object-contain drop-shadow-2xl mb-8 pointer-events-none select-none" draggable="false" fetchpriority="high">
+        <div id="comic-text-container" class="flex flex-wrap justify-center gap-y-2 gap-x-3 sm:gap-x-4 text-5xl sm:text-7xl font-black text-yellow-400 tracking-tighter uppercase" style="-webkit-text-stroke: 2px #0f172a; filter: drop-shadow(4px 4px 0 #0f172a);"></div>
+        <button id="btn-close-screensaver" class="mt-16 px-6 py-3 bg-white/20 hover:bg-white/30 dark:bg-black/20 dark:hover:bg-black/30 backdrop-blur-md rounded-2xl font-bold text-sky-900 dark:text-sky-100 border border-white/50 dark:border-white/10 transition-colors shadow-lg active:scale-95">Open App Manually</button>
     </div>
 
     <div class="h-full w-full flex flex-col gap-2 sm:gap-4 px-2 sm:px-4 lg:px-6 pt-[max(env(safe-area-inset-top),0.5rem)] pb-2 sm:pb-4 lg:pb-6 text-center">
@@ -568,6 +574,24 @@
             }
         }
 
+        function showScreensaver() {
+            const ss = document.getElementById('screensaver');
+            ss.classList.remove('hidden');
+            ss.classList.add('flex');
+            const container = document.getElementById('comic-text-container');
+            const words = "ENJOY YOUR TIME".split(' ');
+            container.innerHTML = words.map((word, wIdx) => {
+                return '<div class="flex">' + word.split('').map((char, cIdx) => `<span class="comic-letter" style="animation-delay: ${(wIdx * 5 + cIdx) * 0.08}s">${char}</span>`).join('') + '</div>';
+            }).join('');
+        }
+
+        function hideScreensaver() {
+            const ss = document.getElementById('screensaver');
+            ss.classList.add('hidden');
+            ss.classList.remove('flex');
+            setRouteMode('manual');
+        }
+
         function autoDetectDirection() {
             if (routeMode !== 'auto') return;
             if ("geolocation" in navigator) {
@@ -625,9 +649,11 @@
                             switchRoute(foundRoute, foundStopKey);
                             showLocationToast(targetName);
                         } else {
+                            showScreensaver();
                             setDirection('to_eghq');
                         }
                     } else {
+                        showScreensaver();
                         setDirection('to_eghq');
                     }
                 }, (err) => {
@@ -740,6 +766,7 @@
             document.getElementById('route-dropdown').addEventListener('change',(e)=>switchRoute(e.target.value));
             document.getElementById('stop-selector').addEventListener('change',(e)=>setStop(e.target.value));
             document.getElementById('btn-save-home').addEventListener('click',saveHomeLocation);
+            document.getElementById('btn-close-screensaver').addEventListener('click',hideScreensaver);
             document.getElementById('btn-mode-auto').addEventListener('click',()=>setRouteMode('auto'));
             document.getElementById('btn-mode-manual').addEventListener('click',()=>setRouteMode('manual'));
             document.getElementById('btn-expand-fs').addEventListener('click',toggleFullscreen);
