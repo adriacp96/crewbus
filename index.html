@@ -4,18 +4,15 @@
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
     <title>CrewBus</title>
     
-    <!-- Primary Meta Tags -->
     <meta name="title" content="CrewBus">
     <meta name="description" content="Real-time bus schedules, eGate planner, and route tracking for crew members.">
 
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://crewbus.online/">
     <meta property="og:title" content="CrewBus">
     <meta property="og:description" content="Real-time bus schedules, eGate planner, and route tracking for crew members.">
     <meta property="og:image" content="https://raw.githubusercontent.com/adriacp96/crewbus/002f1ac615af5168f5c7f77c8d19d9639d61eedd/assets/mockup.png">
 
-    <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://crewbus.online/">
     <meta property="twitter:title" content="CrewBus">
@@ -39,7 +36,7 @@
 </head>
 <body class="bg-neutral-50 dark:bg-black text-neutral-900 dark:text-neutral-100 font-sans transition-colors duration-200 select-none">
 
-    <div id="location-toast" class="fixed top-6 left-1/2 transform -translate-x-1/2 -translate-y-8 opacity-0 z-[100] bg-neutral-900 dark:bg-white text-white dark:text-black px-4 py-2.5 rounded-full shadow-xl shadow-black/20 dark:shadow-white/10 text-xs sm:text-sm font-bold flex items-center gap-2 transition-all duration-500 pointer-events-none border border-neutral-700 dark:border-neutral-200">
+    <div id="location-toast" class="fixed top-4 sm:top-6 mt-[env(safe-area-inset-top)] left-1/2 transform -translate-x-1/2 -translate-y-8 opacity-0 z-[100] bg-neutral-900 dark:bg-white text-white dark:text-black px-4 py-2.5 rounded-full shadow-xl shadow-black/20 dark:shadow-white/10 text-xs sm:text-sm font-bold flex items-center gap-2 transition-all duration-500 pointer-events-none border border-neutral-700 dark:border-neutral-200">
         <svg class="w-4 h-4 text-blue-400 dark:text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
         <span id="location-toast-text">Detected location: </span>
     </div>
@@ -48,7 +45,6 @@
         <div class="max-w-md w-full flex flex-col items-center py-8">
             <div class="w-full overflow-hidden relative mb-8 shrink-0">
                 <div class="carousel-track" id="carousel-track">
-                    <!-- Slides dynamically injected here via JS -->
                 </div>
             </div>
             <p class="text-neutral-500 dark:text-neutral-400 mb-6 text-sm sm:text-lg leading-relaxed font-medium text-center shrink-0">Add to Home Screen for the full experience.</p>
