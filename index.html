@@ -720,9 +720,9 @@
                 }, (err) => {
                     console.warn("Location access denied or unavailable.", err);
                 }, { 
-                    timeout: 10000,
-                    maximumAge: 300000,
-                    enableHighAccuracy: false
+                    timeout: 15000,
+                    maximumAge: 60000,
+                    enableHighAccuracy: true
                 });
             }
         }
@@ -845,6 +845,7 @@
             const sr=localStorage.getItem('sarab_saved_route')||'5',ss=localStorage.getItem('sarab_saved_stop')||'stop1',sd=localStorage.getItem('sarab_saved_direction')||'from_eghq';
             setDirection(sd,!0);document.getElementById('route-dropdown').value=sr;switchRoute(sr,ss);
             setRouteMode(routeMode);
+            if (routeMode !== 'auto') autoDetectDirection(); // Ensure layover checks still run in background
             if(eGateTimeMinutes!==null){
                 document.getElementById('egate-active-banner').classList.remove('hidden'); document.getElementById('egate-active-banner').classList.add('flex');
                 let h = Math.floor(eGateTimeMinutes/60), m = eGateTimeMinutes%60;
