@@ -265,6 +265,7 @@
             document.getElementById('mobile-label-start').innerHTML=`${pinIcon} ${sL}`;
             document.getElementById('mobile-label-end').innerHTML=`${eL} ${pinIcon}`;
             forceScroll=!0;renderRouteMap(!0);updateTime();
+            if(typeof updateHomeButtonUI === 'function') updateHomeButtonUI();
         }
         function setDirection(d,skipUpdate=!1){
             currentDirection=d;localStorage.setItem('sarab_saved_direction',d);
@@ -528,10 +529,27 @@
             }, 3500);
         }
 
+        function updateHomeButtonUI() {
+            const btn = document.getElementById('btn-save-home');
+            if(!btn || !stopNamesMap[currentStop]) return;
+            const currentStopName = stopNamesMap[currentStop];
+            const savedStopName = localStorage.getItem('crewbus_custom_home_stop');
+            const baseClasses = "shrink-0 flex items-center justify-center p-1.5 sm:p-2.5 lg:p-2 rounded-md lg:rounded-lg border transition-all shadow-sm ";
+            
+            if(currentStopName === savedStopName) {
+                btn.className = baseClasses + "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/50";
+                btn.title = "Current Home";
+                btn.innerHTML = `<svg class="w-4 h-4 sm:w-5 sm:h-5 lg:w-5 lg:h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`;
+            } else {
+                btn.className = baseClasses + "bg-white dark:bg-neutral-900 text-neutral-400 dark:text-neutral-600 border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800";
+                btn.title = "Save as Home";
+                btn.innerHTML = `<svg class="w-4 h-4 sm:w-5 sm:h-5 lg:w-5 lg:h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`;
+            }
+        }
+
         function saveHomeLocation() {
             if ("geolocation" in navigator) {
                 const btn = document.getElementById('btn-save-home');
-                const origHTML = btn.innerHTML;
                 btn.innerHTML = '<svg class="w-4 h-4 sm:w-5 sm:h-5 lg:w-5 lg:h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>';
                 
                 navigator.geolocation.getCurrentPosition((pos) => {
@@ -542,10 +560,10 @@
                     
                     showLocationToast(`Saved Home: ${stopName}`, true);
                     btn.innerHTML = '<svg class="w-4 h-4 sm:w-5 sm:h-5 lg:w-5 lg:h-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-                    setTimeout(() => btn.innerHTML = origHTML, 3000);
+                    setTimeout(() => updateHomeButtonUI(), 2000);
                 }, (err) => {
                     alert("Could not get location. Please enable location permissions.");
-                    btn.innerHTML = origHTML;
+                    updateHomeButtonUI();
                 }, { enableHighAccuracy: true });
             }
         }
