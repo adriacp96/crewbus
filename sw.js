@@ -1,4 +1,4 @@
-const CACHE_NAME = 'crewbus-v3';
+const CACHE_NAME = 'crewbus-v4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -9,7 +9,8 @@ const ASSETS_TO_CACHE = [
   './assets/crewmad.png',
   './assets/crewlost.png',
   './assets/crewhappy.png',
-  './assets/crewrun.png'
+  './assets/crewrun.png',
+  './assets/crewruntp.png'
 ];
 
 // Install Event: Caching static assets
