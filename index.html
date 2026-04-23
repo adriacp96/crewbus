@@ -684,8 +684,8 @@
                     const slide = document.createElement('div');
                     slide.className = 'carousel-slide';
                     const imageContent = emotion.isIcon 
-                        ? `<div class="w-[160px] h-[160px] rounded-3xl shadow-[0_0_20px_rgba(59,130,246,0.4)] border-2 border-blue-400 dark:border-blue-500 overflow-hidden shrink-0 animate-pop"><img class="w-full h-full object-cover" src="${emotion.src}" alt="Install CrewBus" fetchpriority="high" decoding="async"></div>`
-                        : `<img class="carousel-image" src="${emotion.src}" alt="CrewBus Scenario" fetchpriority="high" decoding="async">`;
+                        ? `<div class="w-[160px] h-[160px] rounded-3xl shadow-[0_0_20px_rgba(59,130,246,0.4)] border-2 border-blue-400 dark:border-blue-500 overflow-hidden shrink-0 animate-pop"><img class="w-full h-full object-cover pointer-events-none select-none" draggable="false" src="${emotion.src}" alt="Install CrewBus" fetchpriority="high" decoding="async"></div>`
+                        : `<img class="carousel-image pointer-events-none select-none" draggable="false" src="${emotion.src}" alt="CrewBus Scenario" fetchpriority="high" decoding="async">`;
                     const textClass = emotion.isIcon
                         ? `text-lg sm:text-xl text-blue-600 dark:text-blue-400 font-black`
                         : `text-sm sm:text-base text-neutral-600 dark:text-neutral-300 font-semibold`;
