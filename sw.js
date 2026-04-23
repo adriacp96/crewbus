@@ -1,4 +1,4 @@
-const CACHE_NAME = 'crewbus-v13';
+const CACHE_NAME = 'crewbus-v14';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -11,7 +11,8 @@ const ASSETS_TO_CACHE = [
   './assets/crewhappy.png',
   './assets/crewrun.png',
   './assets/crewruntp.png',
-  './assets/crewsun.png'
+  './assets/crewsun.png',
+  './assets/crewdrink.png'
 ];
 
 self.addEventListener('install', (event) => {
