@@ -224,7 +224,7 @@
             "7A": { name: "Route 7A", stops: ['EGHQ (Dep)', 'SNB', 'JADAF', 'EGHQ (Arr)'], dataStr: "00:00,00:12,00:25,00:40|00:30,00:42,00:55,01:10|01:00,01:12,01:25,01:40|01:30,01:42,01:55,02:10|02:00,02:12,02:25,02:40|02:40,02:52,03:05,03:20|03:20,03:32,03:45,04:00|04:00,04:12,04:25,04:40|04:30,04:42,04:55,05:10|05:00,05:12,05:25,05:40|05:30,05:42,05:55,06:10|06:00,06:12,06:25,06:40|06:30,06:45,07:00,07:20|07:00,07:15,07:30,07:50|07:30,07:45,08:00,08:20|08:00,08:15,08:30,08:50|08:30,08:45,09:00,09:20|09:10,09:22,09:37,09:55|09:50,10:02,10:17,10:35|10:30,10:42,10:57,11:15|11:00,11:12,11:27,11:45|11:30,11:42,11:57,12:15|12:00,12:12,12:27,12:45|12:30,12:42,12:57,13:15|13:00,13:12,13:27,13:45|13:30,13:42,13:57,14:15|14:10,14:22,14:37,14:55|14:50,15:02,15:17,15:35|15:30,15:45,16:00,16:20|16:10,16:25,16:40,17:00|16:50,17:05,17:20,17:40|17:20,17:35,17:50,18:10|17:50,18:05,18:20,18:40|18:20,18:35,18:50,19:10|18:50,19:05,19:20,19:40|19:20,19:35,19:50,20:10|20:00,20:15,20:30,20:50|20:40,20:55,21:10,21:30|21:20,21:32,21:45,22:00|22:00,22:12,22:25,22:40|22:30,22:42,22:55,23:10|23:00,23:12,23:25,23:40|23:30,23:42,23:55,00:10" }
         };
         let activeRouteId="5",stopsData=[],schedule=[],stopNamesMap={},stopIndices={},currentDirection='from_eghq',currentStop='stop1',nextTripData={id:null,minutes:0,departs:'',arrives:''},nextTripTargetDate=null,activeBuses=[],forceScroll=!0,lastAutoScrolledId=null;
-        let eGateTimeMinutes=null;
+        let eGateTimeMinutes=localStorage.getItem('crewbus_egate_time')?parseInt(localStorage.getItem('crewbus_egate_time')):null;
         
         function updateVH(){document.documentElement.style.setProperty('--vh',`${window.innerHeight*.01}px`);}
         function switchRoute(id,initStop=null){
@@ -428,50 +428,48 @@
         }
         function renderAll(){renderBanner();renderDesktopTable();renderMobileCards();highlightSelectedStop();}
 
-        // Location Detection
-        const EGHQ_LAT = 25.35168470; // NOTE: Update with exact EGHQ Latitude
-        const EGHQ_LNG = 55.40923583; // NOTE: Update with exact EGHQ Longitude
-        const EGHQ_RADIUS_KM = 0.5; // 500 meters radius
-        const ACCOMMODATION_RADIUS_KM = 1.0; // 1km radius for accommodations
+        const EGHQ_LAT = 25.35168470;
+        const EGHQ_LNG = 55.40923583;
+        const EGHQ_RADIUS_KM = 0.5;
+        const ACCOMMODATION_RADIUS_KM = 1.0;
 
-        // NOTE: Replace 0, 0 with the actual latitudes and longitudes for each stop
         const STOP_LOCATIONS = {
-            'Dr. Khalifa': { lat: 0, lng: 0 },
-            'T.Ecom 1': { lat: 0, lng: 0 },
+            'Dr. Khalifa': { lat: 25.112045281887383, lng: 55.189360944165 },
+            'T.Ecom 1': { lat: 25.094038846454556, lng: 55.17526095395702 },
             'T.Ecom 2': { lat: 0, lng: 0 },
-            'MIT': { lat: 0, lng: 0 },
+            'MIT': { lat: 25.194822169986573, lng: 55.26623087696835 },
             'Pink': { lat: 25.20977050, lng: 55.27310290 },
             'GROS': { lat: 25.22124662, lng: 55.39898959 },
-            'Faltat': { lat: 0, lng: 0 },
-            'Sabrin': { lat: 0, lng: 0 },
+            'Faltat': { lat: 25.251999137737073, lng: 55.29864942988212 },
+            'Sabrin': { lat: 25.257003321995352, lng: 55.28531951533007 },
             'Manazil': { lat: 0, lng: 0 },
             'PV6': { lat: 0, lng: 0 },
-            '7 TWR': { lat: 0, lng: 0 },
-            'ETC-C': { lat: 0, lng: 0 },
-            'ETC-B': { lat: 0, lng: 0 },
-            '3T-3': { lat: 0, lng: 0 },
-            '3T-2': { lat: 0, lng: 0 },
-            '3T-1': { lat: 0, lng: 0 },
-            'Talal': { lat: 0, lng: 0 },
-            'Al Qamzi': { lat: 0, lng: 0 },
-            'Manazel Deira': { lat: 0, lng: 0 },
+            '7 TWR': { lat: 25.248890840439714, lng: 55.27840870184321 },
+            'ETC-C': { lat: 25.24108684612533, lng: 55.341772128824765 },
+            'ETC-B': { lat: 25.243942024224832, lng: 55.34165582697233 },
+            '3T-3': { lat: 25.249531846850502, lng: 55.343008671153754 },
+            '3T-2': { lat: 25.24953415827279, lng: 55.34377688650006 },
+            '3T-1': { lat: 25.25044248238984, lng: 55.34351126930376 },
+            'Talal': { lat: 25.296724350753735, lng: 55.36892547115611 },
+            'Al Qamzi': { lat: 25.296518450632135, lng: 55.36988048649549 },
+            'Manazel Deira': { lat: 25.25158754266293, lng: 55.28921935765508 },
             'Emirates 6': { lat: 75.93756061, lng: 22.89001465 },
             'Sarab 1': { lat: 25.06258074, lng: 55.30040730 },
-            'Safa Twr': { lat: 0, lng: 0 },
-            'Sarab 5': { lat: 0, lng: 0 },
-            'Sarab 3': { lat: 0, lng: 0 },
-            'Sarab 2': { lat: 0, lng: 0 },
+            'Safa Twr': { lat: 25.086773473984483, lng: 55.31167212241173 },
+            'Sarab 5': { lat: 25.0865134935975, lng: 55.31287640765915 },
+            'Sarab 3': { lat: 25.087591392193108, lng: 55.31258468649456 },
+            'Sarab 2': { lat: 25.08789854172462, lng: 55.31248305766258 },
             'Sarab 4': { lat: 25.06200605, lng: 55.31530604 },
-            'DSO 4': { lat: 0, lng: 0 },
-            'DSO 2': { lat: 0, lng: 0 },
+            'DSO 4': { lat: 25.11386067454067, lng: 55.37300267904256 },
+            'DSO 2': { lat: 25.11447269270111, lng: 55.37321457355679 },
             'PZV1': { lat: 0, lng: 0 },
             'PZV2': { lat: 0, lng: 0 },
             'SNB': { lat: 0, lng: 0 },
-            'JADAF': { lat: 0, lng: 0 }
+            'JADAF': { lat: 25.22300079982685, lng: 55.333919130675675 }
         };
 
         function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; // Radius of the earth in km
+            const R = 6371;
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
             const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
@@ -486,7 +484,7 @@
             setTimeout(() => {
                 toast.classList.remove('opacity-100', 'translate-y-0');
                 toast.classList.add('opacity-0', '-translate-y-8');
-            }, 3500); // Hides after 3.5 seconds
+            }, 3500);
         }
 
         function autoDetectDirection() {
@@ -506,7 +504,7 @@
                     let minStopDist = Infinity;
                     
                     for (const [stopName, coords] of Object.entries(STOP_LOCATIONS)) {
-                        if (coords.lat === 0 && coords.lng === 0) continue; // Skip unconfigured locations
+                        if (coords.lat === 0 && coords.lng === 0) continue;
                         const dist = calculateDistance(userLat, userLng, coords.lat, coords.lng);
                         if (dist < minStopDist) {
                             minStopDist = dist;
@@ -529,11 +527,11 @@
 
                         if (foundRoute && foundStopKey) {
                             document.getElementById('route-dropdown').value = foundRoute;
-                            setDirection('to_eghq', true); // Skip re-rendering from setDirection
-                            switchRoute(foundRoute, foundStopKey); // Automatically render the exact Route and Stop
+                            setDirection('to_eghq', true);
+                            switchRoute(foundRoute, foundStopKey);
                             showLocationToast(nearestName);
                         } else {
-                            setDirection('to_eghq'); // Fallback if routing fails
+                            setDirection('to_eghq');
                         }
                     } else {
                         setDirection('to_eghq');
@@ -542,13 +540,12 @@
                     console.warn("Location access denied or unavailable.", err);
                 }, { 
                     timeout: 10000,
-                    maximumAge: 300000, // Accept a cached location up to 5 minutes old
-                    enableHighAccuracy: false // Use lower-power cell/Wi-Fi triangulation
+                    maximumAge: 300000,
+                    enableHighAccuracy: false
                 });
             }
         }
 
-        // Connectivity Handler
         function updateConnectivityUI() {
             const indicator = document.getElementById('connectivity-status');
             if (navigator.onLine) {
@@ -560,7 +557,6 @@
             }
         }
 
-        // Register Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
@@ -576,7 +572,6 @@
             if(!hs){sp.classList.remove('hidden');document.getElementById('dismiss-splash').onclick=()=>{sp.classList.add('hidden');localStorage.setItem('crewbus_onboarding_seen','true');};}
             document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){updateVH();updateTime();}});
             
-            // Connectivity listeners
             window.addEventListener('online', updateConnectivityUI);
             window.addEventListener('offline', updateConnectivityUI);
             updateConnectivityUI();
@@ -631,6 +626,7 @@
             document.getElementById('btn-find-egate').addEventListener('click', () => {
                 const val = document.getElementById('egate-time-input').value; if(!val) return;
                 eGateTimeMinutes = timeToMinutes(val);
+                localStorage.setItem('crewbus_egate_time', eGateTimeMinutes);
                 setDirection('to_eghq'); 
                 document.getElementById('egate-modal').classList.add('hidden');
                 document.getElementById('egate-active-banner').classList.remove('hidden'); document.getElementById('egate-active-banner').classList.add('flex');
@@ -640,7 +636,8 @@
                 forceScroll = true; updateTime();
             });
             document.getElementById('btn-clear-egate').addEventListener('click', () => {
-                eGateTimeMinutes = null; document.getElementById('egate-active-banner').classList.add('hidden'); document.getElementById('egate-active-banner').classList.remove('flex');
+                eGateTimeMinutes = null; localStorage.removeItem('crewbus_egate_time');
+                document.getElementById('egate-active-banner').classList.add('hidden'); document.getElementById('egate-active-banner').classList.remove('flex');
                 document.getElementById('egate-time-input').value = ''; forceScroll = true; updateTime();
             });
 
@@ -654,6 +651,12 @@
             const sr=localStorage.getItem('sarab_saved_route')||'5',ss=localStorage.getItem('sarab_saved_stop')||'stop1',sd=localStorage.getItem('sarab_saved_direction')||'from_eghq';
             setDirection(sd,!0);document.getElementById('route-dropdown').value=sr;switchRoute(sr,ss);
             autoDetectDirection();
+            if(eGateTimeMinutes!==null){
+                document.getElementById('egate-active-banner').classList.remove('hidden'); document.getElementById('egate-active-banner').classList.add('flex');
+                let h = Math.floor(eGateTimeMinutes/60), m = eGateTimeMinutes%60;
+                let endH = Math.floor((eGateTimeMinutes+60)/60)%24, endM = (eGateTimeMinutes+60)%60;
+                document.getElementById('egate-window-text').innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')} - ${endH.toString().padStart(2,'0')}:${endM.toString().padStart(2,'0')}`;
+            }
             setInterval(()=>{updateLiveCountdown();calculateActiveBuses();updateBusPositions();},1000);
         });
     </script>
