@@ -269,6 +269,9 @@
         let screensaverAnimationInterval = null;
         let currentScreensaverScene = null;
         let screensaverTrigger = null;
+        let locationWatchId = null;
+        let lastDetectedZone = null;
+        let mainAppInterval = null;
         const SCREENSAVER_SCENES = [
             { img: 'assets/crewsun.png', text: 'ENJOY YOUR TIME', disco: false, waves: false, vines: false },
             { img: 'assets/crewdrink.png', text: 'PARTY TIME!', disco: true, waves: false, vines: false },
@@ -328,11 +331,16 @@
                 btnAuto.className = actClass;
                 btnManual.className = inactClass;
                 controls.classList.add('hidden');
+                lastDetectedZone = null;
                 if(typeof autoDetectDirection === 'function') autoDetectDirection();
             } else {
                 btnManual.className = actClass;
                 btnAuto.className = inactClass;
                 controls.classList.remove('hidden');
+                if (locationWatchId !== null) {
+                    navigator.geolocation.clearWatch(locationWatchId);
+                    locationWatchId = null;
+                }
             }
         }
         function setStop(s){currentStop=s;localStorage.setItem('sarab_saved_stop',s);forceScroll=!0;switchRoute(activeRouteId,s);}
@@ -600,7 +608,7 @@
                 }, (err) => {
                     alert("Could not get location. Please enable location permissions.");
                     updateHomeButtonUI();
-                }, { enableHighAccuracy: true });
+                }, { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 });
             }
         }
 
@@ -658,102 +666,153 @@
             screensaverTrigger = null;
         }
 
-        function autoDetectDirection() {
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition((position) => {
-                    const userLat = position.coords.latitude;
-                    const userLng = position.coords.longitude;
+        function processLocationData(position, isCached = false) {
+            const userLat = position.coords.latitude;
+            const userLng = position.coords.longitude;
+            const accuracy = position.coords.accuracy;
+
+            // Ignore highly inaccurate location pings
+            if (accuracy > 3000) return;
+
+            if (!isCached) {
+                localStorage.setItem('crewbus_last_pos', JSON.stringify({
+                    lat: userLat,
+                    lng: userLng,
+                    acc: accuracy,
+                    ts: Date.now()
+                }));
+            }
+            
+            const distEGHQ = calculateDistance(userLat, userLng, EGHQ_LAT, EGHQ_LNG);
+
+            // Outside Dubai (>60km from EGHQ) -> Show Screensaver
+            if (distEGHQ > 60) {
+                if (lastDetectedZone !== 'OUTSIDE_DUBAI') {
+                    lastDetectedZone = 'OUTSIDE_DUBAI';
+                    showScreensaver('auto-location');
+                }
+                return;
+            } else if (lastDetectedZone === 'OUTSIDE_DUBAI') {
+                hideScreensaver();
+                lastDetectedZone = null;
+            }
+
+            // Inside Dubai -> Only switch automatically if 'Auto' is selected
+            if (routeMode !== 'auto') return;
+
+            if (distEGHQ <= EGHQ_RADIUS_KM) {
+                if (lastDetectedZone !== 'EGHQ') {
+                    lastDetectedZone = 'EGHQ';
+                    let homeStop = localStorage.getItem('crewbus_custom_home_stop');
+                    let targetRoute = localStorage.getItem('sarab_saved_route') || '5';
+                    let targetStop = localStorage.getItem('sarab_saved_stop') || 'stop1';
                     
-                    const distEGHQ = calculateDistance(userLat, userLng, EGHQ_LAT, EGHQ_LNG);
-
-                    // Outside Dubai (>60km from EGHQ) -> Show Screensaver
-                    if (distEGHQ > 60) {
-                        showScreensaver('auto-location');
-                        return;
-                    }
-
-                    // Inside Dubai -> Only switch automatically if 'Auto' is selected
-                    if (routeMode !== 'auto') return;
-
-                    if (distEGHQ <= EGHQ_RADIUS_KM) {
-                        let homeStop = localStorage.getItem('crewbus_custom_home_stop');
-                        let targetRoute = localStorage.getItem('sarab_saved_route') || '5';
-                        let targetStop = localStorage.getItem('sarab_saved_stop') || 'stop1';
-                        
-                        if (homeStop) {
-                            let targetName = STOP_ALIASES[homeStop] || homeStop;
-                            for (const [rId, rData] of Object.entries(ROUTES)) {
-                                const sIdx = rData.stops.indexOf(targetName);
-                                if (sIdx > 0 && sIdx < rData.stops.length - 1) {
-                                    targetRoute = rId;
-                                    targetStop = `stop${sIdx}`;
-                                    break;
-                                }
-                            }
-                        }
-
-                        document.getElementById('route-dropdown').value = targetRoute;
-                        setDirection('from_eghq', true);
-                        switchRoute(targetRoute, targetStop);
-                        showLocationToast('EGHQ');
-                        return;
-                    }
-
-                    let nearestName = null;
-                    let minStopDist = Infinity;
-                    
-                    const cLat = localStorage.getItem('crewbus_custom_home_lat');
-                    const cLng = localStorage.getItem('crewbus_custom_home_lng');
-                    const cStop = localStorage.getItem('crewbus_custom_home_stop');
-                    if (cLat && cLng && cStop) {
-                        const distCustom = calculateDistance(userLat, userLng, parseFloat(cLat), parseFloat(cLng));
-                        if (distCustom < minStopDist) {
-                            minStopDist = distCustom;
-                            nearestName = cStop;
-                        }
-                    }
-
-                    for (const [stopName, coords] of Object.entries(STOP_LOCATIONS)) {
-                        if (coords.lat === 0 && coords.lng === 0) continue;
-                        const dist = calculateDistance(userLat, userLng, coords.lat, coords.lng);
-                        if (dist < minStopDist) {
-                            minStopDist = dist;
-                            nearestName = stopName;
-                        }
-                    }
-
-                    if (nearestName && minStopDist <= ACCOMMODATION_RADIUS_KM) {
-                        let targetName = STOP_ALIASES[nearestName] || nearestName;
-                        let foundRoute = null;
-                        let foundStopKey = null;
-                        
+                    if (homeStop) {
+                        let targetName = STOP_ALIASES[homeStop] || homeStop;
                         for (const [rId, rData] of Object.entries(ROUTES)) {
                             const sIdx = rData.stops.indexOf(targetName);
                             if (sIdx > 0 && sIdx < rData.stops.length - 1) {
-                                foundRoute = rId;
-                                foundStopKey = `stop${sIdx}`;
+                                targetRoute = rId;
+                                targetStop = `stop${sIdx}`;
                                 break;
                             }
                         }
+                    }
 
-                        if (foundRoute && foundStopKey) {
-                            document.getElementById('route-dropdown').value = foundRoute;
-                            setDirection('to_eghq', true);
-                            switchRoute(foundRoute, foundStopKey);
-                            showLocationToast(targetName);
-                        } else {
-                            setDirection('to_eghq');
+                    document.getElementById('route-dropdown').value = targetRoute;
+                    setDirection('from_eghq', true);
+                    switchRoute(targetRoute, targetStop);
+                    showLocationToast('EGHQ');
+                }
+                return;
+            }
+
+            let nearestName = null;
+            let minStopDist = Infinity;
+            
+            const cLat = localStorage.getItem('crewbus_custom_home_lat');
+            const cLng = localStorage.getItem('crewbus_custom_home_lng');
+            const cStop = localStorage.getItem('crewbus_custom_home_stop');
+            if (cLat && cLng && cStop) {
+                const distCustom = calculateDistance(userLat, userLng, parseFloat(cLat), parseFloat(cLng));
+                if (distCustom < minStopDist) {
+                    minStopDist = distCustom;
+                    nearestName = cStop;
+                }
+            }
+
+            for (const [stopName, coords] of Object.entries(STOP_LOCATIONS)) {
+                if (coords.lat === 0 && coords.lng === 0) continue;
+                const dist = calculateDistance(userLat, userLng, coords.lat, coords.lng);
+                if (dist < minStopDist) {
+                    minStopDist = dist;
+                    nearestName = stopName;
+                }
+            }
+
+            if (nearestName && minStopDist <= ACCOMMODATION_RADIUS_KM) {
+                let targetName = STOP_ALIASES[nearestName] || nearestName;
+                if (lastDetectedZone !== targetName) {
+                    lastDetectedZone = targetName;
+                    let foundRoute = null;
+                    let foundStopKey = null;
+                    
+                    for (const [rId, rData] of Object.entries(ROUTES)) {
+                        const sIdx = rData.stops.indexOf(targetName);
+                        if (sIdx > 0 && sIdx < rData.stops.length - 1) {
+                            foundRoute = rId;
+                            foundStopKey = `stop${sIdx}`;
+                            break;
                         }
+                    }
+
+                    if (foundRoute && foundStopKey) {
+                        document.getElementById('route-dropdown').value = foundRoute;
+                        setDirection('to_eghq', true);
+                        switchRoute(foundRoute, foundStopKey);
+                        showLocationToast(targetName);
                     } else {
                         setDirection('to_eghq');
                     }
-                }, (err) => {
-                    console.warn("Location access denied or unavailable.", err);
-                }, { 
-                    timeout: 30000,
-                    maximumAge: 0,
-                    enableHighAccuracy: true
-                });
+                }
+            } else {
+                if (lastDetectedZone !== 'TRANSIT') {
+                    lastDetectedZone = 'TRANSIT';
+                }
+            }
+        }
+
+        function autoDetectDirection() {
+            if (!("geolocation" in navigator)) return;
+            
+            if (locationWatchId === null) {
+                try {
+                    const cachedPosStr = localStorage.getItem('crewbus_last_pos');
+                    if (cachedPosStr) {
+                        const cachedPos = JSON.parse(cachedPosStr);
+                        if (Date.now() - cachedPos.ts < 3600000) { // 1 hour max age
+                            processLocationData({
+                                coords: {
+                                    latitude: cachedPos.lat,
+                                    longitude: cachedPos.lng,
+                                    accuracy: cachedPos.acc || 100
+                                }
+                            }, true);
+                        }
+                    }
+                } catch(e) {}
+
+                locationWatchId = navigator.geolocation.watchPosition(
+                    processLocationData,
+                    (err) => {
+                        console.warn("Location service error:", err);
+                        if (err.code === err.PERMISSION_DENIED && locationWatchId !== null) {
+                            navigator.geolocation.clearWatch(locationWatchId);
+                            locationWatchId = null;
+                        }
+                    },
+                    { enableHighAccuracy: true, maximumAge: 10000, timeout: 15000 }
+                );
             }
         }
 
@@ -781,7 +840,18 @@
             if(window.visualViewport)window.visualViewport.addEventListener('resize',()=>{updateVH();});
             const hs=localStorage.getItem('crewbus_onboarding_seen'),sp=document.getElementById('splash-screen');
             if(!hs){sp.classList.remove('hidden');document.getElementById('dismiss-splash').onclick=()=>{sp.classList.add('hidden');localStorage.setItem('crewbus_onboarding_seen','true');};}
-            document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){updateVH();updateTime();}});
+            
+            const appLoop = () => { updateLiveCountdown();calculateActiveBuses();updateBusPositions(); };
+            document.addEventListener('visibilitychange',()=>{
+                if(document.visibilityState==='visible'){
+                    updateVH(); updateTime();
+                    if (!mainAppInterval) mainAppInterval = setInterval(appLoop, 1000);
+                    if (routeMode !== 'manual') autoDetectDirection();
+                } else {
+                    if (mainAppInterval) { clearInterval(mainAppInterval); mainAppInterval = null; }
+                    if (locationWatchId !== null) { navigator.geolocation.clearWatch(locationWatchId); locationWatchId = null; }
+                }
+            });
             
             window.addEventListener('online', updateConnectivityUI);
             window.addEventListener('offline', updateConnectivityUI);
@@ -882,7 +952,7 @@
                 let endH = Math.floor((eGateTimeMinutes+60)/60)%24, endM = (eGateTimeMinutes+60)%60;
                 document.getElementById('egate-window-text').innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')} - ${endH.toString().padStart(2,'0')}:${endM.toString().padStart(2,'0')}`;
             }
-            setInterval(()=>{updateLiveCountdown();calculateActiveBuses();updateBusPositions();},1000);
+            mainAppInterval = setInterval(appLoop, 1000);
         });
     </script>
 </body>
