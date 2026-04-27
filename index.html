@@ -676,7 +676,25 @@
                     if (routeMode !== 'auto') return;
 
                     if (distEGHQ <= EGHQ_RADIUS_KM) {
-                        setDirection('from_eghq');
+                        let homeStop = localStorage.getItem('crewbus_custom_home_stop');
+                        let targetRoute = localStorage.getItem('sarab_saved_route') || '5';
+                        let targetStop = localStorage.getItem('sarab_saved_stop') || 'stop1';
+                        
+                        if (homeStop) {
+                            let targetName = STOP_ALIASES[homeStop] || homeStop;
+                            for (const [rId, rData] of Object.entries(ROUTES)) {
+                                const sIdx = rData.stops.indexOf(targetName);
+                                if (sIdx > 0 && sIdx < rData.stops.length - 1) {
+                                    targetRoute = rId;
+                                    targetStop = `stop${sIdx}`;
+                                    break;
+                                }
+                            }
+                        }
+
+                        document.getElementById('route-dropdown').value = targetRoute;
+                        setDirection('from_eghq', true);
+                        switchRoute(targetRoute, targetStop);
                         showLocationToast('EGHQ');
                         return;
                     }
