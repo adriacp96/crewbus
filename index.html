@@ -707,7 +707,7 @@
                     let targetRoute = localStorage.getItem('sarab_saved_route') || '5';
                     let targetStop = localStorage.getItem('sarab_saved_stop') || 'stop1';
                     
-                    if (homeStop) {
+                    if (homeStop && homeStop !== 'null' && homeStop !== 'undefined') {
                         let targetName = STOP_ALIASES[homeStop] || homeStop;
                         for (const [rId, rData] of Object.entries(ROUTES)) {
                             const sIdx = rData.stops.indexOf(targetName);
@@ -717,6 +717,11 @@
                                 break;
                             }
                         }
+                    }
+                    
+                    if (!ROUTES[targetRoute]) {
+                        targetRoute = '5';
+                        targetStop = 'stop1';
                     }
 
                     document.getElementById('route-dropdown').value = targetRoute;
