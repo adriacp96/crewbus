@@ -645,9 +645,9 @@
 
                 const subtext = document.getElementById('screensaver-subtext');
                 if (subtext) {
-                    subtext.style.animation = 'none'; // Remove previous animation
-                    void subtext.offsetWidth; // Force a DOM reflow to reset
-                    subtext.style.animation = 'subtextPopAndFade 5s ease-out'; // Apply the new self-contained loop
+                    subtext.style.animation = 'none';
+                    void subtext.offsetWidth;
+                    subtext.style.animation = 'subtextPopAndFade 5s ease-out';
                 }
             };
 
@@ -671,7 +671,6 @@
             const userLng = position.coords.longitude;
             const accuracy = position.coords.accuracy;
 
-            // Ignore highly inaccurate location pings
             if (accuracy > 3000) return;
 
             if (!isCached) {
@@ -685,7 +684,6 @@
             
             const distEGHQ = calculateDistance(userLat, userLng, EGHQ_LAT, EGHQ_LNG);
 
-            // Outside Dubai (>60km from EGHQ) -> Show Screensaver
             if (distEGHQ > 60) {
                 if (lastDetectedZone !== 'OUTSIDE_DUBAI') {
                     lastDetectedZone = 'OUTSIDE_DUBAI';
@@ -697,7 +695,6 @@
                 lastDetectedZone = null;
             }
 
-            // Inside Dubai -> Only switch automatically if 'Auto' is selected
             if (routeMode !== 'auto') return;
 
             if (distEGHQ <= EGHQ_RADIUS_KM) {
@@ -795,7 +792,7 @@
                     const cachedPosStr = localStorage.getItem('crewbus_last_pos');
                     if (cachedPosStr) {
                         const cachedPos = JSON.parse(cachedPosStr);
-                        if (Date.now() - cachedPos.ts < 3600000) { // 1 hour max age
+                        if (Date.now() - cachedPos.ts < 3600000) {
                             processLocationData({
                                 coords: {
                                     latitude: cachedPos.lat,
@@ -950,7 +947,7 @@
             const sr=localStorage.getItem('sarab_saved_route')||'5',ss=localStorage.getItem('sarab_saved_stop')||'stop1',sd=localStorage.getItem('sarab_saved_direction')||'from_eghq';
             setDirection(sd,!0);document.getElementById('route-dropdown').value=sr;switchRoute(sr,ss);
             setRouteMode(routeMode);
-            if (routeMode !== 'auto') autoDetectDirection(); // Ensure layover checks still run in background
+            if (routeMode !== 'auto') autoDetectDirection();
             if(eGateTimeMinutes!==null){
                 document.getElementById('egate-active-banner').classList.remove('hidden'); document.getElementById('egate-active-banner').classList.add('flex');
                 let h = Math.floor(eGateTimeMinutes/60), m = eGateTimeMinutes%60;
