@@ -105,8 +105,8 @@
         <div id="screensaver-subtext" class="mt-4 sm:mt-6 text-lg sm:text-2xl font-black text-yellow-400 tracking-tighter uppercase z-10 opacity-0" style="text-shadow: -2px -2px 0 #0f172a, 0 -2px 0 #0f172a, 2px -2px 0 #0f172a, 2px 0 0 #0f172a, 2px 2px 0 #0f172a, 0 2px 0 #0f172a, -2px 2px 0 #0f172a, -2px 0 0 #0f172a; filter: drop-shadow(3px 3px 0 #0f172a); transform: skew(-5deg) rotate(-2deg);">(It looks you are not in DXB)</div>
     </div>
 
-    <div id="main-app-wrapper" class="absolute inset-0 flex flex-col gap-2 sm:gap-4 px-0 sm:px-4 lg:px-6 pt-[max(env(safe-area-inset-top),0.5rem)] pb-0 text-center">
-        <header class="shrink-0 mx-2 sm:mx-0 flex flex-row items-center justify-between bg-white dark:bg-black p-2.5 sm:p-5 lg:px-6 lg:py-5 rounded-xl sm:rounded-2xl lg:rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-none">
+    <div id="main-app-wrapper" class="absolute inset-0 flex flex-col gap-2 sm:gap-4 px-2 sm:px-4 lg:px-6 pt-[max(env(safe-area-inset-top),0.5rem)] pb-2 sm:pb-4 lg:pb-6 text-center">
+        <header class="shrink-0 flex flex-row items-center justify-between bg-white dark:bg-black p-2.5 sm:p-5 lg:px-6 lg:py-5 rounded-xl sm:rounded-2xl lg:rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-none">
             <div class="flex items-center gap-2.5 sm:gap-4 lg:gap-5 text-left">
                 <div class="w-9 h-9 sm:w-14 sm:h-14 lg:w-14 lg:h-14 bg-red-600 rounded-lg sm:rounded-xl flex items-center justify-center text-white shadow-md shadow-red-600/30 shrink-0">
                     <svg class="w-5 h-5 sm:w-8 sm:h-8 lg:w-8 lg:h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6 2 7"/><path d="M10 6h4"/><path d="m22 7-2-1"/><rect width="16" height="16" x="4" y="3" rx="2"/><path d="M4 11h16"/><path d="M8 15h.01"/><path d="M16 15h.01"/><path d="M6 19v2"/><path d="M18 19v2"/></svg>
@@ -126,7 +126,7 @@
         </header>
 
         <div class="flex flex-col lg:flex-row gap-2 sm:gap-4 flex-1 min-h-0 w-full">
-            <div class="flex flex-col gap-2 sm:gap-4 w-full lg:w-[320px] xl:w-[380px] shrink-0 lg:min-h-0 px-2 sm:px-0">
+            <div class="flex flex-col gap-2 sm:gap-4 w-full lg:w-[320px] xl:w-[380px] shrink-0 lg:min-h-0">
                 <div class="flex flex-col gap-2 sm:gap-4 bg-white dark:bg-black p-2 sm:p-5 lg:p-5 rounded-xl sm:rounded-2xl lg:rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-none transition-colors">
                     <div class="flex bg-neutral-100 dark:bg-neutral-900 rounded-md lg:rounded-lg p-0.5 sm:p-1 lg:p-1.5 border border-neutral-200 dark:border-neutral-800 shrink-0">
                         <button id="btn-mode-auto" class="flex-1 py-1 sm:py-1.5 lg:py-2 text-[10px] sm:text-sm font-bold rounded lg:rounded-md bg-white dark:bg-neutral-800 shadow dark:shadow-none text-neutral-900 dark:text-white transition-all whitespace-nowrap text-center flex items-center justify-center gap-1.5">
@@ -198,7 +198,7 @@
             </div>
 
             <div class="flex-1 flex flex-col gap-2 sm:gap-4 min-h-0">
-                <div class="shrink-0 mx-2 sm:mx-0 bg-white dark:bg-black rounded-xl sm:rounded-2xl lg:rounded-2xl border border-neutral-200 dark:border-neutral-800 flex flex-col shadow-sm dark:shadow-none transition-colors relative">
+                <div class="shrink-0 bg-white dark:bg-black rounded-xl sm:rounded-2xl lg:rounded-2xl border border-neutral-200 dark:border-neutral-800 flex flex-col shadow-sm dark:shadow-none transition-colors relative">
                     <div class="flex items-center justify-end pt-2 sm:pt-4 lg:pt-3 px-3 sm:px-6 mb-0">
                         <span id="connectivity-status" class="flex items-center gap-1 lg:gap-1.5 px-1.5 lg:px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-950 text-green-600 dark:text-green-400 lg:text-green-700 border border-green-200 dark:border-green-900/50 text-[8px] sm:text-xs font-bold uppercase tracking-wider shrink-0 text-right">
                             <span class="relative flex h-1 w-1 sm:h-2 sm:w-2 lg:h-1.5 lg:w-1.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span><span class="relative inline-flex rounded-full h-1 w-1 sm:h-2 sm:w-2 lg:h-1.5 lg:w-1.5 bg-green-500"></span></span>Live
@@ -209,7 +209,7 @@
                     </div>
                 </div>
                 
-                <div class="flex-1 flex flex-col min-h-0 bg-white dark:bg-black rounded-t-xl sm:rounded-t-2xl rounded-b-none border border-b-0 border-neutral-200 dark:border-neutral-800 overflow-hidden transition-colors shadow-sm dark:shadow-none">
+                <div class="flex-1 flex flex-col min-h-0 bg-white dark:bg-black rounded-t-xl rounded-b-[2.5rem] sm:rounded-t-2xl sm:rounded-b-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden transition-colors shadow-sm dark:shadow-none">
                     <div class="shrink-0 px-3 py-2 sm:px-6 sm:py-5 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 flex justify-between items-center text-left">
                         <h2 class="text-xs sm:text-lg lg:text-lg font-bold lg:font-black text-neutral-900 dark:text-neutral-100 uppercase tracking-tight text-left">Your Bus Schedule</h2>
                         <div class="flex items-center gap-1 sm:gap-2 lg:gap-3">
@@ -247,7 +247,7 @@
                         </table>
                     </div>
                     
-                    <div id="mobile-cards-container" class="md:hidden flex-1 overflow-y-auto custom-scrollbar scroll-smooth relative pb-[calc(env(safe-area-inset-bottom)+0.5rem)] text-left"></div>
+                    <div id="mobile-cards-container" class="md:hidden flex-1 overflow-y-auto custom-scrollbar scroll-smooth relative pb-[calc(env(safe-area-inset-bottom)+1.5rem)] text-left"></div>
                 </div>
             </div>
         </div>
