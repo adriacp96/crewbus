@@ -324,6 +324,7 @@
             if(!skipUpdate)switchRoute(activeRouteId,currentStop);
         }
         function setRouteMode(mode) {
+            const isRefreshing = (mode === 'auto' && routeMode === 'auto');
             routeMode = mode;
             localStorage.setItem('crewbus_route_mode', mode);
             const btnAuto = document.getElementById('btn-mode-auto');
@@ -337,6 +338,10 @@
                 btnManual.className = inactClass;
                 controls.classList.add('hidden');
                 lastDetectedZone = null;
+                if (isRefreshing && locationWatchId !== null) {
+                    navigator.geolocation.clearWatch(locationWatchId);
+                    locationWatchId = null;
+                }
                 if(typeof autoDetectDirection === 'function') autoDetectDirection();
             } else {
                 btnManual.className = actClass;
