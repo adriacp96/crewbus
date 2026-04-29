@@ -692,7 +692,10 @@
             if (distEGHQ > 60) {
                 if (lastDetectedZone !== 'OUTSIDE_DUBAI') {
                     lastDetectedZone = 'OUTSIDE_DUBAI';
-                    showScreensaver('auto-location');
+                    if (!isCached) showScreensaver('auto-location');
+                }
+                if (!isCached && routeMode === 'auto') {
+                    setRouteMode('manual');
                 }
                 return;
             } else if (lastDetectedZone === 'OUTSIDE_DUBAI') {
@@ -785,6 +788,10 @@
             } else {
                 if (lastDetectedZone !== 'TRANSIT') {
                     lastDetectedZone = 'TRANSIT';
+                }
+                if (!isCached) {
+                    setRouteMode('manual');
+                    showLocationToast('Not at a known location', true);
                 }
             }
         }
