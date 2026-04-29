@@ -337,7 +337,9 @@
                 btnAuto.className = actClass;
                 btnManual.className = inactClass;
                 controls.classList.add('hidden');
-                lastDetectedZone = null;
+                
+                // Reset state to force a fresh detection
+                lastDetectedZone = null; 
                 if (isRefreshing && locationWatchId !== null) {
                     navigator.geolocation.clearWatch(locationWatchId);
                     locationWatchId = null;
