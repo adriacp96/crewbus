@@ -238,7 +238,7 @@
                         <div id="mobile-label-end" class="text-right flex items-center gap-1 justify-end"></div>
                     </div>
 
-                    <div id="desktop-table-container" class="hidden md:block flex-1 overflow-x-auto overflow-y-auto custom-scrollbar scroll-smooth relative text-left">
+                    <div id="desktop-table-container" class="hidden md:block flex-1 overflow-x-auto overflow-y-auto custom-scrollbar scroll-smooth relative pb-[env(safe-area-inset-bottom)] text-left">
                         <table class="w-full text-left text-sm whitespace-nowrap">
                             <thead class="bg-neutral-50/90 dark:bg-neutral-900/90 backdrop-blur-md text-neutral-500 dark:text-neutral-400 uppercase tracking-widest text-xs sticky top-0 z-10 shadow-sm border-b border-neutral-200 dark:border-neutral-800 text-left">
                                 <tr id="desktop-thead-tr" class="text-left"></tr>
@@ -247,7 +247,7 @@
                         </table>
                     </div>
                     
-                    <div id="mobile-cards-container" class="md:hidden flex-1 overflow-y-auto custom-scrollbar scroll-smooth relative pb-6 text-left"></div>
+                    <div id="mobile-cards-container" class="md:hidden flex-1 overflow-y-auto custom-scrollbar scroll-smooth relative pb-[calc(env(safe-area-inset-bottom)+1.5rem)] text-left"></div>
                 </div>
             </div>
         </div>
@@ -524,7 +524,7 @@
         const EGHQ_LAT = 25.24174093764362;
         const EGHQ_LNG = 55.36594995751756;
         const EGHQ_RADIUS_KM = 0.5;
-        const ACCOMMODATION_RADIUS_KM = 0.1;
+        const ACCOMMODATION_RADIUS_KM = 0.5;
 
         const STOP_LOCATIONS = {
             'Dr. Khalifa': { lat: 25.112045281887383, lng: 55.189360944165 },
@@ -746,6 +746,7 @@
 
             let nearestName = null;
             let minStopDist = Infinity;
+            let isSavedHome = false;
             
             const cLat = localStorage.getItem('crewbus_custom_home_lat');
             const cLng = localStorage.getItem('crewbus_custom_home_lng');
@@ -755,6 +756,7 @@
                 if (distCustom < minStopDist) {
                     minStopDist = distCustom;
                     nearestName = cStop;
+                    isSavedHome = true;
                 }
             }
 
@@ -764,6 +766,7 @@
                 if (dist < minStopDist) {
                     minStopDist = dist;
                     nearestName = stopName;
+                    isSavedHome = false;
                 }
             }
 
@@ -787,7 +790,11 @@
                         document.getElementById('route-dropdown').value = foundRoute;
                         setDirection('to_eghq', true);
                         switchRoute(foundRoute, foundStopKey);
-                        showLocationToast(targetName);
+                        if (isSavedHome) {
+                            showLocationToast(`Saved Home: ${targetName}`, true);
+                        } else {
+                            showLocationToast(targetName);
+                        }
                     } else {
                         setDirection('to_eghq');
                     }
