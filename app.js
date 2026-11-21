@@ -16,12 +16,13 @@
         DIRECTION: 'crewbus_direction',
         HOME: 'crewbus_home',
         GTA_MODE: 'crewbus_gta6_mode',
-        GTA_FAB: 'crewbus_gta6_fab',
+        GTA_FAB: 'crewbus_gta6_fab_v2',
         SPLASH_DONE: 'crewbus_splash_dismissed'
     };
 
     const LAYOVER_DISTANCE_KM = 80;
-    const EGATE_WINDOW_BEFORE_MIN = 35;
+    const EGATE_EARLY_MAX_MIN = 50; // Muestra buses que llegan hasta 50 min antes
+    const EGATE_LATE_MAX_MIN = 25;  // Muestra buses que llegan hasta 25 min después
 
     const SPLASH_SLIDES = [
         { img: 'assets/crewrun.png', title: 'Never Miss Your Bus', text: 'Real-time departures & live countdowns right at your fingertips.' },
@@ -46,7 +47,7 @@
 
     const DOM = {
         metaThemeColor: $('meta-theme-color'),
-        // GTA Floating Pill
+        // GTA Floating Logo Button
         fabWrapper: $('gta-fab-wrapper'),
         fabToggle: $('gta-fab-toggle'),
         fabHide: $('gta-fab-hide'),
@@ -178,7 +179,6 @@
                         modMins.push(null);
                     } else {
                         let val = base;
-                        // Rollover across midnight (e.g. 23:50 -> 00:15)
                         if (lastValid !== null && val < lastValid - 360) {
                             val += 1440;
                         }
@@ -188,7 +188,6 @@
                     }
                 }
 
-                // Determine first and last valid stop indices for live vehicle tracking
                 let firstIdx = -1;
                 let lastIdx = -1;
                 for (let i = 0; i < absMins.length; i++) {
@@ -227,7 +226,7 @@
         mode: localStorage.getItem(STORAGE.MODE) || 'auto',
         routeId: localStorage.getItem(STORAGE.ROUTE) || '5',
         stopName: localStorage.getItem(STORAGE.STOP) || '',
-        direction: localStorage.getItem(STORAGE.DIRECTION) || 'from', // 'from' | 'to'
+        direction: localStorage.getItem(STORAGE.DIRECTION) || 'from',
         egateMins: null,
         isFullscreen: false,
         isGtaMode: localStorage.getItem(STORAGE.GTA_MODE) === '1',
@@ -240,7 +239,6 @@
         vehiclesLayer: null
     };
 
-    // Ensure valid route & stop
     function validateState() {
         const routeIds = Object.keys(PARSED_ROUTES);
         if (!routeIds.length) return;
@@ -265,7 +263,7 @@
     }
 
     // ------------------------------------------------------------------------
-    // Stop Index Resolution (handles duplicate stops like Manazel Deira on 4B)
+    // Stop Index Resolution
     // ------------------------------------------------------------------------
     function getStopIndices(route, stopName, direction) {
         const stopsUpper = route.stops.map((s) => s.toUpperCase());
@@ -309,7 +307,7 @@
     }
 
     // ------------------------------------------------------------------------
-    // GTA VI Theme + Draggable / Hideable Floating Pill
+    // GTA VI Theme + Draggable / Minimizable Floating VI Logo
     // ------------------------------------------------------------------------
     function updateMetaThemeColor() {
         if (!DOM.metaThemeColor) return;
@@ -331,7 +329,6 @@
             DOM.fabToggle.setAttribute('aria-pressed', state.isGtaMode ? 'true' : 'false');
         }
 
-        // Refresh UI labels, route map vehicle sprites, and schedule styles
         updateStaticLabels();
         renderRouteMapBase();
         renderSchedule(false);
@@ -348,24 +345,25 @@
     }
 
     function loadFabPrefs() {
+        const defaults = { side: 'right', topPct: 76, hidden: true };
         try {
             const raw = localStorage.getItem(STORAGE.GTA_FAB);
-            if (!raw) return { side: 'right', topPct: 78, hidden: false };
+            if (!raw) return defaults;
             const parsed = JSON.parse(raw);
             return {
                 side: parsed.side === 'left' ? 'left' : 'right',
-                topPct: typeof parsed.topPct === 'number' ? Math.min(88, Math.max(10, parsed.topPct)) : 78,
-                hidden: Boolean(parsed.hidden)
+                topPct: typeof parsed.topPct === 'number' ? Math.min(88, Math.max(10, parsed.topPct)) : defaults.topPct,
+                hidden: typeof parsed.hidden === 'boolean' ? parsed.hidden : true
             };
         } catch {
-            return { side: 'right', topPct: 78, hidden: false };
+            return defaults;
         }
     }
 
     function saveFabPrefs(prefs) {
         try {
             localStorage.setItem(STORAGE.GTA_FAB, JSON.stringify(prefs));
-        } catch { /* ignore storage quota errors */ }
+        } catch { /* ignore */ }
     }
 
     function initGtaFloatingButton() {
@@ -385,7 +383,14 @@
 
         applyFabVisuals();
 
-        // Hide to edge tab
+        let isDragging = false;
+        let hasMoved = false;
+        let startX = 0;
+        let startY = 0;
+        let originLeft = 0;
+        let originTop = 0;
+        let suppressNextClick = false;
+
         if (DOM.fabHide) {
             DOM.fabHide.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -395,12 +400,10 @@
             });
         }
 
-        // Restore from edge tab
-        let restoreDragged = false;
         if (DOM.fabRestore) {
-            DOM.fabRestore.addEventListener('click', () => {
-                if (restoreDragged) {
-                    restoreDragged = false;
+            DOM.fabRestore.addEventListener('click', (e) => {
+                if (suppressNextClick) {
+                    e.preventDefault();
                     return;
                 }
                 prefs.hidden = false;
@@ -409,39 +412,22 @@
             });
         }
 
-        // Dragging logic for both the pill and the docked edge tab
-        let isDragging = false;
-        let hasMoved = false;
-        let startX = 0;
-        let startY = 0;
-        let originLeft = 0;
-        let originTop = 0;
-        let suppressNextToggleClick = false;
-
-        const onPointerDown = (e) => {
-            // Don't start drag from the small hide button
-            if (e.target.closest('#gta-fab-hide')) return;
-            if (e.button !== undefined && e.button !== 0) return;
-
-            isDragging = true;
-            hasMoved = false;
-            startX = e.clientX;
-            startY = e.clientY;
-            const rect = wrapper.getBoundingClientRect();
-            originLeft = rect.left;
-            originTop = rect.top;
-
-            try {
-                wrapper.setPointerCapture(e.pointerId);
-            } catch { /* ignore */ }
-        };
+        if (DOM.fabToggle) {
+            DOM.fabToggle.addEventListener('click', (e) => {
+                if (suppressNextClick) {
+                    e.preventDefault();
+                    return;
+                }
+                applyGtaMode(!state.isGtaMode, true);
+            });
+        }
 
         const onPointerMove = (e) => {
             if (!isDragging) return;
             const dx = e.clientX - startX;
             const dy = e.clientY - startY;
 
-            if (!hasMoved && Math.hypot(dx, dy) > 6) {
+            if (!hasMoved && Math.hypot(dx, dy) > 8) {
                 hasMoved = true;
                 wrapper.classList.add('dragging');
             }
@@ -452,7 +438,6 @@
             const minTop = 52;
             const maxTop = window.innerHeight - rect.height - 24;
             const newTop = Math.min(maxTop, Math.max(minTop, originTop + dy));
-
             wrapper.style.top = `${newTop}px`;
 
             if (!prefs.hidden) {
@@ -464,12 +449,12 @@
             }
         };
 
-        const onPointerUp = (e) => {
+        const onPointerUp = () => {
             if (!isDragging) return;
             isDragging = false;
-            try {
-                wrapper.releasePointerCapture(e.pointerId);
-            } catch { /* ignore */ }
+            window.removeEventListener('pointermove', onPointerMove);
+            window.removeEventListener('pointerup', onPointerUp);
+            window.removeEventListener('pointercancel', onPointerUp);
 
             if (hasMoved) {
                 wrapper.classList.remove('dragging');
@@ -477,30 +462,34 @@
                 const centerX = rect.left + rect.width / 2;
                 if (!prefs.hidden) {
                     prefs.side = centerX < window.innerWidth / 2 ? 'left' : 'right';
-                } else {
-                    restoreDragged = true;
                 }
                 prefs.topPct = Math.round(
                     Math.min(88, Math.max(10, (rect.top / window.innerHeight) * 100))
                 );
                 applyFabVisuals();
                 saveFabPrefs(prefs);
-                suppressNextToggleClick = true;
-                setTimeout(() => { suppressNextToggleClick = false; }, 120);
+
+                suppressNextClick = true;
+                setTimeout(() => { suppressNextClick = false; }, 160);
             }
         };
 
-        wrapper.addEventListener('pointerdown', onPointerDown);
-        wrapper.addEventListener('pointermove', onPointerMove);
-        wrapper.addEventListener('pointerup', onPointerUp);
-        wrapper.addEventListener('pointercancel', onPointerUp);
+        wrapper.addEventListener('pointerdown', (e) => {
+            if (e.target.closest('#gta-fab-hide')) return;
+            if (e.button !== undefined && e.button !== 0) return;
 
-        if (DOM.fabToggle) {
-            DOM.fabToggle.addEventListener('click', () => {
-                if (suppressNextToggleClick) return;
-                applyGtaMode(!state.isGtaMode, true);
-            });
-        }
+            isDragging = true;
+            hasMoved = false;
+            startX = e.clientX;
+            startY = e.clientY;
+            const rect = wrapper.getBoundingClientRect();
+            originLeft = rect.left;
+            originTop = rect.top;
+
+            window.addEventListener('pointermove', onPointerMove);
+            window.addEventListener('pointerup', onPointerUp);
+            window.addEventListener('pointercancel', onPointerUp);
+        });
     }
 
     // ------------------------------------------------------------------------
@@ -634,7 +623,7 @@
             <div class="vice-car-wrap">
                 <span class="vice-car-trail"></span>
                 <span class="vice-car-underglow"></span>
-                <svg class="w-9 h-5 drop-shadow-[0_2px_6px_rgba(255,46,147,0.85)]" viewBox="0 0 46 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-9 h-5 drop-shadow-[0_2px_6px_rgba(255,46,147,0.85)]" width="36" height="20" viewBox="0 0 46 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4 9.5L1.6 6.8H7.2" stroke="#ffd166" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M4 14.5L6.5 9.8C7.8 8.2 10.2 7.6 13.5 7.4L19.5 4.2C22.4 3.2 26.8 3.2 30 4.4L35.2 7.5C39.2 8 42.6 9.3 43.8 11.4L44.2 14.2C44.2 15.2 43.4 15.8 42.2 15.8H5.5C4.4 15.8 3.6 15.2 4 14.5Z" fill="url(#${gradId})" stroke="#ffffff" stroke-width="1.15" stroke-linejoin="round"/>
                     <path d="M16.2 7.4L20.4 5.1C23.2 4.6 26.8 4.8 29.8 5.7L32.8 7.5H16.2Z" fill="#00f5d4" fill-opacity="0.75"/>
@@ -660,7 +649,7 @@
     function createClassicBusSVG() {
         return `
             <div class="w-6 h-6 rounded-full bg-indigo-600 dark:bg-indigo-500 text-white shadow-md ring-2 ring-white dark:ring-neutral-950 flex items-center justify-center">
-                <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6 2 7"/><path d="M10 6h4"/><path d="m22 7-2-1"/><rect width="16" height="16" x="4" y="3" rx="2"/><path d="M4 11h16"/><path d="M8 15h.01"/><path d="M16 15h.01"/></svg>
+                <svg class="w-3.5 h-3.5" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6 2 7"/><path d="M10 6h4"/><path d="m22 7-2-1"/><rect width="16" height="16" x="4" y="3" rx="2"/><path d="M4 11h16"/><path d="M8 15h.01"/><path d="M16 15h.01"/></svg>
             </div>
         `;
     }
@@ -677,12 +666,10 @@
         DOM.routeMapContainer.className = 'relative flex items-start justify-between w-full';
         DOM.routeMapContainer.style.minWidth = `${minWidthPx}px`;
 
-        // Base track line (center of first 44px node to center of last 44px node)
         const track = document.createElement('div');
         track.className = 'gta-track-line absolute left-[22px] right-[22px] top-[9px] h-[2px] bg-neutral-200 dark:bg-neutral-800 rounded-full z-0';
         DOM.routeMapContainer.appendChild(track);
 
-        // Active segment highlight between departIdx and arriveIdx
         if (stops.length > 1) {
             const startPct = (departIdx / (stops.length - 1)) * 100;
             const endPct = (arriveIdx / (stops.length - 1)) * 100;
@@ -698,14 +685,12 @@
             DOM.routeMapContainer.appendChild(segTrack);
         }
 
-        // Vehicles overlay layer
         const vehiclesLayer = document.createElement('div');
         vehiclesLayer.id = 'route-vehicles-layer';
         vehiclesLayer.className = 'absolute left-[22px] right-[22px] top-[10px] h-0 z-20 pointer-events-none';
         DOM.routeMapContainer.appendChild(vehiclesLayer);
         state.vehiclesLayer = vehiclesLayer;
 
-        // Stop Nodes
         stops.forEach((stop, idx) => {
             const isDepart = idx === departIdx;
             const isArrive = idx === arriveIdx;
@@ -741,7 +726,6 @@
 
             node.innerHTML = `<span class="${dotClass}"></span><span class="${labelClass}">${stop}</span>`;
 
-            // Tap a stop on the live map to quickly select it
             if (!isEndpoint) {
                 node.addEventListener('click', () => {
                     if (state.stopName.toUpperCase() !== stop.toUpperCase()) {
@@ -765,7 +749,6 @@
         if (stopCount < 2) return;
 
         const activeVehicles = [];
-        // Check yesterday (-1440) and today (0) to catch midnight-crossing trips
         const offsets = [-1440, 0];
 
         route.trips.forEach((trip) => {
@@ -776,7 +759,6 @@
                 const end = trip.endMin + offset;
 
                 if (nowMinsFloat >= start && nowMinsFloat <= end) {
-                    // Find current active segment between valid stops
                     let prevIdx = trip.firstIdx;
                     let prevMin = trip.absMins[prevIdx] + offset;
 
@@ -821,7 +803,7 @@
     }
 
     // ------------------------------------------------------------------------
-    // Next Bus Computation & eGate Matching
+    // Next Bus Computation & eGate Early / Late Evaluation
     // ------------------------------------------------------------------------
     function getNextTripInfo(nowSec) {
         const route = PARSED_ROUTES[state.routeId];
@@ -852,14 +834,42 @@
         return best;
     }
 
-    function isTripInEgateWindow(trip, arriveIdx) {
-        if (state.egateMins === null) return false;
+    function getEgateStatus(trip, arriveIdx) {
+        if (state.egateMins === null) return null;
         const arrMod = trip.modMins[arriveIdx];
-        if (arrMod === null) return false;
+        if (arrMod === null) return null;
 
-        // Distance before eGate time (handles midnight wrap cleanly)
-        const minsBefore = ((state.egateMins - arrMod) % 1440 + 1440) % 1440;
-        return minsBefore >= 0 && minsBefore <= EGATE_WINDOW_BEFORE_MIN;
+        // diff < 0 => arrives early | diff === 0 => on time | diff > 0 => arrives late
+        let diff = (arrMod - state.egateMins) % 1440;
+        if (diff > 720) diff -= 1440;
+        if (diff < -720) diff += 1440;
+
+        if (diff < -EGATE_EARLY_MAX_MIN || diff > EGATE_LATE_MAX_MIN) return null;
+
+        if (diff === 0) {
+            return { diff, kind: 'early', label: 'On time' };
+        }
+        if (diff < 0) {
+            return { diff, kind: 'early', label: `${Math.abs(diff)}m early` };
+        }
+        return {
+            diff,
+            kind: diff <= 10 ? 'warn' : 'late',
+            label: `+${diff}m late`
+        };
+    }
+
+    function buildEgateBadgeHtml(status, extraClass = '') {
+        if (!status) return '';
+        let cls = 'inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-bold tracking-tight whitespace-nowrap ';
+        if (status.kind === 'early') {
+            cls += 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-700/50 gta-egate-badge-early ';
+        } else if (status.kind === 'warn') {
+            cls += 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 border border-amber-200/80 dark:border-amber-700/50 gta-egate-badge-warn ';
+        } else {
+            cls += 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 border border-red-200/80 dark:border-red-700/50 gta-egate-badge-late ';
+        }
+        return `<span class="${cls}${extraClass}">${status.label}</span>`;
     }
 
     // ------------------------------------------------------------------------
@@ -878,7 +888,33 @@
         const { departIdx, arriveIdx } = getStopIndices(route, state.stopName, state.direction);
         const hasEgate = state.egateMins !== null;
 
-        // 1. Desktop Table Header
+        // Pre-calculate eGate status and find the ideal trip to center on
+        // (closest arrival on time or early; otherwise earliest late option in window)
+        const egateStatuses = new Map();
+        let bestEarlyIdx = -1;
+        let bestEarlyDiff = -Infinity;
+        let bestLateIdx = -1;
+        let bestLateDiff = Infinity;
+
+        if (hasEgate) {
+            route.trips.forEach((trip) => {
+                if (trip.modMins[departIdx] === null || trip.modMins[arriveIdx] === null) return;
+                const status = getEgateStatus(trip, arriveIdx);
+                if (!status) return;
+                egateStatuses.set(trip.index, status);
+
+                if (status.diff <= 0 && status.diff > bestEarlyDiff) {
+                    bestEarlyDiff = status.diff;
+                    bestEarlyIdx = trip.index;
+                } else if (status.diff > 0 && status.diff < bestLateDiff) {
+                    bestLateDiff = status.diff;
+                    bestLateIdx = trip.index;
+                }
+            });
+        }
+
+        const primaryEgateIdx = bestEarlyIdx !== -1 ? bestEarlyIdx : bestLateIdx;
+
         if (DOM.desktopTheadTr) {
             DOM.desktopTheadTr.innerHTML = route.stops.map((stop, idx) => {
                 const isDep = idx === departIdx;
@@ -892,41 +928,43 @@
             }).join('');
         }
 
-        // 2. Desktop Table Rows & Mobile Cards
         let desktopHtml = '';
         let mobileHtml = '';
-        let firstEgateFound = false;
 
         route.trips.forEach((trip) => {
             const depMod = trip.modMins[departIdx];
             const arrMod = trip.modMins[arriveIdx];
             const isServiced = depMod !== null && arrMod !== null;
             const isNext = trip.index === nextIdx;
-            const isEgateMatch = isServiced && hasEgate && isTripInEgateWindow(trip, arriveIdx);
+            const egateStatus = isServiced ? (egateStatuses.get(trip.index) || null) : null;
 
             let isPast = false;
-            if (isServiced && !isNext) {
+            if (isServiced && !isNext && !egateStatus) {
                 const diffSec = ((depMod * 60 - nowSec) % 86400 + 86400) % 86400;
                 isPast = depMod * 60 < nowSec && diffSec > 3600;
             }
 
             let scrollIdDesk = '';
             let scrollIdMob = '';
-            if (isEgateMatch && !firstEgateFound) {
+            if (trip.index === primaryEgateIdx) {
                 scrollIdDesk = 'id="desk-scroll-egate"';
                 scrollIdMob = 'id="mob-scroll-egate"';
-                firstEgateFound = true;
             } else if (isNext) {
                 scrollIdDesk = 'id="desk-scroll-next"';
                 scrollIdMob = 'id="mob-scroll-next"';
             }
 
-            // Desktop Row
             let trClass = 'transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-900/60 ';
             if (isNext) {
                 trClass += 'bg-indigo-50/90 dark:bg-indigo-950/50 font-bold gta-next-row ';
-            } else if (isEgateMatch) {
-                trClass += 'bg-violet-50/80 dark:bg-violet-950/40 font-semibold gta-egate-row ';
+            } else if (egateStatus) {
+                if (egateStatus.kind === 'early') {
+                    trClass += 'bg-emerald-50/75 dark:bg-emerald-950/35 font-semibold gta-egate-row-early ';
+                } else if (egateStatus.kind === 'warn') {
+                    trClass += 'bg-amber-50/75 dark:bg-amber-950/35 font-semibold gta-egate-row-warn ';
+                } else {
+                    trClass += 'bg-red-50/70 dark:bg-red-950/30 font-semibold gta-egate-row-late ';
+                }
             } else if (isPast) {
                 trClass += 'opacity-40 ';
             }
@@ -946,8 +984,9 @@
                     badge = state.isGtaMode
                         ? `<span class="ml-2 text-[9px] px-1.5 py-0.5 rounded bg-gradient-to-r from-[#ff2e93] to-[#ff7b54] text-white uppercase tracking-wider font-black">NEXT</span>`
                         : `<span class="ml-2 text-[9px] px-1.5 py-0.5 rounded bg-indigo-600 text-white uppercase tracking-wider font-bold">NEXT</span>`;
-                } else if (isArr && isEgateMatch) {
-                    badge = `<span class="gta-egate-pill ml-2 text-[9px] px-1.5 py-0.5 rounded bg-indigo-600 text-white uppercase tracking-wider font-bold">eGate</span>`;
+                }
+                if (isArr && egateStatus) {
+                    badge += buildEgateBadgeHtml(egateStatus, 'ml-2');
                 }
 
                 return `<td class="${tdClass}">${raw}${badge}</td>`;
@@ -955,13 +994,18 @@
 
             desktopHtml += `<tr ${scrollIdDesk} class="${trClass}">${cells}</tr>`;
 
-            // Mobile Card (only trips servicing the selected stop)
             if (isServiced) {
-                let cardClass = 'flex items-center justify-between px-4 py-3 border-b border-neutral-100 dark:border-neutral-800/70 transition-colors ';
+                let cardClass = 'flex items-center justify-between gap-2 px-4 py-3 border-b border-neutral-100 dark:border-neutral-800/70 transition-colors ';
                 if (isNext) {
                     cardClass += 'bg-indigo-50/90 dark:bg-indigo-950/50 gta-next-row ';
-                } else if (isEgateMatch) {
-                    cardClass += 'bg-violet-50/80 dark:bg-violet-950/40 gta-egate-row ';
+                } else if (egateStatus) {
+                    if (egateStatus.kind === 'early') {
+                        cardClass += 'bg-emerald-50/75 dark:bg-emerald-950/35 gta-egate-row-early ';
+                    } else if (egateStatus.kind === 'warn') {
+                        cardClass += 'bg-amber-50/75 dark:bg-amber-950/35 gta-egate-row-warn ';
+                    } else {
+                        cardClass += 'bg-red-50/70 dark:bg-red-950/30 gta-egate-row-late ';
+                    }
                 } else if (isPast) {
                     cardClass += 'opacity-40 ';
                 }
@@ -974,27 +1018,26 @@
                     ? 'text-base font-bold text-neutral-900 dark:text-white'
                     : 'text-sm font-semibold text-neutral-600 dark:text-neutral-300';
 
-                let pills = '';
+                let nextPill = '';
                 if (isNext) {
-                    pills += state.isGtaMode
+                    nextPill = state.isGtaMode
                         ? `<span class="text-[9px] px-1.5 py-0.5 rounded-md bg-gradient-to-r from-[#ff2e93] to-[#ff7b54] text-white font-black uppercase tracking-wider">Next</span>`
                         : `<span class="text-[9px] px-1.5 py-0.5 rounded-md bg-indigo-600 text-white font-bold uppercase tracking-wider">Next</span>`;
                 }
-                if (isEgateMatch) {
-                    pills += `<span class="gta-egate-pill text-[9px] px-1.5 py-0.5 rounded-md bg-indigo-600 text-white font-bold uppercase tracking-wider">eGate</span>`;
-                }
 
-                // Compute trip duration for mobile sub-label
                 const durMins = ((arrMod - depMod) % 1440 + 1440) % 1440;
+                const rightMeta = egateStatus
+                    ? buildEgateBadgeHtml(egateStatus)
+                    : `<span class="text-[10px] font-medium text-neutral-400 dark:text-neutral-500">${durMins}m</span>`;
 
                 mobileHtml += `
                     <div ${scrollIdMob} class="${cardClass}">
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 min-w-0">
                             <p class="${depTextClass}">${trip.rawTimes[departIdx]}</p>
-                            ${pills}
+                            ${nextPill}
                         </div>
-                        <div class="flex items-center gap-2 text-right">
-                            <span class="text-[10px] font-medium text-neutral-400 dark:text-neutral-500">${durMins}m</span>
+                        <div class="flex items-center gap-2 text-right shrink-0">
+                            ${rightMeta}
                             <p class="${arrTextClass}">${trip.rawTimes[arriveIdx]}</p>
                         </div>
                     </div>
@@ -1027,7 +1070,7 @@
     }
 
     // ------------------------------------------------------------------------
-    // 1-Second Live Tick (Clock, Countdown, Fullscreen, Wanted Stars, Live Map)
+    // 1-Second Live Tick
     // ------------------------------------------------------------------------
     function formatBannerCountdown(diffSec) {
         if (diffSec <= 0) return state.isGtaMode ? 'GO NOW!' : 'Departing';
@@ -1090,22 +1133,18 @@
             if (DOM.bannerMinutes) DOM.bannerMinutes.textContent = formatBannerCountdown(nextInfo.diffSec);
             if (DOM.bannerArrives) DOM.bannerArrives.textContent = nextInfo.arriveStr;
 
-            // Update Fullscreen view
             if (DOM.fsDeparts) DOM.fsDeparts.textContent = nextInfo.departStr;
             if (DOM.fsCountdown) DOM.fsCountdown.textContent = formatFsCountdown(nextInfo.diffSec);
             if (DOM.fsArrives) DOM.fsArrives.textContent = nextInfo.arriveStr;
             updateFullscreenUrgency(nextInfo.diffSec);
 
-            // Update GTA VI Wanted Level Stars
             updateWantedStars(nextInfo.diffSec);
 
-            // Re-render schedule only when the next departure rolls over
             if (nextInfo.tripIndex !== state.lastNextTripIndex) {
                 renderSchedule(false);
             }
         }
 
-        // Update Live Route Map vehicles (buses or Vice City sports cars)
         updateLiveVehicles(nowMinsFloat);
     }
 
@@ -1155,7 +1194,6 @@
                 const { latitude: lat, longitude: lng } = pos.coords;
                 const distEghq = getDistanceKm(lat, lng, EGHQ_CONFIG.lat, EGHQ_CONFIG.lng);
 
-                // Outside Dubai -> Layover Screensaver
                 if (distEghq > LAYOVER_DISTANCE_KM) {
                     if (!state.layoverShownThisSession) {
                         state.layoverShownThisSession = true;
@@ -1166,7 +1204,6 @@
 
                 if (state.mode !== 'auto') return;
 
-                // 1. Check if at EGHQ
                 if (distEghq <= EGHQ_CONFIG.eghqRadiusKm) {
                     const home = getSavedHome();
                     if (home && PARSED_ROUTES[home.routeId]) {
@@ -1183,7 +1220,6 @@
                     return;
                 }
 
-                // 2. Check Saved Custom Home GPS first
                 const home = getSavedHome();
                 if (home && home.lat && home.lng && PARSED_ROUTES[home.routeId]) {
                     const distHome = getDistanceKm(lat, lng, home.lat, home.lng);
@@ -1201,7 +1237,6 @@
                     }
                 }
 
-                // 3. Find closest known accommodation
                 if (typeof STOP_LOCATIONS !== 'undefined') {
                     let closest = null;
                     Object.entries(STOP_LOCATIONS).forEach(([locName, coords]) => {
@@ -1227,7 +1262,7 @@
                     }
                 }
             },
-            () => { /* GPS permission denied or unavailable — keep last saved state */ },
+            () => { /* keep last saved state */ },
             { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
         );
     }
@@ -1281,7 +1316,6 @@
 
         state.egateMins = mins;
 
-        // eGate is at EGHQ -> switch to "To EGHQ" automatically
         if (state.direction !== 'to') {
             state.direction = 'to';
             saveState();
@@ -1290,9 +1324,10 @@
             renderRouteMapBase();
         }
 
-        const winStart = minsToTime(mins - EGATE_WINDOW_BEFORE_MIN);
-        const winEnd = minsToTime(mins);
-        if (DOM.egateWindowText) DOM.egateWindowText.textContent = `${winStart} – ${winEnd} (Arr. EGHQ)`;
+        const egateStr = minsToTime(mins);
+        const winStart = minsToTime(mins - EGATE_EARLY_MAX_MIN);
+        const winEnd = minsToTime(mins + EGATE_LATE_MAX_MIN);
+        if (DOM.egateWindowText) DOM.egateWindowText.textContent = `${winStart} – ${winEnd} (eGate ${egateStr})`;
         if (DOM.egateActiveBanner) {
             DOM.egateActiveBanner.classList.remove('hidden');
             DOM.egateActiveBanner.classList.add('flex');
@@ -1312,7 +1347,7 @@
     }
 
     // ------------------------------------------------------------------------
-    // Layover Screensaver + Comic Text Animation (also Triple-Tap Clock Easter Egg)
+    // Layover Screensaver + Comic Text Animation
     // ------------------------------------------------------------------------
     function openScreensaver(fromOutsideDubai = false) {
         if (!DOM.screensaver) return;
@@ -1369,7 +1404,7 @@
     }
 
     // ------------------------------------------------------------------------
-    // Onboarding Splash Screen (iOS Safari non-standalone)
+    // Onboarding Splash Screen
     // ------------------------------------------------------------------------
     function initSplashScreen() {
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -1406,7 +1441,7 @@
     }
 
     // ------------------------------------------------------------------------
-    // Connectivity Indicator (Online / Offline)
+    // Connectivity Indicator
     // ------------------------------------------------------------------------
     function updateConnectivityUI() {
         if (!DOM.connectivityStatus) return;
@@ -1492,7 +1527,6 @@
             DOM.btnCenterSchedule.addEventListener('click', centerScheduleScroll);
         }
 
-        // Fullscreen Countdown
         if (DOM.btnExpandFs) {
             DOM.btnExpandFs.addEventListener('click', () => {
                 state.isFullscreen = true;
@@ -1508,7 +1542,6 @@
             });
         }
 
-        // eGate Modal
         if (DOM.btnEgatePlanner) DOM.btnEgatePlanner.addEventListener('click', openEgateModal);
         if (DOM.btnCloseEgate) DOM.btnCloseEgate.addEventListener('click', closeEgateModal);
         if (DOM.btnFindEgate) DOM.btnFindEgate.addEventListener('click', applyEgateFilter);
@@ -1519,7 +1552,6 @@
             });
         }
 
-        // Triple-tap clock easter egg -> Screensaver
         if (DOM.clockContainer) {
             DOM.clockContainer.addEventListener('click', () => {
                 state.clockTapCount++;
@@ -1537,7 +1569,6 @@
             DOM.btnCloseScreensaver.addEventListener('click', closeScreensaver);
         }
 
-        // Escape key closes overlays
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeEgateModal();
@@ -1549,7 +1580,6 @@
             }
         });
 
-        // Online/Offline & System Dark Mode
         window.addEventListener('online', updateConnectivityUI);
         window.addEventListener('offline', updateConnectivityUI);
         if (window.matchMedia) {
@@ -1581,15 +1611,12 @@
         initGtaFloatingButton();
         bindEvents();
 
-        // Apply saved GTA VI skin state (also renders map, schedule, and first tick)
         applyGtaMode(state.isGtaMode, false);
         updateControlButtonsUI();
         requestAnimationFrame(() => centerScheduleScroll());
 
-        // Start 1-second live heartbeat
         setInterval(tick, 1000);
 
-        // Optional onboarding & GPS auto-detect
         initSplashScreen();
         runAutoLocation(false);
         registerServiceWorker();
