@@ -21,8 +21,8 @@
     };
 
     const LAYOVER_DISTANCE_KM = 80;
-    const EGATE_EARLY_BUFFER_MIN = 35; // Muestra opciones tempranas hasta 35 min antes de abrir
     const EGATE_OPEN_DURATION_MIN = 60; // El eGate permanece abierto 1 hora (60 min)
+    const EGATE_MAX_EARLY_LOOKBACK_MIN = 180; // Tope de búsqueda para encontrar la única opción previa
 
     const SPLASH_SLIDES = [
         { img: 'assets/crewrun.png', title: 'Never Miss Your Bus', text: 'Real-time departures & live countdowns right at your fingertips.' },
@@ -834,42 +834,77 @@
         return best;
     }
 
-    function getEgateStatus(trip, arriveIdx) {
-        if (state.egateMins === null) return null;
-        const arrMod = trip.modMins[arriveIdx];
-        if (arrMod === null) return null;
-
-        // diff respecto a la hora de apertura del eGate (maneja cruce de medianoche)
-        let diff = (arrMod - state.egateMins) % 1440;
-        if (diff > 720) diff -= 1440;
-        if (diff < -720) diff += 1440;
-
-        // Solo buses que lleguen antes de que cierre el eGate (diff < 60)
-        // y hasta 35 min antes de que abra
-        if (diff < -EGATE_EARLY_BUFFER_MIN || diff >= EGATE_OPEN_DURATION_MIN) {
-            return null;
+    function computeEgateMatches(route, departIdx, arriveIdx) {
+        const egateStatuses = new Map();
+        if (state.egateMins === null) {
+            return { egateStatuses, primaryEgateIdx: -1 };
         }
 
-        if (diff < 0) {
-            return { diff, kind: 'early', label: `${Math.abs(diff)}m early` };
-        }
-        if (diff === 0) {
-            return { diff, kind: 'early', label: 'On time' };
+        let bestEarlyIdx = -1;
+        let bestEarlyDiff = -Infinity;
+        let bestOpenIdx = -1;
+        let bestOpenDiff = Infinity;
+
+        route.trips.forEach((trip) => {
+            if (trip.modMins[departIdx] === null) return;
+            const arrMod = trip.modMins[arriveIdx];
+            if (arrMod === null) return;
+
+            // Diferencia en minutos respecto a la hora de apertura del eGate (soporta cruce de medianoche)
+            let diff = (arrMod - state.egateMins) % 1440;
+            if (diff > 720) diff -= 1440;
+            if (diff < -720) diff += 1440;
+
+            // 1) Guardamos solo la opción MÁS CERCANA para llegar antes de abrir (diff < 0)
+            if (diff < 0 && diff >= -EGATE_MAX_EARLY_LOOKBACK_MIN) {
+                if (diff > bestEarlyDiff) {
+                    bestEarlyDiff = diff;
+                    bestEarlyIdx = trip.index;
+                }
+                return;
+            }
+
+            // 2) Todos los buses que llegan durante la hora abierta, siempre antes del cierre (0 <= diff < 60)
+            if (diff >= 0 && diff < EGATE_OPEN_DURATION_MIN) {
+                if (diff === 0) {
+                    egateStatuses.set(trip.index, {
+                        diff,
+                        kind: 'early',
+                        label: 'On time'
+                    });
+                } else {
+                    const minsBeforeClose = EGATE_OPEN_DURATION_MIN - diff;
+                    let kind = 'early';
+                    if (minsBeforeClose <= 5) {
+                        kind = 'late';
+                    } else if (minsBeforeClose <= 15) {
+                        kind = 'warn';
+                    }
+                    egateStatuses.set(trip.index, {
+                        diff,
+                        kind,
+                        label: `+${diff}m • ${minsBeforeClose}m left`
+                    });
+                }
+
+                if (diff < bestOpenDiff) {
+                    bestOpenDiff = diff;
+                    bestOpenIdx = trip.index;
+                }
+            }
+        });
+
+        // Añadimos únicamente esa única opción temprana
+        if (bestEarlyIdx !== -1) {
+            egateStatuses.set(bestEarlyIdx, {
+                diff: bestEarlyDiff,
+                kind: 'early',
+                label: `${Math.abs(bestEarlyDiff)}m early`
+            });
         }
 
-        const minsBeforeClose = EGATE_OPEN_DURATION_MIN - diff;
-        let kind = 'early'; // Margen cómodo dentro de la hora abierta
-        if (minsBeforeClose <= 5) {
-            kind = 'late';  // Muy justo (últimos 5 min antes del cierre)
-        } else if (minsBeforeClose <= 15) {
-            kind = 'warn';  // Aviso (quedan 6–15 min antes del cierre)
-        }
-
-        return {
-            diff,
-            kind,
-            label: `+${diff}m • ${minsBeforeClose}m left`
-        };
+        const primaryEgateIdx = bestOpenIdx !== -1 ? bestOpenIdx : bestEarlyIdx;
+        return { egateStatuses, primaryEgateIdx };
     }
 
     function buildEgateBadgeHtml(status, extraClass = '') {
@@ -899,33 +934,7 @@
         state.lastNextTripIndex = nextIdx;
 
         const { departIdx, arriveIdx } = getStopIndices(route, state.stopName, state.direction);
-        const hasEgate = state.egateMins !== null;
-
-        // Evaluar todos los viajes dentro de la ventana del eGate y centrar en el primero ya abierto (o el más cercano antes de abrir)
-        const egateStatuses = new Map();
-        let bestOpenIdx = -1;
-        let bestOpenDiff = Infinity;
-        let bestEarlyIdx = -1;
-        let bestEarlyDiff = -Infinity;
-
-        if (hasEgate) {
-            route.trips.forEach((trip) => {
-                if (trip.modMins[departIdx] === null || trip.modMins[arriveIdx] === null) return;
-                const status = getEgateStatus(trip, arriveIdx);
-                if (!status) return;
-                egateStatuses.set(trip.index, status);
-
-                if (status.diff >= 0 && status.diff < bestOpenDiff) {
-                    bestOpenDiff = status.diff;
-                    bestOpenIdx = trip.index;
-                } else if (status.diff < 0 && status.diff > bestEarlyDiff) {
-                    bestEarlyDiff = status.diff;
-                    bestEarlyIdx = trip.index;
-                }
-            });
-        }
-
-        const primaryEgateIdx = bestOpenIdx !== -1 ? bestOpenIdx : bestEarlyIdx;
+        const { egateStatuses, primaryEgateIdx } = computeEgateMatches(route, departIdx, arriveIdx);
 
         if (DOM.desktopTheadTr) {
             DOM.desktopTheadTr.innerHTML = route.stops.map((stop, idx) => {
