@@ -161,18 +161,26 @@
     </div>
 
     <!-- Fullscreen Countdown Overlay -->
-    <div id="fullscreen-overlay" class="hidden fixed inset-0 z-50 bg-white dark:bg-black flex flex-col items-center justify-center text-neutral-900 dark:text-white transition-opacity h-[100dvh] w-full px-5 pt-[max(env(safe-area-inset-top),1rem)] pb-[max(env(safe-area-inset-bottom),1rem)] pl-[max(env(safe-area-inset-left),1rem)] pr-[max(env(safe-area-inset-right),1rem)]">
-        <button id="btn-close-fs" aria-label="Exit Fullscreen" class="absolute top-[max(env(safe-area-inset-top),1rem)] right-[max(env(safe-area-inset-right),1rem)] w-11 h-11 flex items-center justify-center bg-neutral-100 dark:bg-white/10 rounded-full hover:bg-neutral-200 dark:hover:bg-white/20 active:scale-95 transition-all cursor-pointer border border-neutral-200 dark:border-white/10">
+    <div id="fullscreen-overlay" class="hidden fixed inset-0 z-50 bg-white dark:bg-black text-neutral-900 dark:text-white transition-opacity h-[100dvh] w-full pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
+        <button id="btn-close-fs" aria-label="Exit Fullscreen" class="absolute top-[max(env(safe-area-inset-top),1rem)] right-[max(env(safe-area-inset-right),1rem)] z-20 w-11 h-11 flex items-center justify-center bg-neutral-100 dark:bg-white/10 rounded-full hover:bg-neutral-200 dark:hover:bg-white/20 active:scale-95 transition-all cursor-pointer border border-neutral-200 dark:border-white/10">
             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" x2="21" y1="10" y2="3"/><line x1="3" x2="10" y1="21" y2="14"/></svg>
         </button>
-        <div class="text-center w-full max-w-2xl flex flex-col items-center justify-center gap-4 sm:gap-8">
-            <p id="fs-title" class="text-indigo-600 dark:text-indigo-400 font-semibold tracking-widest uppercase text-xs sm:text-lg">Next Departure</p>
-            <div id="fs-departs" class="font-extrabold tracking-tighter leading-none text-neutral-900 dark:text-white tabular-nums" style="font-size: clamp(4rem, 16vw, 10rem);">--:--</div>
+
+        <div class="grid grid-rows-[1fr_auto_1fr] items-center justify-items-center w-full h-full max-w-2xl mx-auto px-5">
+            <!-- Fila superior: Título + Hora de salida -->
+            <div class="self-end flex flex-col items-center text-center pb-5 sm:pb-8 pt-[max(env(safe-area-inset-top),3.5rem)]">
+                <p id="fs-title" class="text-indigo-600 dark:text-indigo-400 font-semibold tracking-widest uppercase text-xs sm:text-lg mb-2">Next Departure</p>
+                <div id="fs-departs" class="font-extrabold tracking-tighter leading-none text-neutral-900 dark:text-white tabular-nums" style="font-size: clamp(3.5rem, 14vw, 8.5rem);">--:--</div>
+            </div>
+
+            <!-- Fila central: Countdown exactamente en el centro de la pantalla -->
             <div id="fs-countdown-box" class="flex flex-col items-center justify-center bg-neutral-100 dark:bg-neutral-900 px-6 py-5 sm:p-10 rounded-3xl border border-neutral-200 dark:border-white/10 w-full max-w-lg mx-auto transition-all duration-500 shadow-lg">
                 <p class="text-xs sm:text-base text-neutral-500 dark:text-neutral-400 uppercase tracking-widest font-bold mb-2">Departing In</p>
                 <div id="fs-countdown" class="font-bold font-mono tracking-tight text-neutral-900 dark:text-white tabular-nums leading-none" style="font-size: clamp(2.75rem, 12vw, 7rem);">--:--</div>
             </div>
-            <div class="flex items-center justify-center gap-2.5 text-lg sm:text-2xl text-neutral-600 dark:text-neutral-300 font-medium">
+
+            <!-- Fila inferior: Hora de llegada -->
+            <div class="self-start flex items-center justify-center gap-2.5 pt-5 sm:pt-8 pb-[max(env(safe-area-inset-bottom),1rem)] text-lg sm:text-2xl text-neutral-600 dark:text-neutral-300 font-medium">
                 <span id="fs-arrival-label">Expected Arrival</span>
                 <span id="fs-arrives" class="font-bold text-neutral-900 dark:text-white tabular-nums">--:--</span>
                 <svg class="w-5 h-5 sm:w-7 sm:h-7 text-green-500 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
