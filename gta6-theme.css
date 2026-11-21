@@ -1,0 +1,580 @@
+/* ============================================================================
+ * CrewBus - GTA VI (Vice City / Leonida Launch Edition) Theme + Floating Pill
+ * ============================================================================ */
+
+:root {
+    --vice-bg-deep: #0c0417;
+    --vice-bg-mid: #1a0830;
+    --vice-card: rgba(21, 9, 41, 0.84);
+    --vice-card-solid: #150929;
+    --vice-pink: #ff2e93;
+    --vice-orange: #ff7b54;
+    --vice-gold: #ffd166;
+    --vice-cyan: #00f5d4;
+    --vice-purple: #8338ec;
+    --vice-border: rgba(255, 46, 147, 0.34);
+    --vice-border-cyan: rgba(0, 245, 212, 0.35);
+}
+
+/* ---------- Helper Visibility Toggles ---------- */
+.gta-only,
+.gta-only-flex,
+.gta-only-inline,
+.gta-bg-backdrop {
+    display: none;
+}
+
+body.gta6-mode .classic-only {
+    display: none !important;
+}
+body.gta6-mode .gta-only {
+    display: block;
+}
+body.gta6-mode .gta-only-flex {
+    display: flex;
+}
+body.gta6-mode .gta-only-inline {
+    display: inline-flex;
+}
+
+/* ---------- Floating Movable & Hideable GTA VI Button ---------- */
+.gta-fab-wrapper {
+    position: fixed;
+    top: 78%;
+    z-index: 55;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: left 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                right 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                top 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.22s ease;
+}
+
+.gta-fab-wrapper.dragging {
+    transition: none !important;
+}
+
+.gta-fab-wrapper.snap-right {
+    right: max(env(safe-area-inset-right), 10px);
+    left: auto;
+}
+
+.gta-fab-wrapper.snap-left {
+    left: max(env(safe-area-inset-left), 10px);
+    right: auto;
+}
+
+.gta-fab-pill {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 999px;
+    background: rgba(18, 12, 32, 0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 46, 147, 0.45);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28), 0 0 12px rgba(255, 46, 147, 0.18);
+    transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.25s ease;
+}
+
+.gta-fab-wrapper.snap-left .gta-fab-pill {
+    flex-direction: row-reverse;
+}
+
+.gta-fab-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px 4px 4px;
+    border-radius: 999px;
+    cursor: grab;
+    color: #fff;
+    border: none;
+    background: transparent;
+    outline: none;
+}
+
+.gta-fab-wrapper.dragging .gta-fab-main {
+    cursor: grabbing;
+}
+
+.gta-fab-badge {
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: -0.04em;
+    color: #fff;
+    background: linear-gradient(135deg, #ff2e93 0%, #ff7b54 55%, #ffd166 100%);
+    box-shadow: 0 0 10px rgba(255, 46, 147, 0.55);
+}
+
+.gta-fab-text {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #ff99c8, #ffd166, #00f5d4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.gta-fab-hide-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.gta-fab-hide-btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+}
+
+.gta-fab-wrapper.snap-left .gta-fab-hide-btn svg {
+    transform: rotate(180deg);
+}
+
+/* Active GTA VI Pill Glow */
+body.gta6-mode .gta-fab-pill {
+    background: linear-gradient(135deg, rgba(255, 46, 147, 0.28), rgba(19, 8, 38, 0.92));
+    border-color: rgba(0, 245, 212, 0.7);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45), 0 0 18px rgba(0, 245, 212, 0.35);
+}
+
+/* Docked / Hidden Minimal Edge Tab */
+.gta-fab-tab {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 46px;
+    border: 1px solid rgba(255, 46, 147, 0.45);
+    background: rgba(18, 10, 34, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #ffd166;
+    font-size: 9px;
+    font-weight: 900;
+    font-style: italic;
+    cursor: pointer;
+    opacity: 0.58;
+    transition: opacity 0.2s ease, width 0.2s ease, background 0.2s ease;
+}
+
+.gta-fab-tab:hover,
+.gta-fab-tab:active {
+    opacity: 1;
+    width: 26px;
+    background: rgba(255, 46, 147, 0.85);
+    color: #fff;
+}
+
+.gta-fab-wrapper.is-hidden.snap-right {
+    right: 0;
+}
+.gta-fab-wrapper.is-hidden.snap-left {
+    left: 0;
+}
+.gta-fab-wrapper.is-hidden .gta-fab-pill {
+    display: none;
+}
+.gta-fab-wrapper.is-hidden .gta-fab-tab {
+    display: flex;
+}
+.gta-fab-wrapper.is-hidden.snap-right .gta-fab-tab {
+    border-right: none;
+    border-radius: 10px 0 0 10px;
+}
+.gta-fab-wrapper.is-hidden.snap-left .gta-fab-tab {
+    border-left: none;
+    border-radius: 0 10px 10px 0;
+}
+
+/* ============================================================================
+ * GTA VI ACTIVE SKIN OVERRIDES
+ * ============================================================================ */
+
+body.gta6-mode {
+    background: radial-gradient(circle at 85% 8%, rgba(255, 46, 147, 0.28) 0%, transparent 45%),
+                radial-gradient(circle at 12% 88%, rgba(0, 245, 212, 0.2) 0%, transparent 48%),
+                linear-gradient(165deg, #1b0734 0%, #0e041d 52%, #070312 100%) !important;
+    color: #fdf4ff !important;
+}
+
+body.gta6-mode .gta-bg-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+body.gta6-mode .gta-sunset-orb {
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 209, 102, 0.22) 0%, rgba(255, 123, 84, 0.16) 45%, rgba(255, 46, 147, 0) 75%);
+    filter: blur(18px);
+}
+
+body.gta6-mode .gta-palms-layer {
+    position: absolute;
+    inset: 0;
+    opacity: 0.16;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 220' preserveAspectRatio='xMaxYMax slice'%3E%3Cg fill='%23ff2e93'%3E%3Cpath d='M350 220 C340 165 344 125 360 85' stroke='%23ff2e93' stroke-width='8' fill='none' stroke-linecap='round'/%3E%3Cpath d='M360 85 C332 68 308 72 292 88 C316 80 338 82 360 85Z'/%3E%3Cpath d='M360 85 C338 52 316 42 294 50 C318 56 340 68 360 85Z'/%3E%3Cpath d='M360 85 C372 54 388 46 404 52 C386 60 374 70 360 85Z'/%3E%3Cpath d='M360 85 C382 72 396 78 408 94 C390 86 376 86 360 85Z'/%3E%3C/g%3E%3Cg fill='%2300f5d4' opacity='0.7'%3E%3Cpath d='M42 220 C52 175 48 140 34 108' stroke='%2300f5d4' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M34 108 C56 96 74 100 86 112 C68 106 52 107 34 108Z'/%3E%3Cpath d='M34 108 C52 82 68 74 84 80 C66 86 50 96 34 108Z'/%3E%3Cpath d='M34 108 C24 84 10 78 -4 84 C12 90 22 98 34 108Z'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* Cards & Surfaces */
+body.gta6-mode .gta-card {
+    background: var(--vice-card) !important;
+    border-color: var(--vice-border) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+body.gta6-mode .gta-subbar {
+    background: rgba(34, 12, 62, 0.72) !important;
+    border-color: rgba(255, 46, 147, 0.24) !important;
+}
+
+body.gta6-mode .gta-thead {
+    background: rgba(26, 10, 48, 0.96) !important;
+    border-color: rgba(255, 46, 147, 0.3) !important;
+}
+
+/* Header & Brand */
+body.gta6-mode #header-brand-icon {
+    background: linear-gradient(135deg, #ff2e93 0%, #ff7b54 55%, #ffd166 100%) !important;
+    box-shadow: 0 0 18px rgba(255, 46, 147, 0.55) !important;
+}
+
+body.gta6-mode #header-route-name {
+    background: linear-gradient(90deg, #ffffff 0%, #ffd166 55%, #ff79c6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent !important;
+    font-style: italic;
+    letter-spacing: -0.02em;
+}
+
+body.gta6-mode #header-accommodation-list {
+    color: rgba(0, 245, 212, 0.85) !important;
+}
+
+body.gta6-mode .gta-clock {
+    background: rgba(12, 4, 24, 0.82) !important;
+    border-color: var(--vice-border-cyan) !important;
+    box-shadow: 0 0 14px rgba(0, 245, 212, 0.16);
+}
+
+body.gta6-mode .gta-clock-icon {
+    color: var(--vice-cyan) !important;
+}
+
+body.gta6-mode #current-time-display {
+    color: #fff !important;
+    text-shadow: 0 0 10px rgba(0, 245, 212, 0.45);
+}
+
+/* Controls, Segments & Inputs */
+body.gta6-mode .gta-segment {
+    background: rgba(11, 4, 22, 0.78) !important;
+    border-color: rgba(131, 56, 236, 0.4) !important;
+}
+
+body.gta6-mode .gta-tab-active {
+    background: linear-gradient(135deg, #ff2e93 0%, #8338ec 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 14px rgba(255, 46, 147, 0.45) !important;
+}
+
+body.gta6-mode .gta-tab-inactive {
+    color: rgba(240, 210, 255, 0.68) !important;
+}
+body.gta6-mode .gta-tab-inactive:hover {
+    color: #00f5d4 !important;
+}
+
+body.gta6-mode .gta-input {
+    background: rgba(11, 4, 22, 0.85) !important;
+    border-color: rgba(0, 245, 212, 0.32) !important;
+    color: #fff !important;
+}
+
+body.gta6-mode .gta-egate-btn {
+    background: rgba(0, 245, 212, 0.12) !important;
+    border-color: rgba(0, 245, 212, 0.45) !important;
+    color: var(--vice-cyan) !important;
+}
+
+body.gta6-mode .gta-icon-btn {
+    background: rgba(255, 46, 147, 0.14) !important;
+    border-color: rgba(255, 46, 147, 0.4) !important;
+    color: #ff99c8 !important;
+}
+
+/* Hero Banner (Vice City Sunset Gradient) */
+body.gta6-mode #next-bus-banner {
+    background: linear-gradient(135deg, #ff2e93 0%, #9b26b6 48%, #240b4c 100%) !important;
+    border: 1px solid rgba(255, 209, 102, 0.45) !important;
+    box-shadow: 0 12px 32px rgba(255, 46, 147, 0.28), 0 0 22px rgba(131, 56, 236, 0.3) !important;
+}
+
+body.gta6-mode #banner-title {
+    color: #ffd166 !important;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+}
+
+body.gta6-mode #banner-departs {
+    font-style: italic;
+    text-shadow: 0 3px 16px rgba(12, 4, 23, 0.45);
+}
+
+body.gta6-mode #banner-minutes {
+    color: var(--vice-cyan) !important;
+    text-shadow: 0 0 12px rgba(0, 245, 212, 0.55);
+}
+
+body.gta6-mode .gta-arrival-pill {
+    background: rgba(12, 4, 23, 0.48) !important;
+    border-color: rgba(0, 245, 212, 0.35) !important;
+}
+
+body.gta6-mode #banner-arrival-label,
+body.gta6-mode #banner-arrival-label-desk {
+    color: #ffd166 !important;
+}
+
+body.gta6-mode .gta-arr-check {
+    color: var(--vice-cyan) !important;
+}
+
+/* Wanted Stars */
+.gta-star {
+    width: 13px;
+    height: 13px;
+    transition: transform 0.25s ease, color 0.25s ease, filter 0.25s ease;
+}
+
+#fs-gta-stars .gta-star {
+    width: 22px;
+    height: 22px;
+}
+
+.gta-star.active {
+    color: #ffd166;
+    filter: drop-shadow(0 0 6px rgba(255, 209, 102, 0.85));
+}
+
+.gta-star.dim {
+    color: rgba(255, 255, 255, 0.24);
+}
+
+@keyframes policeStrobe {
+    0%, 100% { color: #ff2e63; filter: drop-shadow(0 0 8px #ff2e63); transform: scale(1.08); }
+    50% { color: #00e5ff; filter: drop-shadow(0 0 8px #00e5ff); transform: scale(1); }
+}
+
+.wanted-chase .gta-star.active {
+    animation: policeStrobe 0.65s infinite ease-in-out;
+}
+
+/* Live Route Map & Sports Car */
+body.gta6-mode #route-map-title {
+    color: var(--vice-cyan) !important;
+}
+
+body.gta6-mode .gta-track-line {
+    height: 3px !important;
+    background: linear-gradient(90deg, rgba(255, 46, 147, 0.45), rgba(0, 245, 212, 0.55)) !important;
+    box-shadow: 0 0 10px rgba(0, 245, 212, 0.28);
+}
+
+@keyframes viceCarCruise {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-1.5px); }
+}
+
+.vice-car-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: viceCarCruise 0.7s infinite ease-in-out;
+}
+
+.vice-car-trail {
+    position: absolute;
+    right: 78%;
+    top: 56%;
+    width: 18px;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, rgba(255, 46, 147, 0.9), #ffd166);
+    filter: blur(0.6px);
+    pointer-events: none;
+}
+
+.vice-car-underglow {
+    position: absolute;
+    bottom: -2px;
+    left: 15%;
+    right: 15%;
+    height: 4px;
+    border-radius: 999px;
+    background: #00f5d4;
+    filter: blur(4px);
+    opacity: 0.9;
+    pointer-events: none;
+}
+
+/* Schedule Rows & Mobile Cards */
+body.gta6-mode #schedule-heading {
+    color: #ffd166 !important;
+    letter-spacing: 0.1em;
+}
+
+body.gta6-mode #desktop-tbody,
+body.gta6-mode #mobile-cards-container > div {
+    border-color: rgba(255, 46, 147, 0.14) !important;
+}
+
+body.gta6-mode #desktop-tbody tr:hover {
+    background: rgba(255, 46, 147, 0.08) !important;
+}
+
+body.gta6-mode #desktop-tbody td,
+body.gta6-mode #mobile-cards-container p {
+    color: #f8edff;
+}
+
+body.gta6-mode .gta-next-row {
+    background: linear-gradient(90deg, rgba(255, 46, 147, 0.22) 0%, rgba(0, 245, 212, 0.12) 100%) !important;
+    box-shadow: inset 3px 0 0 #00f5d4;
+}
+
+body.gta6-mode .gta-next-text {
+    color: var(--vice-cyan) !important;
+    text-shadow: 0 0 12px rgba(0, 245, 212, 0.45);
+}
+
+body.gta6-mode .gta-egate-row {
+    background: rgba(131, 56, 236, 0.16) !important;
+}
+
+/* eGate Modal & Banner */
+body.gta6-mode #egate-modal-card {
+    background: #140826 !important;
+    border-color: rgba(255, 46, 147, 0.45) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 46, 147, 0.22) !important;
+}
+
+body.gta6-mode #egate-modal-icon {
+    background: rgba(255, 46, 147, 0.2) !important;
+    color: #ff2e93 !important;
+}
+
+body.gta6-mode #egate-time-input {
+    background: #0b0316 !important;
+    border-color: rgba(0, 245, 212, 0.45) !important;
+    color: var(--vice-cyan) !important;
+}
+
+body.gta6-mode #btn-find-egate {
+    background: linear-gradient(135deg, #ff2e93 0%, #ff7b54 100%) !important;
+    box-shadow: 0 6px 20px rgba(255, 46, 147, 0.4);
+}
+
+body.gta6-mode #egate-active-banner {
+    background: rgba(131, 56, 236, 0.26) !important;
+    border-color: rgba(0, 245, 212, 0.35) !important;
+}
+
+body.gta6-mode .gta-egate-pill {
+    background: linear-gradient(90deg, #ff2e93, #ff7b54) !important;
+}
+
+/* Fullscreen Countdown Mode */
+body.gta6-mode #fullscreen-overlay {
+    background: radial-gradient(circle at 50% 15%, rgba(255, 46, 147, 0.34), transparent 55%),
+                radial-gradient(circle at 50% 90%, rgba(0, 245, 212, 0.2), transparent 55%),
+                #0b0317 !important;
+    color: #ffffff !important;
+}
+
+body.gta6-mode #fs-title {
+    color: #ffd166 !important;
+}
+
+body.gta6-mode #fs-departs {
+    font-style: italic;
+    background: linear-gradient(180deg, #ffffff 10%, #ffd166 75%, #ff7b54 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent !important;
+}
+
+body.gta6-mode #fs-countdown-box.gta-fs-normal {
+    background: rgba(22, 9, 44, 0.85) !important;
+    border: 1.5px solid rgba(0, 245, 212, 0.55) !important;
+    box-shadow: 0 0 36px rgba(0, 245, 212, 0.22) !important;
+}
+
+body.gta6-mode #fs-countdown-box.gta-fs-warn {
+    background: linear-gradient(135deg, #ff7b54 0%, #ff2e93 100%) !important;
+    border: 1.5px solid #ffd166 !important;
+    box-shadow: 0 0 40px rgba(255, 123, 84, 0.45) !important;
+}
+
+body.gta6-mode #fs-countdown-box.gta-fs-urgent {
+    background: linear-gradient(135deg, #ff0055 0%, #6d00ff 100%) !important;
+    border: 2px solid #00f5d4 !important;
+    box-shadow: 0 0 46px rgba(255, 0, 85, 0.55) !important;
+}
+
+body.gta6-mode #fs-countdown {
+    color: #ffffff !important;
+    text-shadow: 0 0 20px rgba(0, 245, 212, 0.45);
+}
+
+body.gta6-mode .gta-fs-sub {
+    color: rgba(255, 232, 180, 0.88) !important;
+}
+
+/* Toast Notification in GTA VI Mode */
+body.gta6-mode #location-toast {
+    background: linear-gradient(90deg, rgba(22, 8, 42, 0.95), rgba(45, 12, 68, 0.95)) !important;
+    color: #ffffff !important;
+    border-color: rgba(0, 245, 212, 0.55) !important;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5), 0 0 18px rgba(255, 46, 147, 0.35) !important;
+}
+
+body.gta6-mode .gta-toast-icon {
+    color: var(--vice-cyan) !important;
+}
+
+/* Scrollbar in GTA VI Mode */
+body.gta6-mode .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 46, 147, 0.45);
+}
