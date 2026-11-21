@@ -21,8 +21,8 @@
     };
 
     const LAYOVER_DISTANCE_KM = 80;
-    const EGATE_EARLY_MAX_MIN = 50; // Muestra buses que llegan hasta 50 min antes
-    const EGATE_LATE_MAX_MIN = 25;  // Muestra buses que llegan hasta 25 min después
+    const EGATE_EARLY_BUFFER_MIN = 35; // Muestra opciones tempranas hasta 35 min antes de abrir
+    const EGATE_OPEN_DURATION_MIN = 60; // El eGate permanece abierto 1 hora (60 min)
 
     const SPLASH_SLIDES = [
         { img: 'assets/crewrun.png', title: 'Never Miss Your Bus', text: 'Real-time departures & live countdowns right at your fingertips.' },
@@ -803,7 +803,7 @@
     }
 
     // ------------------------------------------------------------------------
-    // Next Bus Computation & eGate Early / Late Evaluation
+    // Next Bus Computation & eGate 1-Hour Open Window Evaluation
     // ------------------------------------------------------------------------
     function getNextTripInfo(nowSec) {
         const route = PARSED_ROUTES[state.routeId];
@@ -839,23 +839,36 @@
         const arrMod = trip.modMins[arriveIdx];
         if (arrMod === null) return null;
 
-        // diff < 0 => arrives early | diff === 0 => on time | diff > 0 => arrives late
+        // diff respecto a la hora de apertura del eGate (maneja cruce de medianoche)
         let diff = (arrMod - state.egateMins) % 1440;
         if (diff > 720) diff -= 1440;
         if (diff < -720) diff += 1440;
 
-        if (diff < -EGATE_EARLY_MAX_MIN || diff > EGATE_LATE_MAX_MIN) return null;
-
-        if (diff === 0) {
-            return { diff, kind: 'early', label: 'On time' };
+        // Solo buses que lleguen antes de que cierre el eGate (diff < 60)
+        // y hasta 35 min antes de que abra
+        if (diff < -EGATE_EARLY_BUFFER_MIN || diff >= EGATE_OPEN_DURATION_MIN) {
+            return null;
         }
+
         if (diff < 0) {
             return { diff, kind: 'early', label: `${Math.abs(diff)}m early` };
         }
+        if (diff === 0) {
+            return { diff, kind: 'early', label: 'On time' };
+        }
+
+        const minsBeforeClose = EGATE_OPEN_DURATION_MIN - diff;
+        let kind = 'early'; // Margen cómodo dentro de la hora abierta
+        if (minsBeforeClose <= 5) {
+            kind = 'late';  // Muy justo (últimos 5 min antes del cierre)
+        } else if (minsBeforeClose <= 15) {
+            kind = 'warn';  // Aviso (quedan 6–15 min antes del cierre)
+        }
+
         return {
             diff,
-            kind: diff <= 10 ? 'warn' : 'late',
-            label: `+${diff}m late`
+            kind,
+            label: `+${diff}m • ${minsBeforeClose}m left`
         };
     }
 
@@ -888,13 +901,12 @@
         const { departIdx, arriveIdx } = getStopIndices(route, state.stopName, state.direction);
         const hasEgate = state.egateMins !== null;
 
-        // Pre-calculate eGate status and find the ideal trip to center on
-        // (closest arrival on time or early; otherwise earliest late option in window)
+        // Evaluar todos los viajes dentro de la ventana del eGate y centrar en el primero ya abierto (o el más cercano antes de abrir)
         const egateStatuses = new Map();
+        let bestOpenIdx = -1;
+        let bestOpenDiff = Infinity;
         let bestEarlyIdx = -1;
         let bestEarlyDiff = -Infinity;
-        let bestLateIdx = -1;
-        let bestLateDiff = Infinity;
 
         if (hasEgate) {
             route.trips.forEach((trip) => {
@@ -903,17 +915,17 @@
                 if (!status) return;
                 egateStatuses.set(trip.index, status);
 
-                if (status.diff <= 0 && status.diff > bestEarlyDiff) {
+                if (status.diff >= 0 && status.diff < bestOpenDiff) {
+                    bestOpenDiff = status.diff;
+                    bestOpenIdx = trip.index;
+                } else if (status.diff < 0 && status.diff > bestEarlyDiff) {
                     bestEarlyDiff = status.diff;
                     bestEarlyIdx = trip.index;
-                } else if (status.diff > 0 && status.diff < bestLateDiff) {
-                    bestLateDiff = status.diff;
-                    bestLateIdx = trip.index;
                 }
             });
         }
 
-        const primaryEgateIdx = bestEarlyIdx !== -1 ? bestEarlyIdx : bestLateIdx;
+        const primaryEgateIdx = bestOpenIdx !== -1 ? bestOpenIdx : bestEarlyIdx;
 
         if (DOM.desktopTheadTr) {
             DOM.desktopTheadTr.innerHTML = route.stops.map((stop, idx) => {
@@ -1324,10 +1336,9 @@
             renderRouteMapBase();
         }
 
-        const egateStr = minsToTime(mins);
-        const winStart = minsToTime(mins - EGATE_EARLY_MAX_MIN);
-        const winEnd = minsToTime(mins + EGATE_LATE_MAX_MIN);
-        if (DOM.egateWindowText) DOM.egateWindowText.textContent = `${winStart} – ${winEnd} (eGate ${egateStr})`;
+        const openStr = minsToTime(mins);
+        const closeStr = minsToTime(mins + EGATE_OPEN_DURATION_MIN);
+        if (DOM.egateWindowText) DOM.egateWindowText.textContent = `${openStr} – ${closeStr} (1h open)`;
         if (DOM.egateActiveBanner) {
             DOM.egateActiveBanner.classList.remove('hidden');
             DOM.egateActiveBanner.classList.add('flex');
