@@ -520,8 +520,38 @@ body.gta6-mode .gta-next-text {
     text-shadow: 0 0 12px rgba(0, 245, 212, 0.45);
 }
 
-body.gta6-mode .gta-egate-row {
-    background: rgba(131, 56, 236, 0.16) !important;
+/* eGate Early / Warn / Late Rows & Badges in GTA VI Mode */
+body.gta6-mode .gta-egate-row-early {
+    background: rgba(0, 245, 212, 0.11) !important;
+    box-shadow: inset 3px 0 0 rgba(0, 245, 212, 0.75);
+}
+
+body.gta6-mode .gta-egate-row-warn {
+    background: rgba(255, 209, 102, 0.12) !important;
+    box-shadow: inset 3px 0 0 rgba(255, 209, 102, 0.85);
+}
+
+body.gta6-mode .gta-egate-row-late {
+    background: rgba(255, 46, 147, 0.14) !important;
+    box-shadow: inset 3px 0 0 rgba(255, 46, 147, 0.85);
+}
+
+body.gta6-mode .gta-egate-badge-early {
+    background: rgba(0, 245, 212, 0.16) !important;
+    color: #00f5d4 !important;
+    border-color: rgba(0, 245, 212, 0.45) !important;
+}
+
+body.gta6-mode .gta-egate-badge-warn {
+    background: rgba(255, 209, 102, 0.18) !important;
+    color: #ffd166 !important;
+    border-color: rgba(255, 209, 102, 0.5) !important;
+}
+
+body.gta6-mode .gta-egate-badge-late {
+    background: rgba(255, 46, 147, 0.22) !important;
+    color: #ff85c0 !important;
+    border-color: rgba(255, 46, 147, 0.55) !important;
 }
 
 /* eGate Modal & Banner */
