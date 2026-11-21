@@ -883,7 +883,7 @@
                     egateStatuses.set(trip.index, {
                         diff,
                         kind,
-                        label: `+${diff}m • ${minsBeforeClose}m left`
+                        label: `${diff}m after`
                     });
                 }
 
@@ -1347,7 +1347,7 @@
 
         const openStr = minsToTime(mins);
         const closeStr = minsToTime(mins + EGATE_OPEN_DURATION_MIN);
-        if (DOM.egateWindowText) DOM.egateWindowText.textContent = `${openStr} – ${closeStr} (1h open)`;
+        if (DOM.egateWindowText) DOM.egateWindowText.textContent = `${openStr} – ${closeStr}`;
         if (DOM.egateActiveBanner) {
             DOM.egateActiveBanner.classList.remove('hidden');
             DOM.egateActiveBanner.classList.add('flex');
