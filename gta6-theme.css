@@ -40,7 +40,7 @@ body.gta6-mode .gta-only-inline {
 /* ---------- Floating Movable & Hideable GTA VI SVG Button ---------- */
 .gta-fab-wrapper {
     position: fixed;
-    top: 78%;
+    top: 76%;
     z-index: 55;
     touch-action: none;
     user-select: none;
@@ -56,16 +56,16 @@ body.gta6-mode .gta-only-inline {
 }
 
 .gta-fab-wrapper.snap-right {
-    right: max(env(safe-area-inset-right), 12px);
+    right: max(env(safe-area-inset-right), 14px);
     left: auto;
 }
 
 .gta-fab-wrapper.snap-left {
-    left: max(env(safe-area-inset-left), 12px);
+    left: max(env(safe-area-inset-left), 14px);
     right: auto;
 }
 
-/* Transparent container so ONLY the VI silhouette is visible */
+/* Transparent container so ONLY the VI silhouette is shown when expanded */
 .gta-fab-pill {
     position: relative;
     display: inline-flex;
@@ -81,16 +81,18 @@ body.gta6-mode .gta-only-inline {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 58px;
+    height: 44px;
     padding: 2px;
     border: none;
     background: transparent;
     outline: none;
     cursor: grab;
-    opacity: 0.9;
+    opacity: 0.94;
     transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
                 opacity 0.2s ease,
                 filter 0.28s ease;
-    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.38));
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.42));
 }
 
 .gta-fab-main:hover {
@@ -109,27 +111,33 @@ body.gta6-mode .gta-only-inline {
 }
 
 .gta-vi-logo {
-    width: 46px;
-    height: auto;
+    width: 54px;
+    height: 40px;
+    flex-shrink: 0;
     display: block;
     pointer-events: none;
 }
 
 @media (min-width: 580px) {
+    .gta-fab-main {
+        width: 64px;
+        height: 49px;
+    }
     .gta-vi-logo {
-        width: 52px;
+        width: 60px;
+        height: 45px;
     }
 }
 
 /* Active GTA VI Neon Aura on the VI Silhouette */
 @keyframes viNeonFloat {
     0%, 100% {
-        filter: drop-shadow(0 0 8px rgba(255, 46, 147, 0.75))
-                drop-shadow(0 0 16px rgba(0, 245, 212, 0.4));
+        filter: drop-shadow(0 0 8px rgba(255, 46, 147, 0.78))
+                drop-shadow(0 0 16px rgba(0, 245, 212, 0.42));
     }
     50% {
-        filter: drop-shadow(0 0 12px rgba(255, 189, 59, 0.8))
-                drop-shadow(0 0 22px rgba(255, 46, 147, 0.65));
+        filter: drop-shadow(0 0 12px rgba(255, 189, 59, 0.85))
+                drop-shadow(0 0 22px rgba(255, 46, 147, 0.68));
     }
 }
 
@@ -141,28 +149,28 @@ body.gta6-mode .gta-fab-main {
 /* Tiny corner hide chevron (tucked cleanly so it never spoils the VI shape) */
 .gta-fab-hide-btn {
     position: absolute;
-    top: -6px;
-    right: -6px;
-    width: 18px;
-    height: 18px;
+    top: -7px;
+    right: -7px;
+    width: 20px;
+    height: 20px;
     border-radius: 999px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: rgba(255, 255, 255, 0.82);
-    background: rgba(20, 8, 36, 0.72);
+    color: rgba(255, 255, 255, 0.88);
+    background: rgba(20, 8, 36, 0.78);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
     cursor: pointer;
-    opacity: 0.72;
+    opacity: 0.78;
     transition: opacity 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 
 .gta-fab-wrapper.snap-left .gta-fab-hide-btn {
     right: auto;
-    left: -6px;
+    left: -7px;
 }
 
 .gta-fab-wrapper.snap-left .gta-fab-hide-btn svg {
@@ -172,32 +180,34 @@ body.gta6-mode .gta-fab-main {
 .gta-fab-hide-btn:hover,
 .gta-fab-hide-btn:active {
     opacity: 1;
-    background: rgba(255, 46, 147, 0.9);
-    border-color: rgba(255, 209, 102, 0.7);
+    background: rgba(255, 46, 147, 0.92);
+    border-color: rgba(255, 209, 102, 0.75);
     color: #fff;
     transform: scale(1.1);
 }
 
-/* Docked / Hidden Minimal Edge Tab with Mini VI SVG */
+/* Docked / Minimized Edge Tab with Mini VI Logo */
 .gta-fab-tab {
     display: none;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 44px;
+    width: 30px;
+    height: 46px;
     padding: 4px;
     border: 1px solid rgba(255, 46, 147, 0.45);
-    background: rgba(18, 10, 34, 0.62);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(18, 10, 34, 0.68);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     cursor: pointer;
-    opacity: 0.68;
+    opacity: 0.78;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
     transition: opacity 0.2s ease, width 0.2s ease, background 0.2s ease;
 }
 
 .gta-vi-mini {
-    width: 16px;
-    height: auto;
+    width: 22px;
+    height: 16px;
+    flex-shrink: 0;
     display: block;
     pointer-events: none;
     filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.45));
@@ -206,14 +216,14 @@ body.gta6-mode .gta-fab-main {
 .gta-fab-tab:hover,
 .gta-fab-tab:active {
     opacity: 1;
-    width: 30px;
-    background: rgba(34, 12, 62, 0.9);
+    width: 36px;
+    background: rgba(34, 12, 62, 0.92);
     border-color: rgba(0, 245, 212, 0.75);
 }
 
 body.gta6-mode .gta-fab-tab {
-    border-color: rgba(0, 245, 212, 0.65);
-    box-shadow: 0 0 12px rgba(255, 46, 147, 0.35);
+    border-color: rgba(0, 245, 212, 0.7);
+    box-shadow: 0 0 14px rgba(255, 46, 147, 0.38);
 }
 
 .gta-fab-wrapper.is-hidden.snap-right {
@@ -230,11 +240,11 @@ body.gta6-mode .gta-fab-tab {
 }
 .gta-fab-wrapper.is-hidden.snap-right .gta-fab-tab {
     border-right: none;
-    border-radius: 10px 0 0 10px;
+    border-radius: 12px 0 0 12px;
 }
 .gta-fab-wrapper.is-hidden.snap-left .gta-fab-tab {
     border-left: none;
-    border-radius: 0 10px 10px 0;
+    border-radius: 0 12px 12px 0;
 }
 
 /* ============================================================================
