@@ -1,4 +1,4 @@
-const CACHE_NAME = 'crewbus-v1';
+const CACHE_NAME = 'crewbus-vgta';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
