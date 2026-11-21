@@ -1,5 +1,5 @@
 /* ============================================================================
- * CrewBus - GTA VI (Vice City / Leonida Launch Edition) Theme + Floating Pill
+ * CrewBus - GTA VI (Vice City / Leonida Launch Edition) Theme + Floating VI SVG
  * ============================================================================ */
 
 :root {
@@ -37,7 +37,7 @@ body.gta6-mode .gta-only-inline {
     display: inline-flex;
 }
 
-/* ---------- Floating Movable & Hideable GTA VI Button ---------- */
+/* ---------- Floating Movable & Hideable GTA VI SVG Button ---------- */
 .gta-fab-wrapper {
     position: fixed;
     top: 78%;
@@ -56,133 +56,164 @@ body.gta6-mode .gta-only-inline {
 }
 
 .gta-fab-wrapper.snap-right {
-    right: max(env(safe-area-inset-right), 10px);
+    right: max(env(safe-area-inset-right), 12px);
     left: auto;
 }
 
 .gta-fab-wrapper.snap-left {
-    left: max(env(safe-area-inset-left), 10px);
+    left: max(env(safe-area-inset-left), 12px);
     right: auto;
 }
 
+/* Transparent container so ONLY the VI silhouette is visible */
 .gta-fab-pill {
-    display: flex;
+    position: relative;
+    display: inline-flex;
     align-items: center;
-    gap: 2px;
-    padding: 3px;
-    border-radius: 999px;
-    background: rgba(18, 12, 32, 0.78);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 46, 147, 0.45);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28), 0 0 12px rgba(255, 46, 147, 0.18);
-    transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.25s ease;
-}
-
-.gta-fab-wrapper.snap-left .gta-fab-pill {
-    flex-direction: row-reverse;
+    justify-content: center;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
 }
 
 .gta-fab-main {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 4px 8px 4px 4px;
-    border-radius: 999px;
-    cursor: grab;
-    color: #fff;
+    justify-content: center;
+    padding: 2px;
     border: none;
     background: transparent;
     outline: none;
+    cursor: grab;
+    opacity: 0.9;
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.2s ease,
+                filter 0.28s ease;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.38));
+}
+
+.gta-fab-main:hover {
+    opacity: 1;
+    transform: scale(1.07);
+}
+
+.gta-fab-main:active {
+    transform: scale(0.95);
 }
 
 .gta-fab-wrapper.dragging .gta-fab-main {
     cursor: grabbing;
+    opacity: 1;
+    transform: scale(1.08);
 }
 
-.gta-fab-badge {
-    width: 24px;
-    height: 24px;
-    border-radius: 999px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 900;
-    font-style: italic;
-    letter-spacing: -0.04em;
-    color: #fff;
-    background: linear-gradient(135deg, #ff2e93 0%, #ff7b54 55%, #ffd166 100%);
-    box-shadow: 0 0 10px rgba(255, 46, 147, 0.55);
+.gta-vi-logo {
+    width: 46px;
+    height: auto;
+    display: block;
+    pointer-events: none;
 }
 
-.gta-fab-text {
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    background: linear-gradient(90deg, #ff99c8, #ffd166, #00f5d4);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+@media (min-width: 580px) {
+    .gta-vi-logo {
+        width: 52px;
+    }
 }
 
+/* Active GTA VI Neon Aura on the VI Silhouette */
+@keyframes viNeonFloat {
+    0%, 100% {
+        filter: drop-shadow(0 0 8px rgba(255, 46, 147, 0.75))
+                drop-shadow(0 0 16px rgba(0, 245, 212, 0.4));
+    }
+    50% {
+        filter: drop-shadow(0 0 12px rgba(255, 189, 59, 0.8))
+                drop-shadow(0 0 22px rgba(255, 46, 147, 0.65));
+    }
+}
+
+body.gta6-mode .gta-fab-main {
+    opacity: 1;
+    animation: viNeonFloat 2.8s ease-in-out infinite;
+}
+
+/* Tiny corner hide chevron (tucked cleanly so it never spoils the VI shape) */
 .gta-fab-hide-btn {
-    width: 22px;
-    height: 22px;
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 18px;
+    height: 18px;
     border-radius: 999px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: rgba(255, 255, 255, 0.6);
-    background: rgba(255, 255, 255, 0.08);
-    border: none;
+    color: rgba(255, 255, 255, 0.82);
+    background: rgba(20, 8, 36, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
     cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    opacity: 0.72;
+    transition: opacity 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 
-.gta-fab-hide-btn:hover {
-    background: rgba(255, 255, 255, 0.18);
-    color: #fff;
+.gta-fab-wrapper.snap-left .gta-fab-hide-btn {
+    right: auto;
+    left: -6px;
 }
 
 .gta-fab-wrapper.snap-left .gta-fab-hide-btn svg {
     transform: rotate(180deg);
 }
 
-/* Active GTA VI Pill Glow */
-body.gta6-mode .gta-fab-pill {
-    background: linear-gradient(135deg, rgba(255, 46, 147, 0.28), rgba(19, 8, 38, 0.92));
-    border-color: rgba(0, 245, 212, 0.7);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45), 0 0 18px rgba(0, 245, 212, 0.35);
+.gta-fab-hide-btn:hover,
+.gta-fab-hide-btn:active {
+    opacity: 1;
+    background: rgba(255, 46, 147, 0.9);
+    border-color: rgba(255, 209, 102, 0.7);
+    color: #fff;
+    transform: scale(1.1);
 }
 
-/* Docked / Hidden Minimal Edge Tab */
+/* Docked / Hidden Minimal Edge Tab with Mini VI SVG */
 .gta-fab-tab {
     display: none;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 46px;
+    width: 24px;
+    height: 44px;
+    padding: 4px;
     border: 1px solid rgba(255, 46, 147, 0.45);
-    background: rgba(18, 10, 34, 0.55);
+    background: rgba(18, 10, 34, 0.62);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    color: #ffd166;
-    font-size: 9px;
-    font-weight: 900;
-    font-style: italic;
     cursor: pointer;
-    opacity: 0.58;
+    opacity: 0.68;
     transition: opacity 0.2s ease, width 0.2s ease, background 0.2s ease;
+}
+
+.gta-vi-mini {
+    width: 16px;
+    height: auto;
+    display: block;
+    pointer-events: none;
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.45));
 }
 
 .gta-fab-tab:hover,
 .gta-fab-tab:active {
     opacity: 1;
-    width: 26px;
-    background: rgba(255, 46, 147, 0.85);
-    color: #fff;
+    width: 30px;
+    background: rgba(34, 12, 62, 0.9);
+    border-color: rgba(0, 245, 212, 0.75);
+}
+
+body.gta6-mode .gta-fab-tab {
+    border-color: rgba(0, 245, 212, 0.65);
+    box-shadow: 0 0 12px rgba(255, 46, 147, 0.35);
 }
 
 .gta-fab-wrapper.is-hidden.snap-right {
